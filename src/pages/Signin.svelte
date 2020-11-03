@@ -10,20 +10,20 @@
 <main>  
     <header class="header">
         <Link back>Back</Link>
-        <h1>{pageName}</h1>
+        <h1 class="py-3 font-bold text-5xl" >{pageName}</h1>
     </header> 
     <article>
         <form on:submit|preventDefault={handleSubmit}>
             <label>Username:
-            <input name="user" required bind:value={user} />
+            <input class="my-2 p-1" name="user" required bind:value={user} />
         
             <label>Password:
-            <input name="password" required type="password" bind:value={password} />
+            <input class="my-2 p-1" name="password" required type="password" bind:value={password} /><br>
 
-            <p><button type="submit">Sign in</button></p>
+            <button class="bg-gray-200 my-3 hover:bg-gray-300 text-gray-800 py-2 px-2 border border-gray-400 shadow" type="submit">Sign in</button>
 
-            <p><Link to="forgotPass">Forgot password</Link></p>
-            <p><Link to="signup">Don't have account</Link></p>
+            <p class="my-3"><Link to="forgotPass">Forgot password?</Link></p>
+            <p class="my-3"><Link to="signup">Don't have account?</Link></p>
         </form>
     </article>
 </main>
