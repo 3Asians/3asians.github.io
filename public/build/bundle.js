@@ -1870,7 +1870,7 @@ var app = (function () {
     		},
     		h: function hydrate() {
     			set_attributes(a, a_data);
-    			add_location(a, file, 40, 0, 1249);
+    			add_location(a, file, 40, 0, 1289);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, a, anchor);
@@ -4873,8 +4873,8 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
-    			add_location(nav, file$a, 19, 1, 617);
-    			add_location(div, file$a, 27, 1, 819);
+    			add_location(nav, file$a, 19, 1, 636);
+    			add_location(div, file$a, 27, 1, 846);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, nav, anchor);
