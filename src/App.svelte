@@ -17,14 +17,21 @@
 </script>
 
 <Router url="{url}">
-	<nav>
-		<Link to="/">Home</Link>
-		<Link to="signin">Signin</Link>
-		<Link to="about">About</Link>
-		<Link to="map">Map</Link>
-		<Link to="list">List</Link>
-		<Link to="profile">Profile</Link>
+<div class="links">
+	<nav class="dropdown">
+	<button class="dropbtn">
+      <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/> </svg>
+    </button>
+	<ul class="dropdown-content">
+		<li><Link to="/">Home</Link></li>
+		<li><Link to="signin">Signin</Link></li>
+		<li><Link to="about">About</Link></li>
+		<li><Link to="map">Map</Link></li>
+		<li><Link to="list">List</Link></li>
+		<li><Link to="profile">Profile</Link></li>
+		</ul>
 	</nav>
+	</div>
 	<div>
 		<Route path="/"><Home /></Route>
 		<Route path="signin" component="{Signin}"/>
