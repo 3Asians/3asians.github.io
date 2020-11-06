@@ -2117,15 +2117,18 @@ var app = (function () {
     	let t0;
     	let t1;
     	let article;
-    	let button;
     	let p0;
     	let t2;
     	let t3;
-    	let footer;
+    	let button;
     	let p1;
     	let t4;
     	let t5;
+    	let footer;
+    	let p2;
     	let t6;
+    	let t7;
+    	let t8;
 
     	const block = {
     		c: function create() {
@@ -2135,15 +2138,18 @@ var app = (function () {
     			t0 = text(/*appName*/ ctx[0]);
     			t1 = space();
     			article = element("article");
-    			button = element("button");
     			p0 = element("p");
-    			t2 = text("Find food");
+    			t2 = text("Click the button to find lists of food");
     			t3 = space();
-    			footer = element("footer");
+    			button = element("button");
     			p1 = element("p");
-    			t4 = text("© ");
-    			t5 = text(/*appName*/ ctx[0]);
-    			t6 = text(" 2020");
+    			t4 = text("Find food");
+    			t5 = space();
+    			footer = element("footer");
+    			p2 = element("p");
+    			t6 = text("© ");
+    			t7 = text(/*appName*/ ctx[0]);
+    			t8 = text(" 2020");
     			this.h();
     		},
     		l: function claim(nodes) {
@@ -2151,47 +2157,56 @@ var app = (function () {
     			var main_nodes = children(main);
     			header = claim_element(main_nodes, "HEADER", { class: true });
     			var header_nodes = children(header);
-    			h1 = claim_element(header_nodes, "H1", {});
+    			h1 = claim_element(header_nodes, "H1", { class: true });
     			var h1_nodes = children(h1);
     			t0 = claim_text(h1_nodes, /*appName*/ ctx[0]);
     			h1_nodes.forEach(detach_dev);
     			header_nodes.forEach(detach_dev);
     			t1 = claim_space(main_nodes);
-    			article = claim_element(main_nodes, "ARTICLE", {});
+    			article = claim_element(main_nodes, "ARTICLE", { class: true });
     			var article_nodes = children(article);
+    			p0 = claim_element(article_nodes, "P", {});
+    			var p0_nodes = children(p0);
+    			t2 = claim_text(p0_nodes, "Click the button to find lists of food");
+    			p0_nodes.forEach(detach_dev);
+    			t3 = claim_space(article_nodes);
     			button = claim_element(article_nodes, "BUTTON", { class: true });
     			var button_nodes = children(button);
-    			p0 = claim_element(button_nodes, "P", {});
-    			var p0_nodes = children(p0);
-    			t2 = claim_text(p0_nodes, "Find food");
-    			p0_nodes.forEach(detach_dev);
+    			p1 = claim_element(button_nodes, "P", { class: true });
+    			var p1_nodes = children(p1);
+    			t4 = claim_text(p1_nodes, "Find food");
+    			p1_nodes.forEach(detach_dev);
     			button_nodes.forEach(detach_dev);
     			article_nodes.forEach(detach_dev);
-    			t3 = claim_space(main_nodes);
+    			t5 = claim_space(main_nodes);
     			footer = claim_element(main_nodes, "FOOTER", { class: true });
     			var footer_nodes = children(footer);
-    			p1 = claim_element(footer_nodes, "P", { class: true });
-    			var p1_nodes = children(p1);
-    			t4 = claim_text(p1_nodes, "© ");
-    			t5 = claim_text(p1_nodes, /*appName*/ ctx[0]);
-    			t6 = claim_text(p1_nodes, " 2020");
-    			p1_nodes.forEach(detach_dev);
+    			p2 = claim_element(footer_nodes, "P", { class: true });
+    			var p2_nodes = children(p2);
+    			t6 = claim_text(p2_nodes, "© ");
+    			t7 = claim_text(p2_nodes, /*appName*/ ctx[0]);
+    			t8 = claim_text(p2_nodes, " 2020");
+    			p2_nodes.forEach(detach_dev);
     			footer_nodes.forEach(detach_dev);
     			main_nodes.forEach(detach_dev);
     			this.h();
     		},
     		h: function hydrate() {
-    			add_location(h1, file$1, 6, 8, 98);
-    			attr_dev(header, "class", "header");
+    			attr_dev(h1, "class", "font-bold text-5xl");
+    			add_location(h1, file$1, 6, 8, 113);
+    			attr_dev(header, "class", "text-center py-8 px-8");
     			add_location(header, file$1, 5, 4, 65);
-    			add_location(p0, file$1, 9, 48, 196);
-    			attr_dev(button, "class", "bg-white rounded-lg p-6");
-    			add_location(button, file$1, 9, 8, 156);
-    			add_location(article, file$1, 8, 4, 137);
-    			attr_dev(p1, "class", "copy");
-    			add_location(p1, file$1, 12, 8, 276);
-    			attr_dev(footer, "class", "footer");
-    			add_location(footer, file$1, 11, 4, 243);
+    			add_location(p0, file$1, 9, 4, 214);
+    			attr_dev(p1, "class", "text-5xl");
+    			add_location(p1, file$1, 11, 8, 412);
+    			attr_dev(button, "class", "bg-white m-4 py-20 px-8 hover:bg-gray-200 text-red-600 font-semibold border-4 border-red-500 shadow items shadow-2xl");
+    			add_location(button, file$1, 10, 8, 269);
+    			attr_dev(article, "class", "text-center");
+    			add_location(article, file$1, 8, 4, 179);
+    			attr_dev(p2, "class", "copy");
+    			add_location(p2, file$1, 14, 8, 524);
+    			attr_dev(footer, "class", "text-center py-8 px-8");
+    			add_location(footer, file$1, 13, 4, 476);
     			add_location(main, file$1, 4, 0, 53);
     		},
     		m: function mount(target, anchor) {
@@ -2201,15 +2216,18 @@ var app = (function () {
     			append_dev(h1, t0);
     			append_dev(main, t1);
     			append_dev(main, article);
-    			append_dev(article, button);
-    			append_dev(button, p0);
+    			append_dev(article, p0);
     			append_dev(p0, t2);
-    			append_dev(main, t3);
-    			append_dev(main, footer);
-    			append_dev(footer, p1);
+    			append_dev(article, t3);
+    			append_dev(article, button);
+    			append_dev(button, p1);
     			append_dev(p1, t4);
-    			append_dev(p1, t5);
-    			append_dev(p1, t6);
+    			append_dev(main, t5);
+    			append_dev(main, footer);
+    			append_dev(footer, p2);
+    			append_dev(p2, t6);
+    			append_dev(p2, t7);
+    			append_dev(p2, t8);
     		},
     		p: noop,
     		i: noop,
@@ -2276,10 +2294,10 @@ var app = (function () {
 
     	const block = {
     		c: function create() {
-    			t = text("Back");
+    			t = text("←Back");
     		},
     		l: function claim(nodes) {
-    			t = claim_text(nodes, "Back");
+    			t = claim_text(nodes, "←Back");
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, t, anchor);
@@ -2300,16 +2318,16 @@ var app = (function () {
     	return block;
     }
 
-    // (25:15) <Link to="forgotPass">
+    // (25:28) <Link to="forgotPass">
     function create_default_slot_1(ctx) {
     	let t;
 
     	const block = {
     		c: function create() {
-    			t = text("Forgot password");
+    			t = text("Forgot password?");
     		},
     		l: function claim(nodes) {
-    			t = claim_text(nodes, "Forgot password");
+    			t = claim_text(nodes, "Forgot password?");
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, t, anchor);
@@ -2323,23 +2341,23 @@ var app = (function () {
     		block,
     		id: create_default_slot_1.name,
     		type: "slot",
-    		source: "(25:15) <Link to=\\\"forgotPass\\\">",
+    		source: "(25:28) <Link to=\\\"forgotPass\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (26:15) <Link to="signup">
+    // (26:28) <Link to="signup">
     function create_default_slot(ctx) {
     	let t;
 
     	const block = {
     		c: function create() {
-    			t = text("Don't have account");
+    			t = text("Don't have account?");
     		},
     		l: function claim(nodes) {
-    			t = claim_text(nodes, "Don't have account");
+    			t = claim_text(nodes, "Don't have account?");
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, t, anchor);
@@ -2353,7 +2371,7 @@ var app = (function () {
     		block,
     		id: create_default_slot.name,
     		type: "slot",
-    		source: "(26:15) <Link to=\\\"signup\\\">",
+    		source: "(26:28) <Link to=\\\"signup\\\">",
     		ctx
     	});
 
@@ -2377,15 +2395,15 @@ var app = (function () {
     	let label0;
     	let t5;
     	let input1;
+    	let br;
     	let t6;
-    	let p0;
     	let button;
     	let t7;
     	let t8;
-    	let p1;
+    	let p0;
     	let link1;
     	let t9;
-    	let p2;
+    	let p1;
     	let link2;
     	let current;
     	let mounted;
@@ -2436,15 +2454,15 @@ var app = (function () {
     			label0 = element("label");
     			t5 = text("Password:\r\n            ");
     			input1 = element("input");
+    			br = element("br");
     			t6 = space();
-    			p0 = element("p");
     			button = element("button");
     			t7 = text("Sign in");
     			t8 = space();
-    			p1 = element("p");
+    			p0 = element("p");
     			create_component(link1.$$.fragment);
     			t9 = space();
-    			p2 = element("p");
+    			p1 = element("p");
     			create_component(link2.$$.fragment);
     			this.h();
     		},
@@ -2455,7 +2473,7 @@ var app = (function () {
     			var header_nodes = children(header);
     			claim_component(link0.$$.fragment, header_nodes);
     			t0 = claim_space(header_nodes);
-    			h1 = claim_element(header_nodes, "H1", {});
+    			h1 = claim_element(header_nodes, "H1", { class: true });
     			var h1_nodes = children(h1);
     			t1 = claim_text(h1_nodes, /*pageName*/ ctx[2]);
     			h1_nodes.forEach(detach_dev);
@@ -2468,30 +2486,35 @@ var app = (function () {
     			label1 = claim_element(form_nodes, "LABEL", {});
     			var label1_nodes = children(label1);
     			t3 = claim_text(label1_nodes, "Username:\r\n            ");
-    			input0 = claim_element(label1_nodes, "INPUT", { name: true, required: true });
+    			input0 = claim_element(label1_nodes, "INPUT", { class: true, name: true, required: true });
     			t4 = claim_space(label1_nodes);
     			label0 = claim_element(label1_nodes, "LABEL", {});
     			var label0_nodes = children(label0);
     			t5 = claim_text(label0_nodes, "Password:\r\n            ");
-    			input1 = claim_element(label0_nodes, "INPUT", { name: true, required: true, type: true });
+
+    			input1 = claim_element(label0_nodes, "INPUT", {
+    				class: true,
+    				name: true,
+    				required: true,
+    				type: true
+    			});
+
+    			br = claim_element(label0_nodes, "BR", {});
     			t6 = claim_space(label0_nodes);
-    			p0 = claim_element(label0_nodes, "P", {});
-    			var p0_nodes = children(p0);
-    			button = claim_element(p0_nodes, "BUTTON", { type: true });
+    			button = claim_element(label0_nodes, "BUTTON", { class: true, type: true });
     			var button_nodes = children(button);
     			t7 = claim_text(button_nodes, "Sign in");
     			button_nodes.forEach(detach_dev);
-    			p0_nodes.forEach(detach_dev);
     			t8 = claim_space(label0_nodes);
-    			p1 = claim_element(label0_nodes, "P", {});
-    			var p1_nodes = children(p1);
-    			claim_component(link1.$$.fragment, p1_nodes);
-    			p1_nodes.forEach(detach_dev);
+    			p0 = claim_element(label0_nodes, "P", { class: true });
+    			var p0_nodes = children(p0);
+    			claim_component(link1.$$.fragment, p0_nodes);
+    			p0_nodes.forEach(detach_dev);
     			t9 = claim_space(label0_nodes);
-    			p2 = claim_element(label0_nodes, "P", {});
-    			var p2_nodes = children(p2);
-    			claim_component(link2.$$.fragment, p2_nodes);
-    			p2_nodes.forEach(detach_dev);
+    			p1 = claim_element(label0_nodes, "P", { class: true });
+    			var p1_nodes = children(p1);
+    			claim_component(link2.$$.fragment, p1_nodes);
+    			p1_nodes.forEach(detach_dev);
     			label0_nodes.forEach(detach_dev);
     			label1_nodes.forEach(detach_dev);
     			form_nodes.forEach(detach_dev);
@@ -2500,25 +2523,31 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
-    			add_location(h1, file$2, 12, 8, 285);
+    			attr_dev(h1, "class", "py-3 font-bold text-5xl");
+    			add_location(h1, file$2, 12, 8, 292);
     			attr_dev(header, "class", "header");
     			add_location(header, file$2, 10, 4, 220);
+    			attr_dev(input0, "class", "my-2 p-1");
     			attr_dev(input0, "name", "user");
     			input0.required = true;
-    			add_location(input0, file$2, 17, 12, 435);
+    			add_location(input0, file$2, 17, 12, 475);
+    			attr_dev(input1, "class", "my-2 p-1");
     			attr_dev(input1, "name", "password");
     			input1.required = true;
     			attr_dev(input1, "type", "password");
-    			add_location(input1, file$2, 20, 12, 537);
+    			add_location(input1, file$2, 20, 12, 594);
+    			add_location(br, file$2, 20, 101, 683);
+    			attr_dev(button, "class", "bg-gray-200 my-3 hover:bg-gray-300 text-gray-800 py-2 px-2 border border-gray-400 shadow");
     			attr_dev(button, "type", "submit");
-    			add_location(button, file$2, 22, 15, 628);
-    			add_location(p0, file$2, 22, 12, 625);
-    			add_location(p1, file$2, 24, 12, 686);
-    			add_location(p2, file$2, 25, 12, 751);
-    			add_location(label0, file$2, 19, 12, 507);
-    			add_location(label1, file$2, 16, 12, 405);
-    			add_location(form, file$2, 15, 8, 345);
-    			add_location(article, file$2, 14, 4, 326);
+    			add_location(button, file$2, 22, 12, 703);
+    			attr_dev(p0, "class", "my-3");
+    			add_location(p0, file$2, 24, 12, 854);
+    			attr_dev(p1, "class", "my-3");
+    			add_location(p1, file$2, 25, 12, 933);
+    			add_location(label0, file$2, 19, 12, 564);
+    			add_location(label1, file$2, 16, 12, 445);
+    			add_location(form, file$2, 15, 8, 385);
+    			add_location(article, file$2, 14, 4, 366);
     			add_location(main, file$2, 9, 0, 206);
     		},
     		m: function mount(target, anchor) {
@@ -2540,16 +2569,16 @@ var app = (function () {
     			append_dev(label0, t5);
     			append_dev(label0, input1);
     			set_input_value(input1, /*password*/ ctx[1]);
+    			append_dev(label0, br);
     			append_dev(label0, t6);
-    			append_dev(label0, p0);
-    			append_dev(p0, button);
+    			append_dev(label0, button);
     			append_dev(button, t7);
     			append_dev(label0, t8);
-    			append_dev(label0, p1);
-    			mount_component(link1, p1, null);
+    			append_dev(label0, p0);
+    			mount_component(link1, p0, null);
     			append_dev(label0, t9);
-    			append_dev(label0, p2);
-    			mount_component(link2, p2, null);
+    			append_dev(label0, p1);
+    			mount_component(link2, p1, null);
     			current = true;
 
     			if (!mounted) {
@@ -2776,7 +2805,7 @@ var app = (function () {
     			var header_nodes = children(header);
     			claim_component(link.$$.fragment, header_nodes);
     			t0 = claim_space(header_nodes);
-    			h1 = claim_element(header_nodes, "H1", {});
+    			h1 = claim_element(header_nodes, "H1", { class: true });
     			var h1_nodes = children(h1);
     			t1 = claim_text(h1_nodes, /*pageName*/ ctx[0]);
     			h1_nodes.forEach(detach_dev);
@@ -2784,7 +2813,7 @@ var app = (function () {
     			t2 = claim_space(main_nodes);
     			article = claim_element(main_nodes, "ARTICLE", {});
     			var article_nodes = children(article);
-    			button = claim_element(article_nodes, "BUTTON", { onclick: true });
+    			button = claim_element(article_nodes, "BUTTON", { class: true, onclick: true });
     			var button_nodes = children(button);
     			t3 = claim_text(button_nodes, "Sign out");
     			button_nodes.forEach(detach_dev);
@@ -2793,12 +2822,14 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
+    			attr_dev(h1, "class", "font-bold text-4xl");
     			add_location(h1, file$3, 7, 8, 172);
     			attr_dev(header, "class", "header");
     			add_location(header, file$3, 5, 4, 107);
+    			attr_dev(button, "class", "bg-blue-400 hover:bg-blue-500 text-white font-semibold py-3 px-3 border border-black rounded shadow items");
     			attr_dev(button, "onclick", "signOut");
-    			add_location(button, file$3, 10, 8, 232);
-    			add_location(article, file$3, 9, 4, 213);
+    			add_location(button, file$3, 10, 8, 259);
+    			add_location(article, file$3, 9, 4, 240);
     			add_location(main, file$3, 4, 0, 93);
     		},
     		m: function mount(target, anchor) {
@@ -2988,13 +3019,13 @@ var app = (function () {
     			var header_nodes = children(header);
     			claim_component(link.$$.fragment, header_nodes);
     			t0 = claim_space(header_nodes);
-    			h1 = claim_element(header_nodes, "H1", {});
+    			h1 = claim_element(header_nodes, "H1", { class: true });
     			var h1_nodes = children(h1);
     			t1 = claim_text(h1_nodes, /*pageName*/ ctx[0]);
     			h1_nodes.forEach(detach_dev);
     			header_nodes.forEach(detach_dev);
     			t2 = claim_space(main_nodes);
-    			article = claim_element(main_nodes, "ARTICLE", {});
+    			article = claim_element(main_nodes, "ARTICLE", { class: true });
     			var article_nodes = children(article);
     			form = claim_element(article_nodes, "FORM", {});
     			var form_nodes = children(form);
@@ -3003,6 +3034,7 @@ var app = (function () {
     			t3 = claim_text(label0_nodes, "Email:\r\n                ");
 
     			input0 = claim_element(label0_nodes, "INPUT", {
+    				class: true,
     				name: true,
     				required: true,
     				type: true,
@@ -3014,16 +3046,16 @@ var app = (function () {
     			label1 = claim_element(form_nodes, "LABEL", {});
     			var label1_nodes = children(label1);
     			t5 = claim_text(label1_nodes, "Username:\r\n                ");
-    			input1 = claim_element(label1_nodes, "INPUT", { name: true, required: true });
+    			input1 = claim_element(label1_nodes, "INPUT", { class: true, name: true, required: true });
     			label1_nodes.forEach(detach_dev);
     			t6 = claim_space(form_nodes);
     			label2 = claim_element(form_nodes, "LABEL", {});
     			var label2_nodes = children(label2);
     			t7 = claim_text(label2_nodes, "Password:\r\n                ");
-    			input2 = claim_element(label2_nodes, "INPUT", { required: true, type: true });
+    			input2 = claim_element(label2_nodes, "INPUT", { class: true, required: true, type: true });
     			label2_nodes.forEach(detach_dev);
     			t8 = claim_space(form_nodes);
-    			button = claim_element(form_nodes, "BUTTON", { type: true });
+    			button = claim_element(form_nodes, "BUTTON", { class: true, type: true });
     			var button_nodes = children(button);
     			t9 = claim_text(button_nodes, "Sign up");
     			button_nodes.forEach(detach_dev);
@@ -3033,27 +3065,33 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
+    			attr_dev(h1, "class", "font-bold text-5xl");
     			add_location(h1, file$4, 7, 8, 171);
     			attr_dev(header, "class", "header");
     			add_location(header, file$4, 5, 4, 106);
+    			attr_dev(input0, "class", "my-2 p-1 text-left ");
     			attr_dev(input0, "name", "email");
     			input0.required = true;
     			attr_dev(input0, "type", "email");
     			attr_dev(input0, "placeholder", "food@email.com");
-    			add_location(input0, file$4, 12, 16, 282);
-    			add_location(label0, file$4, 11, 12, 251);
+    			add_location(input0, file$4, 12, 16, 322);
+    			add_location(label0, file$4, 11, 12, 291);
+    			attr_dev(input1, "class", "my-2 p-1");
     			attr_dev(input1, "name", "user");
     			input1.required = true;
-    			add_location(input1, file$4, 15, 16, 424);
-    			add_location(label1, file$4, 14, 12, 390);
+    			add_location(input1, file$4, 15, 16, 492);
+    			add_location(label1, file$4, 14, 12, 458);
+    			attr_dev(input2, "class", "my-2 p-1");
     			input2.required = true;
     			attr_dev(input2, "type", "password");
-    			add_location(input2, file$4, 18, 16, 523);
-    			add_location(label2, file$4, 17, 12, 489);
+    			add_location(input2, file$4, 18, 16, 608);
+    			add_location(label2, file$4, 17, 12, 574);
+    			attr_dev(button, "class", "bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-2 border border-gray-400 shadow");
     			attr_dev(button, "type", "submit");
-    			add_location(button, file$4, 21, 12, 606);
-    			add_location(form, file$4, 10, 8, 231);
-    			add_location(article, file$4, 9, 4, 212);
+    			add_location(button, file$4, 21, 12, 708);
+    			add_location(form, file$4, 10, 8, 271);
+    			attr_dev(article, "class", "my-3");
+    			add_location(article, file$4, 9, 4, 239);
     			add_location(main, file$4, 4, 0, 92);
     		},
     		m: function mount(target, anchor) {
@@ -3268,7 +3306,7 @@ var app = (function () {
     			var header_nodes = children(header);
     			claim_component(link.$$.fragment, header_nodes);
     			t0 = claim_space(header_nodes);
-    			h1 = claim_element(header_nodes, "H1", {});
+    			h1 = claim_element(header_nodes, "H1", { class: true });
     			var h1_nodes = children(h1);
     			t1 = claim_text(h1_nodes, /*pageName*/ ctx[1]);
     			h1_nodes.forEach(detach_dev);
@@ -3276,12 +3314,12 @@ var app = (function () {
     			t2 = claim_space(main_nodes);
     			article = claim_element(main_nodes, "ARTICLE", {});
     			var article_nodes = children(article);
-    			h20 = claim_element(article_nodes, "H2", {});
+    			h20 = claim_element(article_nodes, "H2", { class: true });
     			var h20_nodes = children(h20);
     			t3 = claim_text(h20_nodes, "Our story");
     			h20_nodes.forEach(detach_dev);
     			t4 = claim_space(article_nodes);
-    			h21 = claim_element(article_nodes, "H2", {});
+    			h21 = claim_element(article_nodes, "H2", { class: true });
     			var h21_nodes = children(h21);
     			t5 = claim_text(h21_nodes, "About web");
     			h21_nodes.forEach(detach_dev);
@@ -3289,17 +3327,17 @@ var app = (function () {
     			t6 = claim_space(main_nodes);
     			aside = claim_element(main_nodes, "ASIDE", {});
     			var aside_nodes = children(aside);
-    			h40 = claim_element(aside_nodes, "H4", {});
+    			h40 = claim_element(aside_nodes, "H4", { class: true });
     			var h40_nodes = children(h40);
     			t7 = claim_text(h40_nodes, "Phone");
     			h40_nodes.forEach(detach_dev);
     			t8 = claim_space(aside_nodes);
-    			h41 = claim_element(aside_nodes, "H4", {});
+    			h41 = claim_element(aside_nodes, "H4", { class: true });
     			var h41_nodes = children(h41);
     			t9 = claim_text(h41_nodes, "Email");
     			h41_nodes.forEach(detach_dev);
     			t10 = claim_space(aside_nodes);
-    			h42 = claim_element(aside_nodes, "H4", {});
+    			h42 = claim_element(aside_nodes, "H4", { class: true });
     			var h42_nodes = children(h42);
     			t11 = claim_text(h42_nodes, "Github");
     			h42_nodes.forEach(detach_dev);
@@ -3318,20 +3356,26 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
+    			attr_dev(h1, "class", "font-bold text-4xl");
     			add_location(h1, file$5, 9, 8, 199);
     			attr_dev(header, "class", "header");
     			add_location(header, file$5, 7, 4, 134);
-    			add_location(h20, file$5, 12, 8, 260);
-    			add_location(h21, file$5, 13, 8, 288);
-    			add_location(article, file$5, 11, 4, 241);
-    			add_location(h40, file$5, 16, 8, 345);
-    			add_location(h41, file$5, 17, 8, 369);
-    			add_location(h42, file$5, 18, 8, 393);
-    			add_location(aside, file$5, 15, 4, 328);
+    			attr_dev(h20, "class", "font-bold text-2xl my-4");
+    			add_location(h20, file$5, 12, 8, 287);
+    			attr_dev(h21, "class", "font-bold text-2xl my-4");
+    			add_location(h21, file$5, 13, 8, 347);
+    			add_location(article, file$5, 11, 4, 268);
+    			attr_dev(h40, "class", "font-bold text-lg my-4");
+    			add_location(h40, file$5, 16, 8, 436);
+    			attr_dev(h41, "class", "font-bold text-lg my-4");
+    			add_location(h41, file$5, 17, 8, 491);
+    			attr_dev(h42, "class", "font-bold text-lg my-4");
+    			add_location(h42, file$5, 18, 8, 546);
+    			add_location(aside, file$5, 15, 4, 419);
     			attr_dev(p, "class", "copy");
-    			add_location(p, file$5, 21, 8, 461);
+    			add_location(p, file$5, 21, 8, 645);
     			attr_dev(footer, "class", "footer");
-    			add_location(footer, file$5, 20, 4, 428);
+    			add_location(footer, file$5, 20, 4, 612);
     			add_location(main, file$5, 6, 0, 122);
     		},
     		m: function mount(target, anchor) {
@@ -3512,7 +3556,7 @@ var app = (function () {
     			var header_nodes = children(header);
     			claim_component(link.$$.fragment, header_nodes);
     			t0 = claim_space(header_nodes);
-    			h1 = claim_element(header_nodes, "H1", {});
+    			h1 = claim_element(header_nodes, "H1", { class: true });
     			var h1_nodes = children(h1);
     			t1 = claim_text(h1_nodes, /*pageName*/ ctx[0]);
     			h1_nodes.forEach(detach_dev);
@@ -3524,11 +3568,12 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
+    			attr_dev(h1, "class", "font-bold text-5xl");
     			add_location(h1, file$6, 24, 8, 616);
     			attr_dev(header, "class", "header");
     			add_location(header, file$6, 22, 4, 551);
     			attr_dev(div, "id", "map");
-    			add_location(div, file$6, 26, 4, 657);
+    			add_location(div, file$6, 26, 4, 684);
     			add_location(main, file$6, 21, 0, 537);
     		},
     		m: function mount(target, anchor) {
@@ -3693,7 +3738,7 @@ var app = (function () {
     			var header_nodes = children(header);
     			claim_component(link.$$.fragment, header_nodes);
     			t0 = claim_space(header_nodes);
-    			h1 = claim_element(header_nodes, "H1", {});
+    			h1 = claim_element(header_nodes, "H1", { class: true });
     			var h1_nodes = children(h1);
     			t1 = claim_text(h1_nodes, /*pageName*/ ctx[0]);
     			h1_nodes.forEach(detach_dev);
@@ -3702,6 +3747,7 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
+    			attr_dev(h1, "class", "font-bold text-4xl");
     			add_location(h1, file$7, 8, 8, 170);
     			attr_dev(header, "class", "header");
     			add_location(header, file$7, 6, 4, 105);
@@ -3880,7 +3926,7 @@ var app = (function () {
     			var header_nodes = children(header);
     			claim_component(link.$$.fragment, header_nodes);
     			t0 = claim_space(header_nodes);
-    			h1 = claim_element(header_nodes, "H1", {});
+    			h1 = claim_element(header_nodes, "H1", { class: true });
     			var h1_nodes = children(h1);
     			t1 = claim_text(h1_nodes, /*pageName*/ ctx[0]);
     			h1_nodes.forEach(detach_dev);
@@ -3888,12 +3934,12 @@ var app = (function () {
     			t2 = claim_space(main_nodes);
     			article = claim_element(main_nodes, "ARTICLE", {});
     			var article_nodes = children(article);
-    			h20 = claim_element(article_nodes, "H2", {});
+    			h20 = claim_element(article_nodes, "H2", { class: true });
     			var h20_nodes = children(h20);
     			t3 = claim_text(h20_nodes, "Username");
     			h20_nodes.forEach(detach_dev);
     			t4 = claim_space(article_nodes);
-    			h21 = claim_element(article_nodes, "H2", {});
+    			h21 = claim_element(article_nodes, "H2", { class: true });
     			var h21_nodes = children(h21);
     			t5 = claim_text(h21_nodes, "Info");
     			h21_nodes.forEach(detach_dev);
@@ -3901,7 +3947,7 @@ var app = (function () {
     			blockquote = claim_element(article_nodes, "BLOCKQUOTE", {});
     			children(blockquote).forEach(detach_dev);
     			t7 = claim_space(article_nodes);
-    			h22 = claim_element(article_nodes, "H2", {});
+    			h22 = claim_element(article_nodes, "H2", { class: true });
     			var h22_nodes = children(h22);
     			t8 = claim_text(h22_nodes, "Favorite places");
     			h22_nodes.forEach(detach_dev);
@@ -3910,14 +3956,18 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
+    			attr_dev(h1, "class", "font-bold text-4xl");
     			add_location(h1, file$8, 8, 8, 173);
     			attr_dev(header, "class", "header");
     			add_location(header, file$8, 6, 4, 108);
-    			add_location(h20, file$8, 11, 8, 233);
-    			add_location(h21, file$8, 12, 8, 260);
-    			add_location(blockquote, file$8, 13, 8, 283);
-    			add_location(h22, file$8, 14, 8, 318);
-    			add_location(article, file$8, 10, 4, 214);
+    			attr_dev(h20, "class", "font-bold text-2xl m-3");
+    			add_location(h20, file$8, 11, 8, 260);
+    			attr_dev(h21, "class", "font-bold text-2xl m-3");
+    			add_location(h21, file$8, 12, 8, 318);
+    			add_location(blockquote, file$8, 13, 8, 372);
+    			attr_dev(h22, "class", "font-bold text-2xl m-3");
+    			add_location(h22, file$8, 14, 8, 407);
+    			add_location(article, file$8, 10, 4, 241);
     			add_location(main, file$8, 5, 0, 94);
     		},
     		m: function mount(target, anchor) {
@@ -4248,7 +4298,7 @@ var app = (function () {
     			var header_nodes = children(header);
     			claim_component(link0.$$.fragment, header_nodes);
     			t0 = claim_space(header_nodes);
-    			h1 = claim_element(header_nodes, "H1", {});
+    			h1 = claim_element(header_nodes, "H1", { class: true });
     			var h1_nodes = children(h1);
     			t1 = claim_text(h1_nodes, /*pageName*/ ctx[0]);
     			h1_nodes.forEach(detach_dev);
@@ -4263,6 +4313,7 @@ var app = (function () {
     			t3 = claim_text(label_nodes, "Enter your email\r\n                ");
 
     			input = claim_element(label_nodes, "INPUT", {
+    				class: true,
     				name: true,
     				required: true,
     				type: true,
@@ -4271,12 +4322,12 @@ var app = (function () {
 
     			label_nodes.forEach(detach_dev);
     			t4 = claim_space(form_nodes);
-    			button = claim_element(form_nodes, "BUTTON", { type: true });
+    			button = claim_element(form_nodes, "BUTTON", { class: true, type: true });
     			var button_nodes = children(button);
     			t5 = claim_text(button_nodes, "Enter");
     			button_nodes.forEach(detach_dev);
     			t6 = claim_space(form_nodes);
-    			p = claim_element(form_nodes, "P", {});
+    			p = claim_element(form_nodes, "P", { class: true });
     			var p_nodes = children(p);
     			t7 = claim_text(p_nodes, "You will get an email with your username and password");
     			p_nodes.forEach(detach_dev);
@@ -4288,20 +4339,24 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
+    			attr_dev(h1, "class", "font-bold text-4xl my-2");
     			add_location(h1, file$9, 7, 8, 179);
     			attr_dev(header, "class", "header");
     			add_location(header, file$9, 5, 4, 114);
+    			attr_dev(input, "class", "my-2 p-1");
     			attr_dev(input, "name", "email");
     			input.required = true;
     			attr_dev(input, "type", "email");
     			attr_dev(input, "placeholder", "food@email.com");
-    			add_location(input, file$9, 12, 16, 300);
-    			add_location(label, file$9, 11, 12, 259);
+    			add_location(input, file$9, 12, 16, 332);
+    			add_location(label, file$9, 11, 12, 291);
+    			attr_dev(button, "class", "bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-2 border border-gray-400 shadow");
     			attr_dev(button, "type", "submit");
-    			add_location(button, file$9, 14, 12, 408);
-    			add_location(p, file$9, 15, 12, 458);
-    			add_location(form, file$9, 10, 8, 239);
-    			add_location(article, file$9, 9, 4, 220);
+    			add_location(button, file$9, 14, 12, 457);
+    			attr_dev(p, "class", "my-2");
+    			add_location(p, file$9, 15, 12, 600);
+    			add_location(form, file$9, 10, 8, 271);
+    			add_location(article, file$9, 9, 4, 252);
     			add_location(main, file$9, 4, 0, 100);
     		},
     		m: function mount(target, anchor) {
@@ -4412,7 +4467,7 @@ var app = (function () {
     /* src\App.svelte generated by Svelte v3.29.0 */
     const file$a = "src\\App.svelte";
 
-    // (21:2) <Link to="/">
+    // (26:6) <Link to="/">
     function create_default_slot_7(ctx) {
     	let t;
 
@@ -4435,14 +4490,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_7.name,
     		type: "slot",
-    		source: "(21:2) <Link to=\\\"/\\\">",
+    		source: "(26:6) <Link to=\\\"/\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (22:2) <Link to="signin">
+    // (27:6) <Link to="signin">
     function create_default_slot_6(ctx) {
     	let t;
 
@@ -4465,14 +4520,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_6.name,
     		type: "slot",
-    		source: "(22:2) <Link to=\\\"signin\\\">",
+    		source: "(27:6) <Link to=\\\"signin\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (23:2) <Link to="about">
+    // (28:6) <Link to="about">
     function create_default_slot_5(ctx) {
     	let t;
 
@@ -4495,14 +4550,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_5.name,
     		type: "slot",
-    		source: "(23:2) <Link to=\\\"about\\\">",
+    		source: "(28:6) <Link to=\\\"about\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (24:2) <Link to="map">
+    // (29:6) <Link to="map">
     function create_default_slot_4(ctx) {
     	let t;
 
@@ -4525,14 +4580,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_4.name,
     		type: "slot",
-    		source: "(24:2) <Link to=\\\"map\\\">",
+    		source: "(29:6) <Link to=\\\"map\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (25:2) <Link to="list">
+    // (30:6) <Link to="list">
     function create_default_slot_3(ctx) {
     	let t;
 
@@ -4555,14 +4610,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_3.name,
     		type: "slot",
-    		source: "(25:2) <Link to=\\\"list\\\">",
+    		source: "(30:6) <Link to=\\\"list\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (26:2) <Link to="profile">
+    // (31:6) <Link to="profile">
     function create_default_slot_2$1(ctx) {
     	let t;
 
@@ -4585,14 +4640,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_2$1.name,
     		type: "slot",
-    		source: "(26:2) <Link to=\\\"profile\\\">",
+    		source: "(31:6) <Link to=\\\"profile\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (29:2) <Route path="/">
+    // (36:2) <Route path="/">
     function create_default_slot_1$2(ctx) {
     	let home;
     	let current;
@@ -4627,7 +4682,7 @@ var app = (function () {
     		block,
     		id: create_default_slot_1$2.name,
     		type: "slot",
-    		source: "(29:2) <Route path=\\\"/\\\">",
+    		source: "(36:2) <Route path=\\\"/\\\">",
     		ctx
     	});
 
@@ -4636,40 +4691,52 @@ var app = (function () {
 
     // (19:0) <Router url="{url}">
     function create_default_slot$8(ctx) {
+    	let div0;
     	let nav;
-    	let link0;
+    	let button;
+    	let svg;
+    	let path;
     	let t0;
-    	let link1;
+    	let ul;
+    	let li0;
+    	let link0;
     	let t1;
-    	let link2;
+    	let li1;
+    	let link1;
     	let t2;
-    	let link3;
+    	let li2;
+    	let link2;
     	let t3;
-    	let link4;
+    	let li3;
+    	let link3;
     	let t4;
-    	let link5;
+    	let li4;
+    	let link4;
     	let t5;
-    	let div;
-    	let route0;
+    	let li5;
+    	let link5;
     	let t6;
-    	let route1;
+    	let div1;
+    	let route0;
     	let t7;
-    	let route2;
+    	let route1;
     	let t8;
-    	let route3;
+    	let route2;
     	let t9;
-    	let route4;
+    	let route3;
     	let t10;
-    	let route5;
+    	let route4;
     	let t11;
-    	let route6;
+    	let route5;
     	let t12;
-    	let route7;
+    	let route6;
     	let t13;
-    	let route8;
+    	let route7;
     	let t14;
-    	let route9;
+    	let route8;
     	let t15;
+    	let route9;
+    	let t16;
     	let route10;
     	let current;
 
@@ -4794,125 +4861,201 @@ var app = (function () {
 
     	const block = {
     		c: function create() {
+    			div0 = element("div");
     			nav = element("nav");
-    			create_component(link0.$$.fragment);
+    			button = element("button");
+    			svg = svg_element("svg");
+    			path = svg_element("path");
     			t0 = space();
-    			create_component(link1.$$.fragment);
+    			ul = element("ul");
+    			li0 = element("li");
+    			create_component(link0.$$.fragment);
     			t1 = space();
-    			create_component(link2.$$.fragment);
+    			li1 = element("li");
+    			create_component(link1.$$.fragment);
     			t2 = space();
-    			create_component(link3.$$.fragment);
+    			li2 = element("li");
+    			create_component(link2.$$.fragment);
     			t3 = space();
-    			create_component(link4.$$.fragment);
+    			li3 = element("li");
+    			create_component(link3.$$.fragment);
     			t4 = space();
-    			create_component(link5.$$.fragment);
+    			li4 = element("li");
+    			create_component(link4.$$.fragment);
     			t5 = space();
-    			div = element("div");
-    			create_component(route0.$$.fragment);
+    			li5 = element("li");
+    			create_component(link5.$$.fragment);
     			t6 = space();
-    			create_component(route1.$$.fragment);
+    			div1 = element("div");
+    			create_component(route0.$$.fragment);
     			t7 = space();
-    			create_component(route2.$$.fragment);
+    			create_component(route1.$$.fragment);
     			t8 = space();
-    			create_component(route3.$$.fragment);
+    			create_component(route2.$$.fragment);
     			t9 = space();
-    			create_component(route4.$$.fragment);
+    			create_component(route3.$$.fragment);
     			t10 = space();
-    			create_component(route5.$$.fragment);
+    			create_component(route4.$$.fragment);
     			t11 = space();
-    			create_component(route6.$$.fragment);
+    			create_component(route5.$$.fragment);
     			t12 = space();
-    			create_component(route7.$$.fragment);
+    			create_component(route6.$$.fragment);
     			t13 = space();
-    			create_component(route8.$$.fragment);
+    			create_component(route7.$$.fragment);
     			t14 = space();
-    			create_component(route9.$$.fragment);
+    			create_component(route8.$$.fragment);
     			t15 = space();
+    			create_component(route9.$$.fragment);
+    			t16 = space();
     			create_component(route10.$$.fragment);
     			this.h();
     		},
     		l: function claim(nodes) {
-    			nav = claim_element(nodes, "NAV", {});
+    			div0 = claim_element(nodes, "DIV", { class: true });
+    			var div0_nodes = children(div0);
+    			nav = claim_element(div0_nodes, "NAV", { class: true });
     			var nav_nodes = children(nav);
-    			claim_component(link0.$$.fragment, nav_nodes);
+    			button = claim_element(nav_nodes, "BUTTON", { class: true });
+    			var button_nodes = children(button);
+    			svg = claim_element(button_nodes, "svg", { class: true, xmlns: true, viewBox: true }, 1);
+    			var svg_nodes = children(svg);
+    			path = claim_element(svg_nodes, "path", { d: true }, 1);
+    			children(path).forEach(detach_dev);
+    			svg_nodes.forEach(detach_dev);
+    			button_nodes.forEach(detach_dev);
     			t0 = claim_space(nav_nodes);
-    			claim_component(link1.$$.fragment, nav_nodes);
-    			t1 = claim_space(nav_nodes);
-    			claim_component(link2.$$.fragment, nav_nodes);
-    			t2 = claim_space(nav_nodes);
-    			claim_component(link3.$$.fragment, nav_nodes);
-    			t3 = claim_space(nav_nodes);
-    			claim_component(link4.$$.fragment, nav_nodes);
-    			t4 = claim_space(nav_nodes);
-    			claim_component(link5.$$.fragment, nav_nodes);
+    			ul = claim_element(nav_nodes, "UL", { class: true });
+    			var ul_nodes = children(ul);
+    			li0 = claim_element(ul_nodes, "LI", {});
+    			var li0_nodes = children(li0);
+    			claim_component(link0.$$.fragment, li0_nodes);
+    			li0_nodes.forEach(detach_dev);
+    			t1 = claim_space(ul_nodes);
+    			li1 = claim_element(ul_nodes, "LI", {});
+    			var li1_nodes = children(li1);
+    			claim_component(link1.$$.fragment, li1_nodes);
+    			li1_nodes.forEach(detach_dev);
+    			t2 = claim_space(ul_nodes);
+    			li2 = claim_element(ul_nodes, "LI", {});
+    			var li2_nodes = children(li2);
+    			claim_component(link2.$$.fragment, li2_nodes);
+    			li2_nodes.forEach(detach_dev);
+    			t3 = claim_space(ul_nodes);
+    			li3 = claim_element(ul_nodes, "LI", {});
+    			var li3_nodes = children(li3);
+    			claim_component(link3.$$.fragment, li3_nodes);
+    			li3_nodes.forEach(detach_dev);
+    			t4 = claim_space(ul_nodes);
+    			li4 = claim_element(ul_nodes, "LI", {});
+    			var li4_nodes = children(li4);
+    			claim_component(link4.$$.fragment, li4_nodes);
+    			li4_nodes.forEach(detach_dev);
+    			t5 = claim_space(ul_nodes);
+    			li5 = claim_element(ul_nodes, "LI", {});
+    			var li5_nodes = children(li5);
+    			claim_component(link5.$$.fragment, li5_nodes);
+    			li5_nodes.forEach(detach_dev);
+    			ul_nodes.forEach(detach_dev);
     			nav_nodes.forEach(detach_dev);
-    			t5 = claim_space(nodes);
-    			div = claim_element(nodes, "DIV", {});
-    			var div_nodes = children(div);
-    			claim_component(route0.$$.fragment, div_nodes);
-    			t6 = claim_space(div_nodes);
-    			claim_component(route1.$$.fragment, div_nodes);
-    			t7 = claim_space(div_nodes);
-    			claim_component(route2.$$.fragment, div_nodes);
-    			t8 = claim_space(div_nodes);
-    			claim_component(route3.$$.fragment, div_nodes);
-    			t9 = claim_space(div_nodes);
-    			claim_component(route4.$$.fragment, div_nodes);
-    			t10 = claim_space(div_nodes);
-    			claim_component(route5.$$.fragment, div_nodes);
-    			t11 = claim_space(div_nodes);
-    			claim_component(route6.$$.fragment, div_nodes);
-    			t12 = claim_space(div_nodes);
-    			claim_component(route7.$$.fragment, div_nodes);
-    			t13 = claim_space(div_nodes);
-    			claim_component(route8.$$.fragment, div_nodes);
-    			t14 = claim_space(div_nodes);
-    			claim_component(route9.$$.fragment, div_nodes);
-    			t15 = claim_space(div_nodes);
-    			claim_component(route10.$$.fragment, div_nodes);
-    			div_nodes.forEach(detach_dev);
+    			div0_nodes.forEach(detach_dev);
+    			t6 = claim_space(nodes);
+    			div1 = claim_element(nodes, "DIV", {});
+    			var div1_nodes = children(div1);
+    			claim_component(route0.$$.fragment, div1_nodes);
+    			t7 = claim_space(div1_nodes);
+    			claim_component(route1.$$.fragment, div1_nodes);
+    			t8 = claim_space(div1_nodes);
+    			claim_component(route2.$$.fragment, div1_nodes);
+    			t9 = claim_space(div1_nodes);
+    			claim_component(route3.$$.fragment, div1_nodes);
+    			t10 = claim_space(div1_nodes);
+    			claim_component(route4.$$.fragment, div1_nodes);
+    			t11 = claim_space(div1_nodes);
+    			claim_component(route5.$$.fragment, div1_nodes);
+    			t12 = claim_space(div1_nodes);
+    			claim_component(route6.$$.fragment, div1_nodes);
+    			t13 = claim_space(div1_nodes);
+    			claim_component(route7.$$.fragment, div1_nodes);
+    			t14 = claim_space(div1_nodes);
+    			claim_component(route8.$$.fragment, div1_nodes);
+    			t15 = claim_space(div1_nodes);
+    			claim_component(route9.$$.fragment, div1_nodes);
+    			t16 = claim_space(div1_nodes);
+    			claim_component(route10.$$.fragment, div1_nodes);
+    			div1_nodes.forEach(detach_dev);
     			this.h();
     		},
     		h: function hydrate() {
-    			add_location(nav, file$a, 19, 1, 617);
-    			add_location(div, file$a, 27, 1, 819);
+    			attr_dev(path, "d", "M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z");
+    			add_location(path, file$a, 22, 95, 803);
+    			attr_dev(svg, "class", "fill-current h-4 w-4");
+    			attr_dev(svg, "xmlns", "http://www.w3.org/2000/svg");
+    			attr_dev(svg, "viewBox", "0 0 20 20");
+    			add_location(svg, file$a, 22, 6, 714);
+    			attr_dev(button, "class", "dropbtn");
+    			add_location(button, file$a, 21, 1, 682);
+    			add_location(li0, file$a, 25, 2, 947);
+    			add_location(li1, file$a, 26, 2, 984);
+    			add_location(li2, file$a, 27, 2, 1028);
+    			add_location(li3, file$a, 28, 2, 1070);
+    			add_location(li4, file$a, 29, 2, 1108);
+    			add_location(li5, file$a, 30, 2, 1148);
+    			attr_dev(ul, "class", "dropdown-content");
+    			add_location(ul, file$a, 24, 1, 914);
+    			attr_dev(nav, "class", "dropdown");
+    			add_location(nav, file$a, 20, 1, 657);
+    			attr_dev(div0, "class", "links");
+    			add_location(div0, file$a, 19, 0, 635);
+    			add_location(div1, file$a, 34, 1, 1220);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, nav, anchor);
-    			mount_component(link0, nav, null);
+    			insert_dev(target, div0, anchor);
+    			append_dev(div0, nav);
+    			append_dev(nav, button);
+    			append_dev(button, svg);
+    			append_dev(svg, path);
     			append_dev(nav, t0);
-    			mount_component(link1, nav, null);
-    			append_dev(nav, t1);
-    			mount_component(link2, nav, null);
-    			append_dev(nav, t2);
-    			mount_component(link3, nav, null);
-    			append_dev(nav, t3);
-    			mount_component(link4, nav, null);
-    			append_dev(nav, t4);
-    			mount_component(link5, nav, null);
-    			insert_dev(target, t5, anchor);
-    			insert_dev(target, div, anchor);
-    			mount_component(route0, div, null);
-    			append_dev(div, t6);
-    			mount_component(route1, div, null);
-    			append_dev(div, t7);
-    			mount_component(route2, div, null);
-    			append_dev(div, t8);
-    			mount_component(route3, div, null);
-    			append_dev(div, t9);
-    			mount_component(route4, div, null);
-    			append_dev(div, t10);
-    			mount_component(route5, div, null);
-    			append_dev(div, t11);
-    			mount_component(route6, div, null);
-    			append_dev(div, t12);
-    			mount_component(route7, div, null);
-    			append_dev(div, t13);
-    			mount_component(route8, div, null);
-    			append_dev(div, t14);
-    			mount_component(route9, div, null);
-    			append_dev(div, t15);
-    			mount_component(route10, div, null);
+    			append_dev(nav, ul);
+    			append_dev(ul, li0);
+    			mount_component(link0, li0, null);
+    			append_dev(ul, t1);
+    			append_dev(ul, li1);
+    			mount_component(link1, li1, null);
+    			append_dev(ul, t2);
+    			append_dev(ul, li2);
+    			mount_component(link2, li2, null);
+    			append_dev(ul, t3);
+    			append_dev(ul, li3);
+    			mount_component(link3, li3, null);
+    			append_dev(ul, t4);
+    			append_dev(ul, li4);
+    			mount_component(link4, li4, null);
+    			append_dev(ul, t5);
+    			append_dev(ul, li5);
+    			mount_component(link5, li5, null);
+    			insert_dev(target, t6, anchor);
+    			insert_dev(target, div1, anchor);
+    			mount_component(route0, div1, null);
+    			append_dev(div1, t7);
+    			mount_component(route1, div1, null);
+    			append_dev(div1, t8);
+    			mount_component(route2, div1, null);
+    			append_dev(div1, t9);
+    			mount_component(route3, div1, null);
+    			append_dev(div1, t10);
+    			mount_component(route4, div1, null);
+    			append_dev(div1, t11);
+    			mount_component(route5, div1, null);
+    			append_dev(div1, t12);
+    			mount_component(route6, div1, null);
+    			append_dev(div1, t13);
+    			mount_component(route7, div1, null);
+    			append_dev(div1, t14);
+    			mount_component(route8, div1, null);
+    			append_dev(div1, t15);
+    			mount_component(route9, div1, null);
+    			append_dev(div1, t16);
+    			mount_component(route10, div1, null);
     			current = true;
     		},
     		p: function update(ctx, dirty) {
@@ -5008,15 +5151,15 @@ var app = (function () {
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(nav);
+    			if (detaching) detach_dev(div0);
     			destroy_component(link0);
     			destroy_component(link1);
     			destroy_component(link2);
     			destroy_component(link3);
     			destroy_component(link4);
     			destroy_component(link5);
-    			if (detaching) detach_dev(t5);
-    			if (detaching) detach_dev(div);
+    			if (detaching) detach_dev(t6);
+    			if (detaching) detach_dev(div1);
     			destroy_component(route0);
     			destroy_component(route1);
     			destroy_component(route2);
