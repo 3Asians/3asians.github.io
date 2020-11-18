@@ -21,7 +21,6 @@
 
 <main>  
     <header class="header">
-        <Link back>Back</Link>
         <h1 class="font-bold text-5xl">{pageName}</h1>
     </header> 
     <div id="map"></div>

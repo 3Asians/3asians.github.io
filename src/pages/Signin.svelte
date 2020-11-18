@@ -9,7 +9,6 @@
 </script>
 <main>  
     <header class="header">
-        <Link back>&#8592;Back</Link>
         <h1 class="py-3 font-bold text-5xl" >{pageName}</h1>
     </header> 
     <article>
