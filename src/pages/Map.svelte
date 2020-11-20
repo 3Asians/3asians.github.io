@@ -21,7 +21,7 @@
 
 <main>  
     <header class="header">
-        <h1 class="font-bold text-5xl">{pageName}</h1>
+        <h1 class="font-bold text-4xl">{pageName}</h1>
     </header> 
     <div id="map"></div>
 </main>

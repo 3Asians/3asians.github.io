@@ -1,12 +1,8 @@
 {
   "version": 3,
   "file": "bundle.css",
-  "sources": [
-    "..\\..\\Component.svelte"
-  ],
-  "sourcesContent": [
-    "<script>\r\n\texport let item;\r\n\texport let index;\r\n</script>\r\n\r\n<style>\r\n\tspan{\r\n\t\tbackground-color: #ddd;\r\n\t\tborder-radius: 4px;\r\n\t\tpadding: 0 1em;\r\n\t\tfont-size: .5em;\r\n\t}\r\n</style>\r\n\r\n<h1>\r\n\t<span>{index+1}</span> {item.name}\r\n</h1>"
-  ],
+  "sources": [],
+  "sourcesContent": [],
   "names": [],
-  "mappings": "AAMC,mBAAI,CAAC,AACJ,gBAAgB,CAAE,IAAI,CACtB,aAAa,CAAE,GAAG,CAClB,OAAO,CAAE,CAAC,CAAC,GAAG,CACd,SAAS,CAAE,IAAI,AAChB,CAAC"
+  "mappings": ""
 }

@@ -14,7 +14,7 @@
     <header class="header">
         <h1 class="font-bold text-4xl">{pageName}</h1>
     </header> 
-    <div>
+    <div class="foods">
         {#each events as event}
         <ul>
             <li><b>{event.name}</b></li>

@@ -5,8 +5,8 @@
 </script>
 
 <main>
-    <header class="text-center py-8 px-8">
-        <h1 class="font-bold text-5xl">{appName}</h1>
+    <header class="text-center">
+        <h1 class="font-bold text-4xl">{appName}</h1>
     </header>
     <article class="text-center">
     <p>Click the button to find lists of food</p>

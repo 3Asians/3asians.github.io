@@ -9,7 +9,9 @@
     </header>  
     <article>
         <h2 class="font-bold text-2xl my-4">Our story</h2>
+        <p>We are students from Technical College</p>
         <h2 class="font-bold text-2xl my-4">About web</h2>
+        <p></p>
     </article>
     <aside>
         <h4 class="font-bold text-lg my-4">Phone</h4>

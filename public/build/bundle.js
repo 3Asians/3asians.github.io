@@ -2210,22 +2210,22 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
-    			attr_dev(h1, "class", "font-bold text-5xl");
-    			add_location(h1, file$1, 8, 8, 154);
-    			attr_dev(header, "class", "text-center py-8 px-8");
+    			attr_dev(h1, "class", "font-bold text-4xl");
+    			add_location(h1, file$1, 8, 8, 144);
+    			attr_dev(header, "class", "text-center");
     			add_location(header, file$1, 7, 4, 106);
-    			add_location(p0, file$1, 11, 4, 255);
+    			add_location(p0, file$1, 11, 4, 245);
     			attr_dev(input, "type", "button");
     			input.value = "Find food";
     			attr_dev(input, "onclick", "window.open('list')");
     			attr_dev(input, "class", "bg-white m-4 py-20 px-8 hover:bg-gray-200 text-red-600 font-semibold border-4 border-red-500 shadow items shadow-2xl");
-    			add_location(input, file$1, 12, 8, 310);
+    			add_location(input, file$1, 12, 8, 300);
     			attr_dev(article, "class", "text-center");
-    			add_location(article, file$1, 10, 4, 220);
+    			add_location(article, file$1, 10, 4, 210);
     			attr_dev(p1, "class", "copy");
-    			add_location(p1, file$1, 15, 8, 573);
+    			add_location(p1, file$1, 15, 8, 563);
     			attr_dev(footer, "class", "text-center py-8 px-8");
-    			add_location(footer, file$1, 14, 4, 525);
+    			add_location(footer, file$1, 14, 4, 515);
     			add_location(main, file$1, 6, 0, 94);
     		},
     		m: function mount(target, anchor) {
@@ -2495,31 +2495,31 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
-    			attr_dev(h1, "class", "py-3 font-bold text-5xl");
+    			attr_dev(h1, "class", "font-bold text-4xl");
     			add_location(h1, file$2, 11, 8, 253);
     			attr_dev(header, "class", "header");
     			add_location(header, file$2, 10, 4, 220);
     			attr_dev(input0, "class", "my-2 p-1");
     			attr_dev(input0, "name", "user");
     			input0.required = true;
-    			add_location(input0, file$2, 16, 12, 436);
+    			add_location(input0, file$2, 16, 12, 431);
     			attr_dev(input1, "class", "my-2 p-1");
     			attr_dev(input1, "name", "password");
     			input1.required = true;
     			attr_dev(input1, "type", "password");
-    			add_location(input1, file$2, 19, 12, 555);
-    			add_location(br, file$2, 19, 101, 644);
+    			add_location(input1, file$2, 19, 12, 550);
+    			add_location(br, file$2, 19, 101, 639);
     			attr_dev(button, "class", "bg-gray-200 my-3 hover:bg-gray-300 text-gray-800 py-2 px-2 border border-gray-400 shadow");
     			attr_dev(button, "type", "submit");
-    			add_location(button, file$2, 21, 12, 664);
+    			add_location(button, file$2, 21, 12, 659);
     			attr_dev(p0, "class", "my-3");
-    			add_location(p0, file$2, 23, 12, 815);
+    			add_location(p0, file$2, 23, 12, 810);
     			attr_dev(p1, "class", "my-3");
-    			add_location(p1, file$2, 24, 12, 894);
-    			add_location(label0, file$2, 18, 12, 525);
-    			add_location(label1, file$2, 15, 12, 406);
-    			add_location(form, file$2, 14, 8, 346);
-    			add_location(article, file$2, 13, 4, 327);
+    			add_location(p1, file$2, 24, 12, 889);
+    			add_location(label0, file$2, 18, 12, 520);
+    			add_location(label1, file$2, 15, 12, 401);
+    			add_location(form, file$2, 14, 8, 341);
+    			add_location(article, file$2, 13, 4, 322);
     			add_location(main, file$2, 9, 0, 206);
     		},
     		m: function mount(target, anchor) {
@@ -3035,24 +3035,29 @@ var app = (function () {
     	let h20;
     	let t2;
     	let t3;
-    	let h21;
+    	let p0;
     	let t4;
     	let t5;
-    	let aside;
-    	let h40;
+    	let h21;
     	let t6;
     	let t7;
-    	let h41;
+    	let p1;
     	let t8;
+    	let aside;
+    	let h40;
     	let t9;
-    	let h42;
     	let t10;
+    	let h41;
     	let t11;
-    	let footer;
-    	let p;
     	let t12;
+    	let h42;
     	let t13;
     	let t14;
+    	let footer;
+    	let p2;
+    	let t15;
+    	let t16;
+    	let t17;
 
     	const block = {
     		c: function create() {
@@ -3065,24 +3070,29 @@ var app = (function () {
     			h20 = element("h2");
     			t2 = text("Our story");
     			t3 = space();
-    			h21 = element("h2");
-    			t4 = text("About web");
+    			p0 = element("p");
+    			t4 = text("We are students from Technical College");
     			t5 = space();
+    			h21 = element("h2");
+    			t6 = text("About web");
+    			t7 = space();
+    			p1 = element("p");
+    			t8 = space();
     			aside = element("aside");
     			h40 = element("h4");
-    			t6 = text("Phone");
-    			t7 = space();
+    			t9 = text("Phone");
+    			t10 = space();
     			h41 = element("h4");
-    			t8 = text("Email");
-    			t9 = space();
+    			t11 = text("Email");
+    			t12 = space();
     			h42 = element("h4");
-    			t10 = text("Github");
-    			t11 = space();
+    			t13 = text("Github");
+    			t14 = space();
     			footer = element("footer");
-    			p = element("p");
-    			t12 = text("© ");
-    			t13 = text(/*appName*/ ctx[0]);
-    			t14 = text(" 2020");
+    			p2 = element("p");
+    			t15 = text("© ");
+    			t16 = text(/*appName*/ ctx[0]);
+    			t17 = text(" 2020");
     			this.h();
     		},
     		l: function claim(nodes) {
@@ -3103,38 +3113,46 @@ var app = (function () {
     			t2 = claim_text(h20_nodes, "Our story");
     			h20_nodes.forEach(detach_dev);
     			t3 = claim_space(article_nodes);
+    			p0 = claim_element(article_nodes, "P", {});
+    			var p0_nodes = children(p0);
+    			t4 = claim_text(p0_nodes, "We are students from Technical College");
+    			p0_nodes.forEach(detach_dev);
+    			t5 = claim_space(article_nodes);
     			h21 = claim_element(article_nodes, "H2", { class: true });
     			var h21_nodes = children(h21);
-    			t4 = claim_text(h21_nodes, "About web");
+    			t6 = claim_text(h21_nodes, "About web");
     			h21_nodes.forEach(detach_dev);
+    			t7 = claim_space(article_nodes);
+    			p1 = claim_element(article_nodes, "P", {});
+    			children(p1).forEach(detach_dev);
     			article_nodes.forEach(detach_dev);
-    			t5 = claim_space(main_nodes);
+    			t8 = claim_space(main_nodes);
     			aside = claim_element(main_nodes, "ASIDE", {});
     			var aside_nodes = children(aside);
     			h40 = claim_element(aside_nodes, "H4", { class: true });
     			var h40_nodes = children(h40);
-    			t6 = claim_text(h40_nodes, "Phone");
+    			t9 = claim_text(h40_nodes, "Phone");
     			h40_nodes.forEach(detach_dev);
-    			t7 = claim_space(aside_nodes);
+    			t10 = claim_space(aside_nodes);
     			h41 = claim_element(aside_nodes, "H4", { class: true });
     			var h41_nodes = children(h41);
-    			t8 = claim_text(h41_nodes, "Email");
+    			t11 = claim_text(h41_nodes, "Email");
     			h41_nodes.forEach(detach_dev);
-    			t9 = claim_space(aside_nodes);
+    			t12 = claim_space(aside_nodes);
     			h42 = claim_element(aside_nodes, "H4", { class: true });
     			var h42_nodes = children(h42);
-    			t10 = claim_text(h42_nodes, "Github");
+    			t13 = claim_text(h42_nodes, "Github");
     			h42_nodes.forEach(detach_dev);
     			aside_nodes.forEach(detach_dev);
-    			t11 = claim_space(main_nodes);
+    			t14 = claim_space(main_nodes);
     			footer = claim_element(main_nodes, "FOOTER", { class: true });
     			var footer_nodes = children(footer);
-    			p = claim_element(footer_nodes, "P", { class: true });
-    			var p_nodes = children(p);
-    			t12 = claim_text(p_nodes, "© ");
-    			t13 = claim_text(p_nodes, /*appName*/ ctx[0]);
-    			t14 = claim_text(p_nodes, " 2020");
-    			p_nodes.forEach(detach_dev);
+    			p2 = claim_element(footer_nodes, "P", { class: true });
+    			var p2_nodes = children(p2);
+    			t15 = claim_text(p2_nodes, "© ");
+    			t16 = claim_text(p2_nodes, /*appName*/ ctx[0]);
+    			t17 = claim_text(p2_nodes, " 2020");
+    			p2_nodes.forEach(detach_dev);
     			footer_nodes.forEach(detach_dev);
     			main_nodes.forEach(detach_dev);
     			this.h();
@@ -3146,20 +3164,22 @@ var app = (function () {
     			add_location(header, file$5, 6, 4, 92);
     			attr_dev(h20, "class", "font-bold text-2xl my-4");
     			add_location(h20, file$5, 10, 8, 213);
+    			add_location(p0, file$5, 11, 8, 273);
     			attr_dev(h21, "class", "font-bold text-2xl my-4");
-    			add_location(h21, file$5, 11, 8, 273);
+    			add_location(h21, file$5, 12, 8, 328);
+    			add_location(p1, file$5, 13, 8, 388);
     			add_location(article, file$5, 9, 4, 194);
     			attr_dev(h40, "class", "font-bold text-lg my-4");
-    			add_location(h40, file$5, 14, 8, 362);
+    			add_location(h40, file$5, 16, 8, 434);
     			attr_dev(h41, "class", "font-bold text-lg my-4");
-    			add_location(h41, file$5, 15, 8, 417);
+    			add_location(h41, file$5, 17, 8, 489);
     			attr_dev(h42, "class", "font-bold text-lg my-4");
-    			add_location(h42, file$5, 16, 8, 472);
-    			add_location(aside, file$5, 13, 4, 345);
-    			attr_dev(p, "class", "copy");
-    			add_location(p, file$5, 19, 8, 571);
+    			add_location(h42, file$5, 18, 8, 544);
+    			add_location(aside, file$5, 15, 4, 417);
+    			attr_dev(p2, "class", "copy");
+    			add_location(p2, file$5, 21, 8, 643);
     			attr_dev(footer, "class", "footer");
-    			add_location(footer, file$5, 18, 4, 538);
+    			add_location(footer, file$5, 20, 4, 610);
     			add_location(main, file$5, 5, 0, 80);
     		},
     		m: function mount(target, anchor) {
@@ -3172,24 +3192,29 @@ var app = (function () {
     			append_dev(article, h20);
     			append_dev(h20, t2);
     			append_dev(article, t3);
+    			append_dev(article, p0);
+    			append_dev(p0, t4);
+    			append_dev(article, t5);
     			append_dev(article, h21);
-    			append_dev(h21, t4);
-    			append_dev(main, t5);
+    			append_dev(h21, t6);
+    			append_dev(article, t7);
+    			append_dev(article, p1);
+    			append_dev(main, t8);
     			append_dev(main, aside);
     			append_dev(aside, h40);
-    			append_dev(h40, t6);
-    			append_dev(aside, t7);
+    			append_dev(h40, t9);
+    			append_dev(aside, t10);
     			append_dev(aside, h41);
-    			append_dev(h41, t8);
-    			append_dev(aside, t9);
+    			append_dev(h41, t11);
+    			append_dev(aside, t12);
     			append_dev(aside, h42);
-    			append_dev(h42, t10);
-    			append_dev(main, t11);
+    			append_dev(h42, t13);
+    			append_dev(main, t14);
     			append_dev(main, footer);
-    			append_dev(footer, p);
-    			append_dev(p, t12);
-    			append_dev(p, t13);
-    			append_dev(p, t14);
+    			append_dev(footer, p2);
+    			append_dev(p2, t15);
+    			append_dev(p2, t16);
+    			append_dev(p2, t17);
     		},
     		p: noop,
     		i: noop,
@@ -3287,7 +3312,7 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
-    			attr_dev(h1, "class", "font-bold text-5xl");
+    			attr_dev(h1, "class", "font-bold text-4xl");
     			add_location(h1, file$6, 23, 8, 584);
     			attr_dev(header, "class", "header");
     			add_location(header, file$6, 22, 4, 551);
@@ -3398,7 +3423,7 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
-    			add_location(p, file$7, 25, 8, 758);
+    			add_location(p, file$7, 25, 8, 772);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -3489,16 +3514,16 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
-    			add_location(b, file$7, 19, 16, 540);
-    			add_location(li0, file$7, 19, 12, 536);
-    			add_location(li1, file$7, 20, 12, 578);
-    			add_location(li2, file$7, 21, 12, 613);
+    			add_location(b, file$7, 19, 16, 554);
+    			add_location(li0, file$7, 19, 12, 550);
+    			add_location(li1, file$7, 20, 12, 592);
+    			add_location(li2, file$7, 21, 12, 627);
     			if (img.src !== (img_src_value = /*event*/ ctx[2].imageSource)) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "imaage");
     			attr_dev(img, "width", "500");
-    			add_location(img, file$7, 22, 16, 656);
-    			add_location(li3, file$7, 22, 12, 652);
-    			add_location(ul, file$7, 18, 8, 518);
+    			add_location(img, file$7, 22, 16, 670);
+    			add_location(li3, file$7, 22, 12, 666);
+    			add_location(ul, file$7, 18, 8, 532);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, ul, anchor);
@@ -3592,7 +3617,7 @@ var app = (function () {
     			h1_nodes.forEach(detach_dev);
     			header_nodes.forEach(detach_dev);
     			t1 = claim_space(main_nodes);
-    			div = claim_element(main_nodes, "DIV", {});
+    			div = claim_element(main_nodes, "DIV", { class: true });
     			var div_nodes = children(div);
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
@@ -3612,6 +3637,7 @@ var app = (function () {
     			add_location(h1, file$7, 14, 8, 402);
     			attr_dev(header, "class", "header");
     			add_location(header, file$7, 13, 4, 369);
+    			attr_dev(div, "class", "foods");
     			add_location(div, file$7, 16, 4, 470);
     			add_location(main, file$7, 12, 0, 355);
     		},
