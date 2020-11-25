@@ -11,6 +11,7 @@
 	import Restaurant from "./pages/Restaurant.svelte";
 	import Menu from "./pages/Menu.svelte";
 	import ForgotPass from "./pages/ForgotPass.svelte";
+	import Component from './pages/Component.svelte';
 
 	export let url = ""; 
 
@@ -44,5 +45,6 @@
 		<Route path="restaurant" component="{Restaurant}"/>
 		<Route path="menu" component="{Menu}"/>
 		<Route path="forgotPass" component="{ForgotPass}"/>
+		<Route path="component" component="{Component}"/>
 	</div>
 </Router>

@@ -2,25 +2,23 @@
     let pageName="List";
     import { onMount } from "svelte";
 
-    let events = [];
+    let restaurants = [];
     onMount(async () => {
-        const res = await fetch(`https://gist.githubusercontent.com/anhthuvu/02012661b6fee976842f035be56a3ded/raw/5da4fb30af059d268715fbf9681901f131420328/data.json`);
-        events = await res.json();
+        const res = await fetch(`https://gist.githubusercontent.com/anhthuvu/310a146b9bfa2697cb71b8402d89c87e/raw/be025a19e9f70587a18c5bc44c00c8cf1506502d/data.json`);
+        restaurants = await res.json();
     });
-
 </script>
-
-<main>  
+<main> 
     <header class="header">
         <h1 class="font-bold text-4xl">{pageName}</h1>
     </header> 
     <div class="foods">
-        {#each events as event}
+        {#each restaurants as restaurant}
         <ul>
-            <li><b>{event.name}</b></li>
-            <li>{event.date}</li>
-            <li>{event.location}</li>
-            <li><img src={event.imageSource} alt="imaage" width="500"/></li>
+            <li><b>{restaurant.RestaurantName}</b></li>
+            <li>Category: {restaurant.RestaurantCategory}</li>
+            <li>Distance: {restaurant.RestaurantDistance}km</li>
+            <li><img src={restaurant.RestaurantImage} alt="imaage" width="500"/></li>
         </ul>
         {:else}
         <p>loading...</p>
