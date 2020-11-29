@@ -2217,15 +2217,15 @@ var app = (function () {
     			add_location(p0, file$1, 11, 4, 245);
     			attr_dev(input, "type", "button");
     			input.value = "Find food";
-    			attr_dev(input, "onclick", "window.open('list')");
+    			attr_dev(input, "onclick", "location.href='/list'");
     			attr_dev(input, "class", "bg-white m-4 py-20 px-8 hover:bg-gray-200 text-red-600 font-semibold border-4 border-red-500 shadow items shadow-2xl");
     			add_location(input, file$1, 12, 8, 300);
     			attr_dev(article, "class", "text-center");
     			add_location(article, file$1, 10, 4, 210);
     			attr_dev(p1, "class", "copy");
-    			add_location(p1, file$1, 15, 8, 563);
+    			add_location(p1, file$1, 15, 8, 565);
     			attr_dev(footer, "class", "text-center py-8 px-8");
-    			add_location(footer, file$1, 14, 4, 515);
+    			add_location(footer, file$1, 14, 4, 517);
     			add_location(main, file$1, 6, 0, 94);
     		},
     		m: function mount(target, anchor) {
@@ -3404,7 +3404,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (23:8) {:else}
+    // (13:8) {:else}
     function create_else_block$1(ctx) {
     	let p;
     	let t;
@@ -3423,7 +3423,7 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
-    			add_location(p, file$7, 23, 8, 867);
+    			add_location(p, file$7, 13, 8, 503);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -3438,14 +3438,14 @@ var app = (function () {
     		block,
     		id: create_else_block$1.name,
     		type: "else",
-    		source: "(23:8) {:else}",
+    		source: "(13:8) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (16:8) {#each restaurants as restaurant}
+    // (6:8) {#each restaurants as restaurant}
     function create_each_block(ctx) {
     	let ul;
     	let li0;
@@ -3523,16 +3523,16 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
-    			add_location(b, file$7, 17, 16, 569);
-    			add_location(li0, file$7, 17, 12, 565);
-    			add_location(li1, file$7, 18, 12, 622);
-    			add_location(li2, file$7, 19, 12, 686);
+    			add_location(b, file$7, 7, 16, 208);
+    			add_location(li0, file$7, 7, 12, 204);
+    			add_location(li1, file$7, 8, 12, 261);
+    			add_location(li2, file$7, 9, 12, 325);
     			if (img.src !== (img_src_value = /*restaurant*/ ctx[2].RestaurantImage)) attr_dev(img, "src", img_src_value);
-    			attr_dev(img, "alt", "imaage");
+    			attr_dev(img, "alt", "img");
     			attr_dev(img, "width", "500");
-    			add_location(img, file$7, 20, 16, 756);
-    			add_location(li3, file$7, 20, 12, 752);
-    			add_location(ul, file$7, 16, 8, 547);
+    			add_location(img, file$7, 10, 16, 395);
+    			add_location(li3, file$7, 10, 12, 391);
+    			add_location(ul, file$7, 6, 8, 186);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, ul, anchor);
@@ -3571,7 +3571,7 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(16:8) {#each restaurants as restaurant}",
+    		source: "(6:8) {#each restaurants as restaurant}",
     		ctx
     	});
 
@@ -3646,12 +3646,12 @@ var app = (function () {
     		},
     		h: function hydrate() {
     			attr_dev(h1, "class", "font-bold text-4xl");
-    			add_location(h1, file$7, 12, 8, 407);
+    			add_location(h1, file$7, 2, 8, 46);
     			attr_dev(header, "class", "header");
-    			add_location(header, file$7, 11, 4, 374);
+    			add_location(header, file$7, 1, 4, 13);
     			attr_dev(div, "class", "foods");
-    			add_location(div, file$7, 14, 4, 475);
-    			add_location(main, file$7, 10, 0, 361);
+    			add_location(div, file$7, 4, 4, 114);
+    			add_location(main, file$7, 0, 0, 0);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, main, anchor);
