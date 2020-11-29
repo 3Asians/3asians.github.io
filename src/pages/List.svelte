@@ -4,7 +4,7 @@
     </header> 
     <div class="foods">
         {#each restaurants as restaurant}
-        <ul>
+        <ul class="lists">
             <li><b>{restaurant.RestaurantName}</b></li>
             <li>Category: {restaurant.RestaurantCategory}</li>
             <li>Distance: {restaurant.RestaurantDistance}km</li>
