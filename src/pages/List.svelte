@@ -8,6 +8,7 @@
             <li><b>{restaurant.RestaurantName}</b></li>
             <li>Category: {restaurant.RestaurantCategory}</li>
             <li>Distance: {restaurant.RestaurantDistance}km</li>
+            <li><a href={restaurant.RestaurantSite}>{restaurant.RestaurantSite}</a></li>
             <li><img src={restaurant.RestaurantImage} alt="img" width="500"/></li>
         </ul>
         {:else}
