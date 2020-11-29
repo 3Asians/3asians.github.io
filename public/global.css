@@ -77,6 +77,16 @@ article{
 	padding-top: 5em;
 }
 
+.lists{
+	border-bottom: black solid 2px;
+	padding: 2em;
+	margin: 2em;
+	display: block;
+  	margin-left: auto;
+  	margin-right: auto;
+  	width: 60%;
+}
+
 .links{
 	background-color: rgb(211, 165, 165);
 	padding: 6px;
