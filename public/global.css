@@ -64,17 +64,17 @@ button:focus {
 }
 
 h1{
-	position: fixed;
+	position: absolute;
 	top: 6px;
-	left: 19em;
 }
 
+
 .foods{
-	padding-top: 5em;
+	padding-top: 2em;
 }
 
 article{
-	padding-top: 5em;
+	padding-top: 3em;
 }
 
 .lists{
