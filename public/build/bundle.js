@@ -3398,7 +3398,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (25:8) {:else}
+    // (27:8) {:else}
     function create_else_block$1(ctx) {
     	let p;
     	let t;
@@ -3417,7 +3417,7 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
-    			add_location(p, file$7, 25, 8, 945);
+    			add_location(p, file$7, 27, 8, 1078);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -3432,14 +3432,14 @@ var app = (function () {
     		block,
     		id: create_else_block$1.name,
     		type: "else",
-    		source: "(25:8) {:else}",
+    		source: "(27:8) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (17:8) {#each restaurants as restaurant}
+    // (19:8) {#each restaurants as restaurant}
     function create_each_block(ctx) {
     	let ul;
     	let li0;
@@ -3530,15 +3530,15 @@ var app = (function () {
     		},
     		h: function hydrate() {
     			attr_dev(a0, "href", a0_href_value = "/restaurant/" + /*restaurant*/ ctx[2].ID);
-    			add_location(a0, file$7, 18, 19, 574);
-    			add_location(b, file$7, 18, 16, 571);
-    			add_location(li0, file$7, 18, 12, 567);
-    			add_location(li1, file$7, 19, 12, 656);
-    			add_location(li2, file$7, 20, 12, 710);
+    			add_location(a0, file$7, 20, 19, 707);
+    			add_location(b, file$7, 20, 16, 704);
+    			add_location(li0, file$7, 20, 12, 700);
+    			add_location(li1, file$7, 21, 12, 789);
+    			add_location(li2, file$7, 22, 12, 843);
     			attr_dev(a1, "href", a1_href_value = /*restaurant*/ ctx[2].Site);
-    			add_location(a1, file$7, 21, 16, 770);
-    			add_location(li3, file$7, 21, 12, 766);
-    			add_location(ul, file$7, 17, 8, 549);
+    			add_location(a1, file$7, 23, 16, 903);
+    			add_location(li3, file$7, 23, 12, 899);
+    			add_location(ul, file$7, 19, 8, 682);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, ul, anchor);
@@ -3585,7 +3585,7 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(17:8) {#each restaurants as restaurant}",
+    		source: "(19:8) {#each restaurants as restaurant}",
     		ctx
     	});
 
@@ -3660,12 +3660,12 @@ var app = (function () {
     		},
     		h: function hydrate() {
     			attr_dev(h1, "class", "font-bold text-4xl");
-    			add_location(h1, file$7, 13, 8, 409);
+    			add_location(h1, file$7, 15, 8, 542);
     			attr_dev(header, "class", "header");
-    			add_location(header, file$7, 12, 4, 376);
+    			add_location(header, file$7, 14, 4, 509);
     			attr_dev(div, "class", "foods");
-    			add_location(div, file$7, 15, 4, 477);
-    			add_location(main, file$7, 11, 0, 363);
+    			add_location(div, file$7, 17, 4, 610);
+    			add_location(main, file$7, 13, 0, 496);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, main, anchor);
@@ -3748,6 +3748,10 @@ var app = (function () {
     	onMount(async () => {
     		const res = await fetch(`https://gist.githubusercontent.com/anhthuvu/27946e76eb3ff4af6132ff54f9e3a3b3/raw/696392a234b93fe07c2b8cfa25f9f370d095c905/data.json`);
     		$$invalidate(0, restaurants = await res.json());
+
+    		restaurants.sort((a, b) => a.Distance > b.Distance
+    		? 1
+    		: a.Distance === b.Distance ? a.ID > b.ID ? 1 : -1 : -1);
     	});
 
     	const writable_props = [];
@@ -4079,23 +4083,23 @@ var app = (function () {
     		},
     		h: function hydrate() {
     			attr_dev(h1, "class", "font-bold text-4xl");
-    			add_location(h1, file$9, 23, 8, 644);
+    			add_location(h1, file$9, 23, 8, 645);
     			attr_dev(header, "class", "header");
-    			add_location(header, file$9, 22, 4, 611);
+    			add_location(header, file$9, 22, 4, 612);
     			attr_dev(a0, "href", a0_href_value = "/restaurant/" + /*restaurant*/ ctx[1].ID);
-    			add_location(a0, file$9, 27, 23, 774);
-    			add_location(b, file$9, 27, 20, 771);
-    			add_location(li0, file$9, 27, 16, 767);
-    			add_location(li1, file$9, 28, 16, 860);
-    			add_location(li2, file$9, 29, 16, 918);
-    			add_location(li3, file$9, 30, 16, 978);
+    			add_location(a0, file$9, 27, 23, 775);
+    			add_location(b, file$9, 27, 20, 772);
+    			add_location(li0, file$9, 27, 16, 768);
+    			add_location(li1, file$9, 28, 16, 861);
+    			add_location(li2, file$9, 29, 16, 919);
+    			add_location(li3, file$9, 30, 16, 979);
     			attr_dev(a1, "href", a1_href_value = /*restaurant*/ ctx[1].Site);
-    			add_location(a1, file$9, 31, 20, 1034);
-    			add_location(li4, file$9, 31, 16, 1030);
-    			add_location(ul, file$9, 26, 12, 745);
+    			add_location(a1, file$9, 31, 20, 1035);
+    			add_location(li4, file$9, 31, 16, 1031);
+    			add_location(ul, file$9, 26, 12, 746);
     			attr_dev(div, "class", "foods");
-    			add_location(div, file$9, 25, 4, 712);
-    			add_location(main, file$9, 21, 0, 598);
+    			add_location(div, file$9, 25, 4, 713);
+    			add_location(main, file$9, 21, 0, 599);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, main, anchor);
@@ -4162,7 +4166,7 @@ var app = (function () {
 
     	for (r = 0; r < restaurants.length; r++) {
     		if (restaurants[r].ID == params.id) {
-    			restaurant.push(restaurants[0]);
+    			restaurant.push(restaurants[r]);
     		}
     	}
 
@@ -4941,7 +4945,7 @@ var app = (function () {
     		});
 
     	route6 = new Route({
-    			props: { path: "list/", component: List },
+    			props: { path: "list/*", component: List },
     			$$inline: true
     		});
 

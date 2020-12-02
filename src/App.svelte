@@ -39,7 +39,7 @@
 		<Route path="signup" component="{Signup}"/>
 		<Route path="about" component="{About}"/>
 		<Route path="map" component="{Map}"/>
-		<Route path="list/" component="{List}"/>
+		<Route path="list/*" component="{List}"/>
 		<Route path="profile" component="{Profile}"/>
 		<Route path="restaurant/:id" component="{Restaurant}"/>
 		<Route path="restaurant/:id" let:params>

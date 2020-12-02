@@ -1,9 +1,8 @@
 <script>
     let pageName="Restaurant";
     import { onMount } from "svelte";
-
-    export let params;
     
+    export let params; 
     let restaurants = [];
     var r;
     let restaurant = [];
@@ -14,9 +13,10 @@
 
     for (r = 0; r < restaurants.length; r++) {
         if (restaurants[r].ID == params.id) {
-            restaurant.push(restaurants[0]);
+            restaurant.push(restaurants[r]);
         }
     }
+
 </script>
 
 <main> 
