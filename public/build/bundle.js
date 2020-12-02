@@ -4941,7 +4941,7 @@ var app = (function () {
     		});
 
     	route6 = new Route({
-    			props: { path: "list/*", component: List },
+    			props: { path: "list/", component: List },
     			$$inline: true
     		});
 
