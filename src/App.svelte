@@ -11,7 +11,6 @@
 	import Restaurant from "./pages/Restaurant.svelte";
 	import Menu from "./pages/Menu.svelte";
 	import ForgotPass from "./pages/ForgotPass.svelte";
-	import Component from './pages/Component.svelte';
 
 	export let url = ""; 
 
@@ -40,11 +39,13 @@
 		<Route path="signup" component="{Signup}"/>
 		<Route path="about" component="{About}"/>
 		<Route path="map" component="{Map}"/>
-		<Route path="list" component="{List}"/>
+		<Route path="list/*" component="{List}"/>
 		<Route path="profile" component="{Profile}"/>
-		<Route path="restaurant" component="{Restaurant}"/>
+		<Route path="restaurant/:id" component="{Restaurant}"/>
+		<Route path="restaurant/:id" let:params>
+			<Restaurant id="{params.id}"/>
+		</Route>
 		<Route path="menu" component="{Menu}"/>
 		<Route path="forgotPass" component="{ForgotPass}"/>
-		<Route path="component" component="{Component}"/>
 	</div>
 </Router>
