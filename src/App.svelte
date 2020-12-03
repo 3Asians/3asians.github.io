@@ -1,16 +1,10 @@
 <script>
 	import { Router, Route, Link } from "svelte-routing";
 	import Home from "./pages/Home.svelte";
-	import Signin from "./pages/Signin.svelte";
-	import Signout from "./pages/Signout.svelte";
-	import Signup from "./pages/Signup.svelte";
 	import About from "./pages/About.svelte";
 	import Map from "./pages/Map.svelte";
 	import List from "./pages/List.svelte";
-	import Profile from "./pages/Profile.svelte";
 	import Restaurant from "./pages/Restaurant.svelte";
-	import Menu from "./pages/Menu.svelte";
-	import ForgotPass from "./pages/ForgotPass.svelte";
 
 	export let url = ""; 
 
@@ -24,11 +18,8 @@
 			</button>
 			<ul class="dropdown-content">
 				<li><Link to="/">Home</Link></li>
-				<li><Link to="signin">Signin</Link></li>
 				<li><Link to="about">About</Link></li>
 				<li><Link to="map">Map</Link></li>
-				<li><Link to="list">List</Link></li>
-				<li><Link to="profile">Profile</Link></li>
 			</ul>
 		</nav>
 	</div>
@@ -40,12 +31,9 @@
 		<Route path="about" component="{About}"/>
 		<Route path="map" component="{Map}"/>
 		<Route path="list/*" component="{List}"/>
-		<Route path="profile" component="{Profile}"/>
 		<Route path="restaurant/:id" component="{Restaurant}"/>
 		<Route path="restaurant/:id" let:params>
 			<Restaurant id="{params.id}"/>
 		</Route>
-		<Route path="menu" component="{Menu}"/>
-		<Route path="forgotPass" component="{ForgotPass}"/>
 	</div>
 </Router>
