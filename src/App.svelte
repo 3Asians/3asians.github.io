@@ -25,9 +25,6 @@
 	</div>
 	<div>
 		<Route path="/"><Home /></Route>
-		<Route path="signin" component="{Signin}"/>
-		<Route path="signout" component="{Signout}"/>
-		<Route path="signup" component="{Signup}"/>
 		<Route path="about" component="{About}"/>
 		<Route path="map" component="{Map}"/>
 		<Route path="list/*" component="{List}"/>

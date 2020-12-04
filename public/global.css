@@ -8,6 +8,7 @@ body {
 	color: #333;
 	margin: 0;
 	padding: 0;
+	text-align: center;
 	box-sizing: border-box;
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
@@ -56,7 +57,7 @@ button:disabled {
 
 button:not(:disabled):active {
 	background-color: #ddd;
-	border-color: brown;
+	border-color: blue;
 }
 
 button:focus {
@@ -66,12 +67,36 @@ button:focus {
 h1{
 	position: absolute;
 	top: 6px;
+	left: 1em;
 }
 
 
 .foods{
 	padding-top: 2em;
 }
+
+iframe{
+	padding-top: 2em;
+	width: 100%;
+	height: 600px;
+}
+
+.loader {
+	border: 16px solid #e2d8d1;
+	border-top: 16px solid #b1a5d3;
+	border-radius: 50%;
+	width: 120px;
+	height: 120px;
+	animation: spin 2s linear infinite;
+	display: block;
+	margin: auto;
+	margin-top: 12em;
+  }
+  
+  @keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+  }
 
 article{
 	padding-top: 3em;
@@ -84,11 +109,11 @@ article{
 	display: block;
   	margin-left: auto;
   	margin-right: auto;
-  	width: 60%;
+  	width: 85%;
 }
 
 .links{
-	background-color: rgb(211, 165, 165);
+	background-color: #a1dbf1;
 	padding: 6px;
 	text-align: right;
 	margin: -18px;

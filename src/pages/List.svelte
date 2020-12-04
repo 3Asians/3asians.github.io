@@ -17,7 +17,7 @@
     </header> 
     <div class="foods">
         {#each restaurants as restaurant}
-        <ul>
+        <ul class="lists">
             <li><b><a href="/restaurant/{restaurant.ID}">{restaurant.Name}</a></b></li>
             <li>Category: {restaurant.Category}</li>
             <li>Distance: {restaurant.Distance}km</li>
@@ -25,7 +25,8 @@
             <!--<li><img src={restaurant.Image} alt="img" width="500"/></li>-->
         </ul>
         {:else}
-        <p>loading...</p>
+        <div class="loader"></div>
+        
         {/each}
     </div>
 </main>
