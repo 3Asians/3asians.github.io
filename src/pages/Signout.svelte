@@ -4,10 +4,9 @@
 </script>
 <main>  
     <header class="header">
-        <Link back>Back</Link>
-        <h1>{pageName}</h1>
+        <h1 class="font-bold text-4xl">{pageName}</h1>
     </header> 
     <article>
-        <button onclick="signOut">Sign out</button>
+        <button class="bg-blue-400 hover:bg-blue-500 text-white font-semibold py-3 px-3 border border-black rounded shadow items" onclick="signOut">Sign out</button>
     </article>
 </main>

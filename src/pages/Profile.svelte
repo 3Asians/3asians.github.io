@@ -5,13 +5,12 @@
 
 <main>  
     <header class="header">
-        <Link back>Back</Link>
-        <h1>{pageName}</h1>
+        <h1 class="font-bold text-4xl">{pageName}</h1>
     </header> 
     <article>
-        <h2>Username</h2>
-        <h2>Info</h2>
+        <h2 class="font-bold text-2xl m-3">Username</h2>
+        <h2 class="font-bold text-2xl m-3">Info</h2>
         <blockquote></blockquote>
-        <h2>Favorite places</h2>
+        <h2 class="font-bold text-2xl m-3">Favorite places</h2>
     </article>
 </main>

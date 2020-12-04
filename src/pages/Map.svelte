@@ -2,27 +2,12 @@
     let pageName="Map";
     import {Link} from "svelte-routing";
 
-    // Initialize and add the map
-    function initMap() {
-    // The location of Uluru
-    const uluru = { lat: -25.344, lng: 131.036 };
-    // The map, centered at Uluru
-    const map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 4,
-        center: uluru,
-    });
-    // The marker, positioned at Uluru
-    const marker = new google.maps.Marker({
-        position: uluru,
-        map: map,
-    });
-    }
 </script>
 
 <main>  
     <header class="header">
-        <Link back>Back</Link>
-        <h1>{pageName}</h1>
+        <h1 class="font-bold text-4xl">{pageName}</h1>
     </header> 
-    <div id="map"></div>
+    <div class="maps">
+    <iframe title="map" src="https://www.google.com/maps/d/embed?mid=1HzY2j4x2sQGoC9SBT-J5kvjp0wZ57a0L"></iframe></div>
 </main>
