@@ -4,10 +4,10 @@
     
     export let params; 
     let restaurants = [];
-    var r;
+    var r
     let restaurant = [];
     onMount(async () => {
-        const res = await fetch('/menu.json');
+        const res = await fetch('https://gist.githubusercontent.com/Gudruna02/cfa46697fd9d5eb012e4605d28dd32f2/raw/ce258b99d56d91961d924afd6d1168a2129fdf6f/menu.json');
         restaurants = await res.json();
     });
 

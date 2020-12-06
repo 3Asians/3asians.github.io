@@ -2753,7 +2753,7 @@ var app = (function () {
     		},
     		h: function hydrate() {
     			attr_dev(div, "class", "loader");
-    			add_location(div, file$4, 27, 8, 962);
+    			add_location(div, file$4, 27, 8, 1084);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -2877,21 +2877,21 @@ var app = (function () {
     		},
     		h: function hydrate() {
     			attr_dev(a0, "href", a0_href_value = "/restaurant/" + /*restaurant*/ ctx[2].ID);
-    			add_location(a0, file$4, 20, 19, 600);
-    			add_location(b, file$4, 20, 16, 597);
-    			add_location(li0, file$4, 20, 12, 593);
-    			add_location(li1, file$4, 21, 12, 682);
-    			add_location(li2, file$4, 22, 12, 736);
+    			add_location(a0, file$4, 20, 19, 722);
+    			add_location(b, file$4, 20, 16, 719);
+    			add_location(li0, file$4, 20, 12, 715);
+    			add_location(li1, file$4, 21, 12, 804);
+    			add_location(li2, file$4, 22, 12, 858);
     			attr_dev(a1, "href", a1_href_value = /*restaurant*/ ctx[2].Site);
-    			add_location(a1, file$4, 23, 16, 796);
-    			add_location(li3, file$4, 23, 12, 792);
+    			add_location(a1, file$4, 23, 16, 918);
+    			add_location(li3, file$4, 23, 12, 914);
     			if (img.src !== (img_src_value = /*restaurant*/ ctx[2].img)) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "img");
     			attr_dev(img, "width", "500");
-    			add_location(img, file$4, 24, 16, 866);
-    			add_location(li4, file$4, 24, 12, 862);
+    			add_location(img, file$4, 24, 16, 988);
+    			add_location(li4, file$4, 24, 12, 984);
     			attr_dev(ul, "class", "lists");
-    			add_location(ul, file$4, 19, 8, 561);
+    			add_location(ul, file$4, 19, 8, 683);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, ul, anchor);
@@ -3020,12 +3020,12 @@ var app = (function () {
     		},
     		h: function hydrate() {
     			attr_dev(h1, "class", "font-bold text-4xl");
-    			add_location(h1, file$4, 15, 8, 421);
+    			add_location(h1, file$4, 15, 8, 543);
     			attr_dev(header, "class", "header");
-    			add_location(header, file$4, 14, 4, 388);
+    			add_location(header, file$4, 14, 4, 510);
     			attr_dev(div, "class", "foods");
-    			add_location(div, file$4, 17, 4, 489);
-    			add_location(main, file$4, 13, 0, 375);
+    			add_location(div, file$4, 17, 4, 611);
+    			add_location(main, file$4, 13, 0, 497);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, main, anchor);
@@ -3106,7 +3106,7 @@ var app = (function () {
     	let restaurants = [];
 
     	onMount(async () => {
-    		const res = await fetch("/menu.json");
+    		const res = await fetch("https://gist.githubusercontent.com/Gudruna02/cfa46697fd9d5eb012e4605d28dd32f2/raw/ce258b99d56d91961d924afd6d1168a2129fdf6f/menu.json");
     		$$invalidate(0, restaurants = await res.json());
 
     		restaurants.sort((a, b) => a.Distance > b.Distance
@@ -3279,23 +3279,23 @@ var app = (function () {
     		},
     		h: function hydrate() {
     			attr_dev(h1, "class", "font-bold text-4xl");
-    			add_location(h1, file$5, 23, 8, 524);
+    			add_location(h1, file$5, 23, 8, 645);
     			attr_dev(header, "class", "header");
-    			add_location(header, file$5, 22, 4, 491);
+    			add_location(header, file$5, 22, 4, 612);
     			attr_dev(a0, "href", a0_href_value = "/restaurant/" + /*restaurant*/ ctx[1].ID);
-    			add_location(a0, file$5, 27, 23, 654);
-    			add_location(b, file$5, 27, 20, 651);
-    			add_location(li0, file$5, 27, 16, 647);
-    			add_location(li1, file$5, 28, 16, 740);
-    			add_location(li2, file$5, 29, 16, 798);
-    			add_location(li3, file$5, 30, 16, 858);
+    			add_location(a0, file$5, 27, 23, 775);
+    			add_location(b, file$5, 27, 20, 772);
+    			add_location(li0, file$5, 27, 16, 768);
+    			add_location(li1, file$5, 28, 16, 861);
+    			add_location(li2, file$5, 29, 16, 919);
+    			add_location(li3, file$5, 30, 16, 979);
     			attr_dev(a1, "href", a1_href_value = /*restaurant*/ ctx[1].Site);
-    			add_location(a1, file$5, 31, 20, 914);
-    			add_location(li4, file$5, 31, 16, 910);
-    			add_location(ul, file$5, 26, 12, 625);
+    			add_location(a1, file$5, 31, 20, 1035);
+    			add_location(li4, file$5, 31, 16, 1031);
+    			add_location(ul, file$5, 26, 12, 746);
     			attr_dev(div, "class", "foods");
-    			add_location(div, file$5, 25, 4, 592);
-    			add_location(main, file$5, 21, 0, 478);
+    			add_location(div, file$5, 25, 4, 713);
+    			add_location(main, file$5, 21, 0, 599);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, main, anchor);
@@ -3356,7 +3356,7 @@ var app = (function () {
     	let restaurant = [];
 
     	onMount(async () => {
-    		const res = await fetch("/menu.json");
+    		const res = await fetch("https://gist.githubusercontent.com/Gudruna02/cfa46697fd9d5eb012e4605d28dd32f2/raw/ce258b99d56d91961d924afd6d1168a2129fdf6f/menu.json");
     		restaurants = await res.json();
     	});
 

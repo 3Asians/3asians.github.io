@@ -1,12 +1,12 @@
 [
     {
-        "RestaurantID": 1,
-        "RestaurantName": "Pítan",
-        "RestaurantCategory": "Icelandic",
-        "RestaurantDistance": 0.3,
-        "RestaurantPrice": "$$",
-        "RestaurantSite": "https://www.pitan.is/#/",
-        "RestaurantMenu": [
+        "ID": 0,
+        "Name": "Pítan",
+        "Category": "Icelandic",
+        "Distance": 0.3,
+        "Price": "$$",
+        "Site": "https://www.pitan.is/#/",
+        "Menu": [
             {
                 "img": "https://api.pitan.is/api/service/image/PI-T0002",
                 "name": "Take away Tilboð 1",
@@ -112,31 +112,31 @@
         ]
     },
     {
-        "RestaurantID": 2,
-        "RestaurantName": "American style",
-        "RestaurantCategory": "Hamburger",
-        "RestaurantDistance": 0.9,
-        "RestaurantPrice": "$$",
-        "RestaurantSite": "https://americanstyle.is/",
-        "RestaurantMenu": "http://americanstyle.is/wp-content/uploads/2020/04/american_style_menu.pdf"
+        "ID": 1,
+        "Name": "American style",
+        "Category": "Hamburger",
+        "Distance": 0.9,
+        "Price": "$$",
+        "Site": "https://americanstyle.is/",
+        "Menu": "http://americanstyle.is/wp-content/uploads/2020/04/american_style_menu.pdf"
     },
     {
-        "RestaurantID": 3,
-        "RestaurantName": "Pizza king",
-        "RestaurantCategory": "Pizza",
-        "RestaurantDistance": 0.3,
-        "RestaurantPrice": "$$",
-        "RestaurantSite": "https://www.pizzaking.is/#",
-        "RestaurantMenu": "https://www.pizzaking.is/matsedill.php"
+        "ID": 2,
+        "Name": "Pizza king",
+        "Category": "Pizza",
+        "Distance": 0.3,
+        "Price": "$$",
+        "Site": "https://www.pizzaking.is/#",
+        "Menu": "https://www.pizzaking.is/matsedill.php"
     },
     {
-        "RestaurantID": 4,
-        "RestaurantName": "Subway",
-        "RestaurantCategory": "Sandwich",
-        "RestaurantDistance": 0.3,
-        "RestaurantPrice": "$",
-        "RestaurantSite": "https://subway.is/",
-        "RestaurantMenu": [
+        "ID": 3,
+        "Name": "Subway",
+        "Category": "Sandwich",
+        "Distance": 0.3,
+        "Price": "$",
+        "Site": "https://subway.is/",
+        "Menu": [
             {
                 "img": "https://subway.is/wp-content/uploads/2020/10/minnatilbod-300x276.jpg",
                 "name": "Minna fjölskyldutilboðið",
@@ -176,13 +176,13 @@
         ]
     },
     {
-        "RestaurantID": 5,
-        "RestaurantName": "Dominos",
-        "RestaurantCategory": "Pizza",
-        "RestaurantDistance": 4,
-        "RestaurantPrice": "$",
-        "RestaurantSite": "https://www.dominos.is/",
-        "RestaurantMenu": [
+        "ID": 4,
+        "Name": "Dominos",
+        "Category": "Pizza",
+        "Distance": 4,
+        "Price": "$",
+        "Site": "https://www.dominos.is/",
+        "Menu": [
             {
                 "img": "https://www.dominos.is//media/2813/dom_trio_vefmyndir_3750x2500.png?width=630&format=jpg&quality=70",
                 "name": "TRÍÓ",
@@ -246,48 +246,48 @@
         ]
     },
     {
-        "RestaurantID": 6,
-        "RestaurantName": "Devitos Pizza",
-        "RestaurantCategory": "Pizza",
-        "RestaurantDistance": 13,
-        "RestaurantPrice": "$$",
-        "RestaurantSite": "https://devitos.is/",
-        "RestaurantMenu": null
+        "ID": 5,
+        "Name": "Devitos Pizza",
+        "Category": "Pizza",
+        "Distance": 13,
+        "Price": "$$",
+        "Site": "https://devitos.is/",
+        "Menu": null
     },
     {
-        "RestaurantID": 7,
-        "RestaurantName": "Noodle Station",
-        "RestaurantCategory": "Noodles",
-        "RestaurantDistance": 14,
-        "RestaurantPrice": "$$",
-        "RestaurantSite": "https://noodlestation.is/",
-        "RestaurantMenu": []
+        "ID": 6,
+        "Name": "Noodle Station",
+        "Category": "Noodles",
+        "Distance": 14,
+        "Price": "$$",
+        "Site": "https://noodlestation.is/",
+        "Menu": []
     },
     {
-        "RestaurantID": 8,
-        "RestaurantName": "Mai Thai",
-        "RestaurantCategory": "Thai",
-        "RestaurantDistance": 10,
-        "RestaurantPrice": "$$",
-        "RestaurantSite": "https://www.maithai.is/",
-        "RestaurantMenu": null
+        "ID": 7,
+        "Name": "Mai Thai",
+        "Category": "Thai",
+        "Distance": 10,
+        "Price": "$$",
+        "Site": "https://www.maithai.is/",
+        "Menu": null
     },
     {
-        "RestaurantID": 9,
-        "RestaurantName": "Brauð Og Co",
-        "RestaurantCategory": "Bakery",
-        "RestaurantDistance": 10,
-        "RestaurantPrice": "$",
-        "RestaurantSite": "https://braudogco.is/",
-        "RestaurantMenu": null
+        "ID": 8,
+        "Name": "Brauð Og Co",
+        "Category": "Bakery",
+        "Distance": 10,
+        "Price": "$",
+        "Site": "https://braudogco.is/",
+        "Menu": null
     },
     {
-        "RestaurantID": 10,
-        "RestaurantName": "Chinese Flavor",
-        "RestaurantCategory": "Chinese",
-        "RestaurantDistance": 13,
-        "RestaurantPrice": "$",
-        "RestaurantSite": null,
-        "RestaurantMenu": null
+        "ID": 9,
+        "Name": "Chinese Flavor",
+        "Category": "Chinese",
+        "Distance": 13,
+        "Price": "$",
+        "Site": null,
+        "Menu": null
     }
 ]
