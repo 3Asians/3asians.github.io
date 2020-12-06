@@ -29,6 +29,7 @@
     "svelte-routing": "^1.4.2",
     "svelte-sortable-list": "^1.1.0",
     "svelte-tablesort": "^1.1.0",
+    "svelte-transitions": "^1.2.0",
     "tailwind": "^4.0.0",
     "tailwindcss": "^1.9.6"
   }

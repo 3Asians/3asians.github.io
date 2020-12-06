@@ -2737,7 +2737,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (27:8) {:else}
+    // (51:8) {:else}
     function create_else_block$1(ctx) {
     	let div;
 
@@ -2753,7 +2753,7 @@ var app = (function () {
     		},
     		h: function hydrate() {
     			attr_dev(div, "class", "loader");
-    			add_location(div, file$4, 27, 8, 1092);
+    			add_location(div, file$4, 51, 8, 1792);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -2767,14 +2767,14 @@ var app = (function () {
     		block,
     		id: create_else_block$1.name,
     		type: "else",
-    		source: "(27:8) {:else}",
+    		source: "(51:8) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (19:8) {#each restaurants as restaurant}
+    // (29:8) {#each restaurants as restaurant}
     function create_each_block(ctx) {
     	let ul;
     	let li0;
@@ -2796,11 +2796,19 @@ var app = (function () {
     	let t7;
     	let t8;
     	let li3;
-    	let a1;
-    	let t9_value = /*restaurant*/ ctx[2].Site + "";
     	let t9;
-    	let a1_href_value;
+    	let t10_value = /*restaurant*/ ctx[2].Price + "";
     	let t10;
+    	let t11;
+    	let li4;
+    	let a1;
+    	let t12_value = /*restaurant*/ ctx[2].Site + "";
+    	let t12;
+    	let a1_href_value;
+    	let t13;
+    	let li5;
+    	let t14;
+    	let t15;
 
     	const block = {
     		c: function create() {
@@ -2820,9 +2828,16 @@ var app = (function () {
     			t7 = text("km");
     			t8 = space();
     			li3 = element("li");
+    			t9 = text("Price: ");
+    			t10 = text(t10_value);
+    			t11 = space();
+    			li4 = element("li");
     			a1 = element("a");
-    			t9 = text(t9_value);
-    			t10 = space();
+    			t12 = text(t12_value);
+    			t13 = space();
+    			li5 = element("li");
+    			t14 = text("Menu:");
+    			t15 = space();
     			this.h();
     		},
     		l: function claim(nodes) {
@@ -2854,27 +2869,40 @@ var app = (function () {
     			t8 = claim_space(ul_nodes);
     			li3 = claim_element(ul_nodes, "LI", {});
     			var li3_nodes = children(li3);
-    			a1 = claim_element(li3_nodes, "A", { href: true });
-    			var a1_nodes = children(a1);
-    			t9 = claim_text(a1_nodes, t9_value);
-    			a1_nodes.forEach(detach_dev);
+    			t9 = claim_text(li3_nodes, "Price: ");
+    			t10 = claim_text(li3_nodes, t10_value);
     			li3_nodes.forEach(detach_dev);
-    			t10 = claim_space(ul_nodes);
+    			t11 = claim_space(ul_nodes);
+    			li4 = claim_element(ul_nodes, "LI", {});
+    			var li4_nodes = children(li4);
+    			a1 = claim_element(li4_nodes, "A", { href: true });
+    			var a1_nodes = children(a1);
+    			t12 = claim_text(a1_nodes, t12_value);
+    			a1_nodes.forEach(detach_dev);
+    			li4_nodes.forEach(detach_dev);
+    			t13 = claim_space(ul_nodes);
+    			li5 = claim_element(ul_nodes, "LI", {});
+    			var li5_nodes = children(li5);
+    			t14 = claim_text(li5_nodes, "Menu:");
+    			li5_nodes.forEach(detach_dev);
+    			t15 = claim_space(ul_nodes);
     			ul_nodes.forEach(detach_dev);
     			this.h();
     		},
     		h: function hydrate() {
     			attr_dev(a0, "href", a0_href_value = "/restaurant/" + /*restaurant*/ ctx[2].ID);
-    			add_location(a0, file$4, 20, 19, 721);
-    			add_location(b, file$4, 20, 16, 718);
-    			add_location(li0, file$4, 20, 12, 714);
-    			add_location(li1, file$4, 21, 12, 803);
-    			add_location(li2, file$4, 22, 12, 857);
+    			add_location(a0, file$4, 30, 19, 896);
+    			add_location(b, file$4, 30, 16, 893);
+    			add_location(li0, file$4, 30, 12, 889);
+    			add_location(li1, file$4, 31, 12, 978);
+    			add_location(li2, file$4, 32, 12, 1032);
+    			add_location(li3, file$4, 33, 12, 1088);
     			attr_dev(a1, "href", a1_href_value = /*restaurant*/ ctx[2].Site);
-    			add_location(a1, file$4, 23, 16, 917);
-    			add_location(li3, file$4, 23, 12, 913);
+    			add_location(a1, file$4, 34, 16, 1140);
+    			add_location(li4, file$4, 34, 12, 1136);
+    			add_location(li5, file$4, 35, 12, 1206);
     			attr_dev(ul, "class", "lists");
-    			add_location(ul, file$4, 19, 8, 682);
+    			add_location(ul, file$4, 29, 8, 857);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, ul, anchor);
@@ -2893,9 +2921,16 @@ var app = (function () {
     			append_dev(li2, t7);
     			append_dev(ul, t8);
     			append_dev(ul, li3);
-    			append_dev(li3, a1);
-    			append_dev(a1, t9);
-    			append_dev(ul, t10);
+    			append_dev(li3, t9);
+    			append_dev(li3, t10);
+    			append_dev(ul, t11);
+    			append_dev(ul, li4);
+    			append_dev(li4, a1);
+    			append_dev(a1, t12);
+    			append_dev(ul, t13);
+    			append_dev(ul, li5);
+    			append_dev(li5, t14);
+    			append_dev(ul, t15);
     		},
     		p: function update(ctx, dirty) {
     			if (dirty & /*restaurants*/ 1 && t0_value !== (t0_value = /*restaurant*/ ctx[2].Name + "")) set_data_dev(t0, t0_value);
@@ -2906,7 +2941,8 @@ var app = (function () {
 
     			if (dirty & /*restaurants*/ 1 && t3_value !== (t3_value = /*restaurant*/ ctx[2].Category + "")) set_data_dev(t3, t3_value);
     			if (dirty & /*restaurants*/ 1 && t6_value !== (t6_value = /*restaurant*/ ctx[2].Distance + "")) set_data_dev(t6, t6_value);
-    			if (dirty & /*restaurants*/ 1 && t9_value !== (t9_value = /*restaurant*/ ctx[2].Site + "")) set_data_dev(t9, t9_value);
+    			if (dirty & /*restaurants*/ 1 && t10_value !== (t10_value = /*restaurant*/ ctx[2].Price + "")) set_data_dev(t10, t10_value);
+    			if (dirty & /*restaurants*/ 1 && t12_value !== (t12_value = /*restaurant*/ ctx[2].Site + "")) set_data_dev(t12, t12_value);
 
     			if (dirty & /*restaurants*/ 1 && a1_href_value !== (a1_href_value = /*restaurant*/ ctx[2].Site)) {
     				attr_dev(a1, "href", a1_href_value);
@@ -2921,7 +2957,7 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(19:8) {#each restaurants as restaurant}",
+    		source: "(29:8) {#each restaurants as restaurant}",
     		ctx
     	});
 
@@ -2996,12 +3032,12 @@ var app = (function () {
     		},
     		h: function hydrate() {
     			attr_dev(h1, "class", "font-bold text-4xl");
-    			add_location(h1, file$4, 15, 8, 542);
+    			add_location(h1, file$4, 25, 8, 717);
     			attr_dev(header, "class", "header");
-    			add_location(header, file$4, 14, 4, 509);
+    			add_location(header, file$4, 24, 4, 684);
     			attr_dev(div, "class", "foods");
-    			add_location(div, file$4, 17, 4, 610);
-    			add_location(main, file$4, 13, 0, 496);
+    			add_location(div, file$4, 27, 4, 785);
+    			add_location(main, file$4, 23, 0, 671);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, main, anchor);
@@ -3079,10 +3115,19 @@ var app = (function () {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots("List", slots, []);
     	let pageName = "List";
+
+    	/*import {fade,slide} from "svelte/transition";
+    	
+    	let show = false;
+    	let showMore = false;
+    	
+    	function toggle() {
+    		show? showMore = false : show = true
+    	}*/
     	let restaurants = [];
 
     	onMount(async () => {
-    		const res = await fetch(`https://gist.githubusercontent.com/anhthuvu/27946e76eb3ff4af6132ff54f9e3a3b3/raw/696392a234b93fe07c2b8cfa25f9f370d095c905/data.json`);
+    		const res = await fetch(`https://gist.githubusercontent.com/anhthuvu/1004ac7072533201b49592b24a446466/raw/ccbb6574bf8460128053f2cad38864481b21e452/menu.json`);
     		$$invalidate(0, restaurants = await res.json());
 
     		restaurants.sort((a, b) => a.Distance > b.Distance
@@ -3138,29 +3183,29 @@ var app = (function () {
     	let li0;
     	let b;
     	let a0;
-    	let t2_value = /*restaurant*/ ctx[1].Name + "";
+    	let t2_value = /*restaurant*/ ctx[0].Name + "";
     	let t2;
     	let a0_href_value;
     	let t3;
     	let li1;
     	let t4;
-    	let t5_value = /*restaurant*/ ctx[1].Category + "";
+    	let t5_value = /*restaurant*/ ctx[0].Category + "";
     	let t5;
     	let t6;
     	let li2;
     	let t7;
-    	let t8_value = /*restaurant*/ ctx[1].Distance + "";
+    	let t8_value = /*restaurant*/ ctx[0].Distance + "";
     	let t8;
     	let t9;
     	let t10;
     	let li3;
     	let t11;
-    	let t12_value = /*restaurant*/ ctx[1].Price + "";
+    	let t12_value = /*restaurant*/ ctx[0].Price + "";
     	let t12;
     	let t13;
     	let li4;
     	let a1;
-    	let t14_value = /*restaurant*/ ctx[1].Site + "";
+    	let t14_value = /*restaurant*/ ctx[0].Site + "";
     	let t14;
     	let a1_href_value;
 
@@ -3169,7 +3214,7 @@ var app = (function () {
     			main = element("main");
     			header = element("header");
     			h1 = element("h1");
-    			t0 = text(/*pageName*/ ctx[0]);
+    			t0 = text(/*pageName*/ ctx[1]);
     			t1 = space();
     			div = element("div");
     			ul = element("ul");
@@ -3203,7 +3248,7 @@ var app = (function () {
     			var header_nodes = children(header);
     			h1 = claim_element(header_nodes, "H1", { class: true });
     			var h1_nodes = children(h1);
-    			t0 = claim_text(h1_nodes, /*pageName*/ ctx[0]);
+    			t0 = claim_text(h1_nodes, /*pageName*/ ctx[1]);
     			h1_nodes.forEach(detach_dev);
     			header_nodes.forEach(detach_dev);
     			t1 = claim_space(main_nodes);
@@ -3255,23 +3300,23 @@ var app = (function () {
     		},
     		h: function hydrate() {
     			attr_dev(h1, "class", "font-bold text-4xl");
-    			add_location(h1, file$5, 23, 8, 645);
+    			add_location(h1, file$5, 23, 8, 641);
     			attr_dev(header, "class", "header");
-    			add_location(header, file$5, 22, 4, 612);
-    			attr_dev(a0, "href", a0_href_value = "/restaurant/" + /*restaurant*/ ctx[1].ID);
-    			add_location(a0, file$5, 27, 23, 775);
-    			add_location(b, file$5, 27, 20, 772);
-    			add_location(li0, file$5, 27, 16, 768);
-    			add_location(li1, file$5, 28, 16, 861);
-    			add_location(li2, file$5, 29, 16, 919);
-    			add_location(li3, file$5, 30, 16, 979);
-    			attr_dev(a1, "href", a1_href_value = /*restaurant*/ ctx[1].Site);
-    			add_location(a1, file$5, 31, 20, 1035);
-    			add_location(li4, file$5, 31, 16, 1031);
-    			add_location(ul, file$5, 26, 12, 746);
+    			add_location(header, file$5, 22, 4, 608);
+    			attr_dev(a0, "href", a0_href_value = "/restaurant/" + /*restaurant*/ ctx[0].ID);
+    			add_location(a0, file$5, 27, 23, 771);
+    			add_location(b, file$5, 27, 20, 768);
+    			add_location(li0, file$5, 27, 16, 764);
+    			add_location(li1, file$5, 28, 16, 857);
+    			add_location(li2, file$5, 29, 16, 915);
+    			add_location(li3, file$5, 30, 16, 975);
+    			attr_dev(a1, "href", a1_href_value = /*restaurant*/ ctx[0].Site);
+    			add_location(a1, file$5, 31, 20, 1031);
+    			add_location(li4, file$5, 31, 16, 1027);
+    			add_location(ul, file$5, 26, 12, 742);
     			attr_dev(div, "class", "foods");
-    			add_location(div, file$5, 25, 4, 713);
-    			add_location(main, file$5, 21, 0, 599);
+    			add_location(div, file$5, 25, 4, 709);
+    			add_location(main, file$5, 21, 0, 595);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, main, anchor);
@@ -3303,7 +3348,22 @@ var app = (function () {
     			append_dev(li4, a1);
     			append_dev(a1, t14);
     		},
-    		p: noop,
+    		p: function update(ctx, [dirty]) {
+    			if (dirty & /*restaurant*/ 1 && t2_value !== (t2_value = /*restaurant*/ ctx[0].Name + "")) set_data_dev(t2, t2_value);
+
+    			if (dirty & /*restaurant*/ 1 && a0_href_value !== (a0_href_value = "/restaurant/" + /*restaurant*/ ctx[0].ID)) {
+    				attr_dev(a0, "href", a0_href_value);
+    			}
+
+    			if (dirty & /*restaurant*/ 1 && t5_value !== (t5_value = /*restaurant*/ ctx[0].Category + "")) set_data_dev(t5, t5_value);
+    			if (dirty & /*restaurant*/ 1 && t8_value !== (t8_value = /*restaurant*/ ctx[0].Distance + "")) set_data_dev(t8, t8_value);
+    			if (dirty & /*restaurant*/ 1 && t12_value !== (t12_value = /*restaurant*/ ctx[0].Price + "")) set_data_dev(t12, t12_value);
+    			if (dirty & /*restaurant*/ 1 && t14_value !== (t14_value = /*restaurant*/ ctx[0].Site + "")) set_data_dev(t14, t14_value);
+
+    			if (dirty & /*restaurant*/ 1 && a1_href_value !== (a1_href_value = /*restaurant*/ ctx[0].Site)) {
+    				attr_dev(a1, "href", a1_href_value);
+    			}
+    		},
     		i: noop,
     		o: noop,
     		d: function destroy(detaching) {
@@ -3338,7 +3398,7 @@ var app = (function () {
 
     	for (r = 0; r < restaurants.length; r++) {
     		if (restaurants[r].ID == params.id) {
-    			restaurant.push(restaurants[r]);
+    			restaurant = restaurants[r];
     		}
     	}
 
@@ -3362,18 +3422,18 @@ var app = (function () {
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ("pageName" in $$props) $$invalidate(0, pageName = $$props.pageName);
+    		if ("pageName" in $$props) $$invalidate(1, pageName = $$props.pageName);
     		if ("params" in $$props) $$invalidate(2, params = $$props.params);
     		if ("restaurants" in $$props) restaurants = $$props.restaurants;
     		if ("r" in $$props) r = $$props.r;
-    		if ("restaurant" in $$props) $$invalidate(1, restaurant = $$props.restaurant);
+    		if ("restaurant" in $$props) $$invalidate(0, restaurant = $$props.restaurant);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [pageName, restaurant, params];
+    	return [restaurant, pageName, params];
     }
 
     class Restaurant extends SvelteComponentDev {

@@ -13,7 +13,7 @@
 
     for (r = 0; r < restaurants.length; r++) {
         if (restaurants[r].ID == params.id) {
-            restaurant.push(restaurants[r]);
+            restaurant = restaurants[r];
         }
     }
 
