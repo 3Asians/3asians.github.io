@@ -1,19 +1,8 @@
 {
   "version": 3,
   "file": "bundle.css",
-<<<<<<< HEAD
   "sources": [],
   "sourcesContent": [],
   "names": [],
   "mappings": ""
-=======
-  "sources": [
-    "..\\..\\GetMap.svelte"
-  ],
-  "sourcesContent": [
-    "<script>\r\n\timport { onMount, setContext } from 'svelte';\r\n\timport { mapbox, key } from './mapbox.js';\r\n\r\n\tsetContext(key, {\r\n\t\tgetMap: () => map\r\n\t});\r\n\r\n\texport let lat;\r\n\texport let lon;\r\n\texport let zoom;\r\n\r\n\tlet container;\r\n\tlet map;\r\n\r\n\tonMount(() => {\r\n\t\tconst link = document.createElement('link');\r\n\t\tlink.rel = 'stylesheet';\r\n\t\tlink.href = 'https://unpkg.com/mapbox-gl/dist/mapbox-gl.css';\r\n\r\n\t\tlink.onload = () => {\r\n\t\t\tmap = new mapbox.Map({\r\n\t\t\t\tcontainer,\r\n\t\t\t\tstyle: 'mapbox://styles/mapbox/streets-v9',\r\n\t\t\t\tcenter: [lon, lat],\r\n\t\t\t\tzoom\r\n\t\t\t});\r\n\t\t};\r\n\r\n\t\tdocument.head.appendChild(link);\r\n\r\n\t\treturn () => {\r\n\t\t\tmap.remove();\r\n\t\t\tlink.parentNode.removeChild(link);\r\n\t\t};\r\n\t});\r\n</script>\r\n\r\n<style>\r\n\tdiv {\r\n\t\twidth: 100%;\r\n\t\theight: 100%;\r\n\t}\r\n</style>\r\n\r\n<div bind:this={container}>\r\n\t{#if map}\r\n\t\t<slot></slot>\r\n\t{/if}\r\n</div>"
-  ],
-  "names": [],
-  "mappings": "AAuCC,GAAG,eAAC,CAAC,AACJ,KAAK,CAAE,IAAI,CACX,MAAM,CAAE,IAAI,AACb,CAAC"
->>>>>>> develop
 }

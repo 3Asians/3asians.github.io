@@ -1,0 +1,293 @@
+[
+    {
+        "RestaurantID": 1,
+        "RestaurantName": "Pítan",
+        "RestaurantCategory": "Icelandic",
+        "RestaurantDistance": 0.3,
+        "RestaurantPrice": "$$",
+        "RestaurantSite": "https://www.pitan.is/#/",
+        "RestaurantMenu": [
+            {
+                "img": "https://api.pitan.is/api/service/image/PI-T0002",
+                "name": "Take away Tilboð 1",
+                "food": "2x Píta m/buff, 2x Barna píta m/buff, 1x Stór franskar",
+                "price": "4,995 kr"
+            },
+            {
+                "img": "https://api.pitan.is/api/service/image/PI-T0003",
+                "name": "Take away Tilboð 2",
+                "food": "2x Píta m/ buff, 2x Píta m/ kjúklingabringu, 1x Stór franskar",
+                "price": "5,995 kr"
+            },
+            {
+                "img": "https://api.pitan.is/api/service/image/PI_NOIMG",
+                "name": "Rúdólf [M0]",
+                "food": "Hreindýrabuff, Feta, Rauðbeður, Iceberg, Laukhringir og Hvítlauskssósa",
+                "price": "2,795 kr"
+            },
+            {
+                "img": "https://api.pitan.is/api/service/image/PI-001-01",
+                "name": "Píta með buffi [M1]",
+                "food": "Kál, tómatar, gúrka, laukur og pítusósa",
+                "price": "2,195 kr"
+            },
+            {
+                "img": "https://api.pitan.is/api/service/image/PI-001-02",
+                "name": "Píta með Kjúklingabringu [M2]",
+                "food": "Kál, tómatar, gúrka og pítusósa",
+                "price": "2,595 kr"
+            },
+            {
+                "img": "https://api.pitan.is/api/service/image/PI-001-76",
+                "name": "Píta með Crispy kjúkling [M3]",
+                "food": "Kál, tómatar, súrar gúrkur, beikon og hvítlaukssósa",
+                "price": "2,595 kr"
+            },
+            {
+                "img": "https://api.pitan.is/api/service/image/PI-001-04",
+                "name": "Píta með Kebab [M4]",
+                "food": "Kál, gúrka, tómatar og kebab sósa",
+                "price": "2,595 kr"
+            },
+            {
+                "img": "https://api.pitan.is/api/service/image/PI-001-05",
+                "name": "Píta með Lambasteik [M5]",
+                "food": "Kál, tómatar, gúrka og sinnepssósa",
+                "price": "2,595 kr"
+            },
+            {
+                "img": "https://api.pitan.is/api/service/image/PI-001-06",
+                "name": "Píta með Grænmeti [M6]",
+                "food": "Kál, tómatar, gúrka, laukur, papríka, svartar ólifur og pítusósa",
+                "price": "2,295 kr"
+            },
+            {
+                "img": "https://api.pitan.is/api/service/image/PI-001-07",
+                "name": "Píta með Beikon [M7]",
+                "food": "Kál, tómatar, egg og pítusósa",
+                "price": "2,595 kr"
+            },
+            {
+                "img": "https://api.pitan.is/api/service/image/PI-001-75",
+                "name": "Vegan-píta með grænmetisbuffi [M8]",
+                "food": "Kál, tómatar, laukur, papríka, gúrka og vegan pítusósa",
+                "price": "2,395 kr"
+            },
+            {
+                "img": "https://api.pitan.is/api/service/image/PI-001-55",
+                "name": "Píta með Beikon og buffi [M9]",
+                "food": "Kál, gúrka, rauðlaukur og pítusósa",
+                "price": "2,595 kr"
+            },
+            {
+                "img": "https://api.pitan.is/api/service/image/PI-001-70",
+                "name": "Píta með Kalkún og beikon [M10]",
+                "food": "Kál, tómatar, gúrka og sinnepssósa",
+                "price": "2,595 kr"
+            },
+            {
+                "img": "https://api.pitan.is/api/service/image/PI-001-80",
+                "name": "Píta með Beikon og berneise [M11]",
+                "food": "Kál, tómatar, laukhringir, beikon, buff og chilli bernaise sósa",
+                "price": "2,595 kr"
+            },
+            {
+                "img": "https://api.pitan.is/api/service/image/PI-001-19",
+                "name": "Píta með Kjúklingalundum [M12]",
+                "food": "Kál, tómatar, gúrka og pítusósa",
+                "price": "2,595 kr"
+            },
+            {
+                "img": "https://api.pitan.is/api/service/image/PI-001-72",
+                "name": "Píta með Roastbeef [M13]",
+                "food": "Kál, papríka, steiktur laukur, súrar gúrkur og remolaði",
+                "price": "2,595 kr"
+            },
+            {
+                "img": "https://api.pitan.is/api/service/image/PI-005-41",
+                "name": "Máltíð Ostborgari",
+                "food": "Máltíð Ostborgari",
+                "price": "2,065 kr"
+            }
+        ]
+    },
+    {
+        "RestaurantID": 2,
+        "RestaurantName": "American style",
+        "RestaurantCategory": "Hamburger",
+        "RestaurantDistance": 0.9,
+        "RestaurantPrice": "$$",
+        "RestaurantSite": "https://americanstyle.is/",
+        "RestaurantMenu": "http://americanstyle.is/wp-content/uploads/2020/04/american_style_menu.pdf"
+    },
+    {
+        "RestaurantID": 3,
+        "RestaurantName": "Pizza king",
+        "RestaurantCategory": "Pizza",
+        "RestaurantDistance": 0.3,
+        "RestaurantPrice": "$$",
+        "RestaurantSite": "https://www.pizzaking.is/#",
+        "RestaurantMenu": "https://www.pizzaking.is/matsedill.php"
+    },
+    {
+        "RestaurantID": 4,
+        "RestaurantName": "Subway",
+        "RestaurantCategory": "Sandwich",
+        "RestaurantDistance": 0.3,
+        "RestaurantPrice": "$",
+        "RestaurantSite": "https://subway.is/",
+        "RestaurantMenu": [
+            {
+                "img": "https://subway.is/wp-content/uploads/2020/10/minnatilbod-300x276.jpg",
+                "name": "Minna fjölskyldutilboðið",
+                "food": "Tveir 12 tommu bátar að eigin vali\nTveir 6 tommu bátar að eigin vali\n2 lítrar gos (Pepsi, Pepsi Max, Kristal eða Appelsín)",
+                "price": "3.999 kr."
+            },
+            {
+                "img": "https://subway.is/wp-content/uploads/2020/10/storatilbod-300x276.jpg",
+                "name": "Stóra fjölskyldutilboðið",
+                "food": "Þrír 12 tommu bátar að eigin vali\nTveir 6 tommu bátar að eigin vali\n2 lítrar gos (Pepsi, Pepsi Max, Kristal eða Appelsín)",
+                "price": "4.999 kr."
+            },
+            {
+                "img": "https://subway.is/wp-content/uploads/2020/04/Screenshot-2020-04-23-at-10.13.13-300x300.png",
+                "name": "Þúsaldartilboð",
+                "food": "6 tommu bátur dagsins, flögur eða kaka og miðstærð af gosi.",
+                "price": "1.000 kr."
+            },
+            {
+                "img": "https://subway.is/wp-content/uploads/2017/12/forsida_3batar-300x129.jpg",
+                "name": "Bátur dagsins",
+                "food": "Mánudagur: Grænmetisbuff\nÞriðjudagur: Teriyaki kjúklingur\nMiðvikudagur: Pizzabátur\nFimmtudagur: Skinkubátur\nFöstudagur: Ítalskur BMT\nLaugardagur: Rifið grísakjöt\nSunnudagur: BLT Beikon",
+                "price": ""
+            },
+            {
+                "img": "https://subway.is/wp-content/uploads/2017/02/barnabox-300x273.jpg",
+                "name": "Barnabox",
+                "food": "6 tommu bátur\n(skinku, kalkún og skinku, pizzu eða ítalskan BMT)\nFlórídana ávaxtasafi\nKaka\nÓvæntur glaðningur (dót)",
+                "price": "929 kr."
+            },
+            {
+                "img": "",
+                "name": "Veisluplatti",
+                "food": "fyrir 6-8 manns\nFjórir 12 tommu bátar skipt upp í 16 bita\nÞú getur valið á milli:\nKjötveisluplatta\nKlassísks platta\nHeilsuplatta\nGrænmetisplatta\nKrakkaplatta",
+                "price": "4.999 kr."
+            }
+        ]
+    },
+    {
+        "RestaurantID": 5,
+        "RestaurantName": "Dominos",
+        "RestaurantCategory": "Pizza",
+        "RestaurantDistance": 4,
+        "RestaurantPrice": "$",
+        "RestaurantSite": "https://www.dominos.is/",
+        "RestaurantMenu": [
+            {
+                "img": "https://www.dominos.is//media/2813/dom_trio_vefmyndir_3750x2500.png?width=630&format=jpg&quality=70",
+                "name": "TRÍÓ",
+                "food": "NÝTT á Domino's! Í hverjum mánuði eru 3 pizzur af matseðli á 1.790 kr. stykkið ef pantað er á vef/appi, greitt fyrirfram og sótt. Gildir fyrir stórar pizzur.",
+                "price": "1.790 kr"
+            },
+            {
+                "img": "https://www.dominos.is//media/2438/dom_vef_3000x3750_hopatilbod_0619.jpg?width=300&format=jpg&quality=70",
+                "name": "Hópatilboð",
+                "food": "Nú á lækkuðu verði! Tvær stórar pizzur með tveimur áleggstegundum, stór skammtur af brauðstöngum með sósu og Gott að eigin vali.",
+                "price": "4.990 kr"
+            },
+            {
+                "img": "https://www.dominos.is//media/2664/dom_vef_3000x3750_matarbod_1019.png?width=300&format=jpg&quality=70",
+                "name": "Matarboð",
+                "food": "Tvær stórar pizzur af matseðli, tvö meðlæti að eigin vali, tvær sósur og 2L gos",
+                "price": "5.990 kr"
+            },
+            {
+                "img": "https://www.dominos.is//media/2448/dom_vef_3000x3750_vaengjatilbod_0619.jpg?width=408.9&format=jpg&quality=70",
+                "name": "Vængjatilboð",
+                "food": "Tuttugu ljúffengir kjúklingavængir með sósu að eigin vali, kartöflubátar með sósu, Gott að eigin vali og 2l ískalt gos. ",
+                "price": "3.090 kr"
+            },
+            {
+                "img": "https://www.dominos.is//media/2443/dom_vef_3000x3750_sparitilboda_0619.jpg?width=408.9&format=jpg&quality=70",
+                "name": "Sparitilboð A",
+                "food": "Stór pizza af matseðli, 2 lítra ískalt gos, stór skammtur af brauðstöngum og sósa. \n",
+                "price": "4.290 kr"
+            },
+            {
+                "img": "https://www.dominos.is//media/2666/sparitilbod-b.png?width=408.9&format=jpg&quality=70",
+                "name": "Sparitilboð B",
+                "food": "Miðstærð af pizzu af matseðli, 2 lítra ískalt gos, stór skammtur af brauðstöngum og sósa.",
+                "price": "3.890 kr"
+            },
+            {
+                "img": "https://www.dominos.is//media/2445/dom_vef_3000x3750_thinpizza_0619.jpg?width=300&format=jpg&quality=70",
+                "name": "Þín pizza",
+                "food": "Stór pizza með tveimur áleggstegundum.",
+                "price": "1.840 kr"
+            },
+            {
+                "img": "https://www.dominos.is//media/2441/dom_vef_3000x3750_ponnutilbod1_0619.jpg?width=300&format=jpg&quality=70",
+                "name": "Pönnutilboð 1",
+                "food": "Pönnupizza af matseðli, einn skammtur af brauðstöngum, sósa og 2 lítra gos.",
+                "price": "4.290 kr"
+            },
+            {
+                "img": "https://www.dominos.is//media/2442/dom_vef_3000x3750_ponnutilbod2_0619.jpg?width=300&format=jpg&quality=70",
+                "name": "Pönnutilboð 2",
+                "food": "Pönnupizza með tveimur áleggstegundum, ef þú sækir.",
+                "price": "1.890 kr"
+            },
+            {
+                "img": "https://www.dominos.is//media/2447/dom_vef_3000x3750_tvennutilbod_6019.jpg?width=300&format=jpg&quality=70",
+                "name": "Tvennutilboð",
+                "food": "Þú sækir pizzu og stóran skammt af brauðstöngum og færð aðra pizzu sömu stærðar að auki.",
+                "price": "verð fer eftir"
+            }
+        ]
+    },
+    {
+        "RestaurantID": 6,
+        "RestaurantName": "Devitos Pizza",
+        "RestaurantCategory": "Pizza",
+        "RestaurantDistance": 13,
+        "RestaurantPrice": "$$",
+        "RestaurantSite": "https://devitos.is/",
+        "RestaurantMenu": null
+    },
+    {
+        "RestaurantID": 7,
+        "RestaurantName": "Noodle Station",
+        "RestaurantCategory": "Noodles",
+        "RestaurantDistance": 14,
+        "RestaurantPrice": "$$",
+        "RestaurantSite": "https://noodlestation.is/",
+        "RestaurantMenu": []
+    },
+    {
+        "RestaurantID": 8,
+        "RestaurantName": "Mai Thai",
+        "RestaurantCategory": "Thai",
+        "RestaurantDistance": 10,
+        "RestaurantPrice": "$$",
+        "RestaurantSite": "https://www.maithai.is/",
+        "RestaurantMenu": null
+    },
+    {
+        "RestaurantID": 9,
+        "RestaurantName": "Brauð Og Co",
+        "RestaurantCategory": "Bakery",
+        "RestaurantDistance": 10,
+        "RestaurantPrice": "$",
+        "RestaurantSite": "https://braudogco.is/",
+        "RestaurantMenu": null
+    },
+    {
+        "RestaurantID": 10,
+        "RestaurantName": "Chinese Flavor",
+        "RestaurantCategory": "Chinese",
+        "RestaurantDistance": 13,
+        "RestaurantPrice": "$",
+        "RestaurantSite": null,
+        "RestaurantMenu": null
+    }
+]
