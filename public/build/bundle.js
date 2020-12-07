@@ -2753,7 +2753,7 @@ var app = (function () {
     		},
     		h: function hydrate() {
     			attr_dev(div, "class", "loader");
-    			add_location(div, file$4, 27, 8, 1084);
+    			add_location(div, file$4, 27, 8, 1018);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -2877,21 +2877,21 @@ var app = (function () {
     		},
     		h: function hydrate() {
     			attr_dev(a0, "href", a0_href_value = "/restaurant/" + /*restaurant*/ ctx[2].ID);
-    			add_location(a0, file$4, 20, 19, 722);
-    			add_location(b, file$4, 20, 16, 719);
-    			add_location(li0, file$4, 20, 12, 715);
-    			add_location(li1, file$4, 21, 12, 804);
-    			add_location(li2, file$4, 22, 12, 858);
+    			add_location(a0, file$4, 20, 19, 656);
+    			add_location(b, file$4, 20, 16, 653);
+    			add_location(li0, file$4, 20, 12, 649);
+    			add_location(li1, file$4, 21, 12, 738);
+    			add_location(li2, file$4, 22, 12, 792);
     			attr_dev(a1, "href", a1_href_value = /*restaurant*/ ctx[2].Site);
-    			add_location(a1, file$4, 23, 16, 918);
-    			add_location(li3, file$4, 23, 12, 914);
+    			add_location(a1, file$4, 23, 16, 852);
+    			add_location(li3, file$4, 23, 12, 848);
     			if (img.src !== (img_src_value = /*restaurant*/ ctx[2].IMG)) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "img");
     			attr_dev(img, "width", "500");
-    			add_location(img, file$4, 24, 16, 988);
-    			add_location(li4, file$4, 24, 12, 984);
+    			add_location(img, file$4, 24, 16, 922);
+    			add_location(li4, file$4, 24, 12, 918);
     			attr_dev(ul, "class", "lists");
-    			add_location(ul, file$4, 19, 8, 683);
+    			add_location(ul, file$4, 19, 8, 617);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, ul, anchor);
@@ -3020,12 +3020,12 @@ var app = (function () {
     		},
     		h: function hydrate() {
     			attr_dev(h1, "class", "font-bold text-4xl");
-    			add_location(h1, file$4, 15, 8, 543);
+    			add_location(h1, file$4, 15, 8, 477);
     			attr_dev(header, "class", "header");
-    			add_location(header, file$4, 14, 4, 510);
+    			add_location(header, file$4, 14, 4, 444);
     			attr_dev(div, "class", "foods");
-    			add_location(div, file$4, 17, 4, 611);
-    			add_location(main, file$4, 13, 0, 497);
+    			add_location(div, file$4, 17, 4, 545);
+    			add_location(main, file$4, 13, 0, 431);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, main, anchor);
@@ -3106,7 +3106,7 @@ var app = (function () {
     	let restaurants = [];
 
     	onMount(async () => {
-    		const res = await fetch("https://gist.githubusercontent.com/Gudruna02/cfa46697fd9d5eb012e4605d28dd32f2/raw/cf120ae14382854289e30859cd5e89529dc608f9/menu.json");
+    		const res = await fetch("https://raw.githubusercontent.com/3Asians/FoodApp/master/menu.json");
     		$$invalidate(0, restaurants = await res.json());
 
     		restaurants.sort((a, b) => a.Distance > b.Distance
@@ -3190,7 +3190,7 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
-    			add_location(ul, file$5, 32, 12, 1041);
+    			add_location(ul, file$5, 32, 12, 976);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, ul, anchor);
@@ -3279,10 +3279,10 @@ var app = (function () {
     		h: function hydrate() {
     			attr_dev(meta, "http-equiv", "refresh");
     			attr_dev(meta, "content", meta_content_value = "2; URL=" + /*restaurant*/ ctx[1].Menu);
-    			add_location(meta, file$5, 29, 12, 863);
+    			add_location(meta, file$5, 29, 12, 798);
     			attr_dev(a, "href", a_href_value = /*restaurant*/ ctx[1].Menu);
-    			add_location(a, file$5, 30, 30, 959);
-    			add_location(p, file$5, 30, 12, 941);
+    			add_location(a, file$5, 30, 30, 894);
+    			add_location(p, file$5, 30, 12, 876);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, meta, anchor);
@@ -3330,7 +3330,7 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
-    			add_location(h3, file$5, 27, 12, 779);
+    			add_location(h3, file$5, 27, 12, 714);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, h3, anchor);
@@ -3412,14 +3412,14 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
-    			add_location(h2, file$5, 35, 20, 1131);
-    			add_location(p, file$5, 36, 20, 1170);
-    			add_location(h3, file$5, 37, 20, 1207);
+    			add_location(h2, file$5, 35, 20, 1066);
+    			add_location(p, file$5, 36, 20, 1105);
+    			add_location(h3, file$5, 37, 20, 1142);
     			if (img.src !== (img_src_value = /*i*/ ctx[4].img)) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "img");
     			attr_dev(img, "width", "500");
-    			add_location(img, file$5, 38, 20, 1247);
-    			add_location(li, file$5, 34, 16, 1105);
+    			add_location(img, file$5, 38, 20, 1182);
+    			add_location(li, file$5, 34, 16, 1040);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, li, anchor);
@@ -3500,12 +3500,12 @@ var app = (function () {
     		},
     		h: function hydrate() {
     			attr_dev(h1, "class", "font-bold text-4xl");
-    			add_location(h1, file$5, 23, 8, 639);
+    			add_location(h1, file$5, 23, 8, 574);
     			attr_dev(header, "class", "header");
-    			add_location(header, file$5, 22, 4, 606);
+    			add_location(header, file$5, 22, 4, 541);
     			attr_dev(div, "class", "foods");
-    			add_location(div, file$5, 25, 4, 707);
-    			add_location(main, file$5, 21, 0, 593);
+    			add_location(div, file$5, 25, 4, 642);
+    			add_location(main, file$5, 21, 0, 528);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, main, anchor);
@@ -3547,7 +3547,7 @@ var app = (function () {
     	let restaurant = [];
 
     	onMount(async () => {
-    		const res = await fetch("https://gist.githubusercontent.com/Gudruna02/cfa46697fd9d5eb012e4605d28dd32f2/raw/cf120ae14382854289e30859cd5e89529dc608f9/menu.json");
+    		const res = await fetch("https://raw.githubusercontent.com/3Asians/FoodApp/master/menu.json");
     		restaurants = await res.json();
     	});
 

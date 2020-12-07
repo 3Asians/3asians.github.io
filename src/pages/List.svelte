@@ -4,7 +4,7 @@
 
     let restaurants = [];
     onMount(async () => {
-        const res = await fetch('https://gist.githubusercontent.com/Gudruna02/cfa46697fd9d5eb012e4605d28dd32f2/raw/cf120ae14382854289e30859cd5e89529dc608f9/menu.json');
+        const res = await fetch('https://raw.githubusercontent.com/3Asians/FoodApp/master/menu.json');
         restaurants = await res.json();
         restaurants.sort((a, b) => (a.Distance > b.Distance) ? 1 : (a.Distance === b.Distance) ? ((a.ID > b.ID) ? 1 : -1) : -1 );
     });

@@ -7,13 +7,13 @@
     let restaurant = [];
 
     onMount(async () => {
-        const res = await fetch('https://gist.githubusercontent.com/Gudruna02/cfa46697fd9d5eb012e4605d28dd32f2/raw/cf120ae14382854289e30859cd5e89529dc608f9/menu.json');
+        const res = await fetch('https://raw.githubusercontent.com/3Asians/FoodApp/master/menu.json');
         restaurants = await res.json();
     });
 
     for (let i = 0; i < restaurants.length; i++) {
         if (params.id == restaurants[i].ID) {
-            restaurant.push(restaurants[i])
+            restaurant.push(restaurants[i]);
         }
     }
 
