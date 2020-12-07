@@ -2885,7 +2885,7 @@ var app = (function () {
     			attr_dev(a1, "href", a1_href_value = /*restaurant*/ ctx[2].Site);
     			add_location(a1, file$4, 23, 16, 918);
     			add_location(li3, file$4, 23, 12, 914);
-    			if (img.src !== (img_src_value = /*restaurant*/ ctx[2].img)) attr_dev(img, "src", img_src_value);
+    			if (img.src !== (img_src_value = /*restaurant*/ ctx[2].IMG)) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "img");
     			attr_dev(img, "width", "500");
     			add_location(img, file$4, 24, 16, 988);
@@ -2932,7 +2932,7 @@ var app = (function () {
     				attr_dev(a1, "href", a1_href_value);
     			}
 
-    			if (dirty & /*restaurants*/ 1 && img.src !== (img_src_value = /*restaurant*/ ctx[2].img)) {
+    			if (dirty & /*restaurants*/ 1 && img.src !== (img_src_value = /*restaurant*/ ctx[2].IMG)) {
     				attr_dev(img, "src", img_src_value);
     			}
     		},
@@ -3106,7 +3106,7 @@ var app = (function () {
     	let restaurants = [];
 
     	onMount(async () => {
-    		const res = await fetch("https://gist.githubusercontent.com/Gudruna02/cfa46697fd9d5eb012e4605d28dd32f2/raw/ce258b99d56d91961d924afd6d1168a2129fdf6f/menu.json");
+    		const res = await fetch("https://gist.githubusercontent.com/Gudruna02/cfa46697fd9d5eb012e4605d28dd32f2/raw/534c4ae3dcaa31ce3ce3e4d13e5b9855a66663c1/menu.json");
     		$$invalidate(0, restaurants = await res.json());
 
     		restaurants.sort((a, b) => a.Distance > b.Distance
@@ -3356,7 +3356,7 @@ var app = (function () {
     	let restaurant = [];
 
     	onMount(async () => {
-    		const res = await fetch("https://gist.githubusercontent.com/Gudruna02/cfa46697fd9d5eb012e4605d28dd32f2/raw/ce258b99d56d91961d924afd6d1168a2129fdf6f/menu.json");
+    		const res = await fetch("https://gist.githubusercontent.com/Gudruna02/cfa46697fd9d5eb012e4605d28dd32f2/raw/534c4ae3dcaa31ce3ce3e4d13e5b9855a66663c1/menu.json");
     		restaurants = await res.json();
     	});
 
