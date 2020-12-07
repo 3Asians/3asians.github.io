@@ -1,7 +1,7 @@
 [
     {
         "ID": 0,
-        "IMG":"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/78404773_2539377722827029_5796740359513964544_n.jpg?_nc_cat=105&ccb=2&_nc_sid=09cbfe&_nc_ohc=9nm7Ju8DXs8AX8Japa0&_nc_ht=scontent-lht6-1.xx&oh=459623025695158d71a5bd618f7359ab&oe=5FF1177B",
+        "IMG":"data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNzUuMzYgMTYxLjk5Ij48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6I2ZmZjt9LmNscy0ye2ZpbGw6Izg1MjA3OTt9PC9zdHlsZT48L2RlZnM+PHRpdGxlPmxvZ288L3RpdGxlPjxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTM2NC40NSw0MC4yOGMtNy42Ni04LjUyLTE4LjYzLTEzLTMxLjczLTEzcy0yNC4wNyw0LjUtMzEuNzMsMTNhNDEuMzksNDEuMzksMCwwLDAtOC43NSwxNS45MSw0Mi4zNyw0Mi4zNywwLDAsMC0xMy4wNS0xNy4xNGMtOS41OC03LjYxLTIyLjkxLTExLjc5LTM3LjUzLTExLjc5cy0yNy44OSw1LjEzLTM3LjU1LDE0LjQ1YTQ5LjA2LDQ5LjA2LDAsMCwwLTQuNTcsNS4xMVYyOC42MkgxODAuMjdWOC44NEgxNTYuNkwxNjYuNDEsMEgxMTYuMjVMOTMuOCwzMy45NGg1Ljg0djE4YTQ4LjU1LDQ4LjU1LDAsMCwwLTgtMTAuMTljLTkuNjYtOS4zMi0yMy0xNC40NS0zNy41NC0xNC40NS0xNC4wOCwwLTI3LjE4LDQuMTItMzYuODksMTEuNkM1Ljk0LDQ3LjUyLDAsNTkuODUsMCw3NC41VjE2Mkg0MS4yOVYxMjYuMzFhNDYuMjIsNDYuMjIsMCwwLDAsMTQuMTQsMS45Miw1My41Niw1My41NiwwLDAsMCwzNC44MS0xMi43LDQ3LjQyLDQ3LjQyLDAsMCwwLDkuNC0xMS4ydjIxLjg1aDQxLjI4Vjk5YTM1LjEsMzUuMSwwLDAsMCw4LjM0LDE2YzYuOCw3LjMyLDE2LjU4LDExLjE5LDI4LjI3LDExLjE5aDIyLjM1VjExMGM5LjE5LDExLjY1LDIzLDE4LjIzLDM2LjE1LDE4LjIzLDcuNDksMCwxMy4zNi0xLjEyLDE4LjQxLTMuNTd2MS41Mmg3NS45VjcxLjc3YzAtNC41OSwxLjc5LTQuNTksMi4zOC00LjU5czIuMzgsMCwyLjM4LDQuNTl2NTQuNDFoNDAuMjZWNzEuNzdDMzc1LjM2LDU5LjEyLDM3MS41OSw0OC4yMywzNjQuNDUsNDAuMjhaTTE4OS44OSw4Ny4xN2MtLjkzLjA2LTEuODUuMTEtMi43LjExLTQuNjUtLjE1LTYuMTktLjU5LTYuNjktLjg0YTExLjUzLDExLjUzLDAsMCwxLS40LTMuNzVWNjcuNTJoMTBhNTMuMTMsNTMuMTMsMCwwLDAtMSwxMC4zOUE1Ni41Myw1Ni41MywwLDAsMCwxODkuODksODcuMTdabTY0LjU1LS42Ny0yLjM2LjkyYTI5Ljg5LDI5Ljg5LDAsMCwxLTEwLjYsMS45MWMtNC4xMSwwLTExLjA3LTIuNTUtMTEuMDctMTIuMSwwLTYuODQsNi4xLTExLjA4LDExLjc2LTExLjA4LDYuMzcsMCwxMi4yNywxLjgsMTIuMjcsMTQuODNaTTUzLjU2LDY2LjE1YzYuOTIsMCwxMS43NSw0Ljc3LDExLjc1LDExLjU5UzYwLjQ4LDg5LjMzLDUzLjU2LDg5LjMzYy0zLjUxLDAtNi4zMi0uNTEtNy45LTEuNDNsLTQuMzctMi41NXYtNC4yQzQxLjI5LDcxLjIsNDUuNDEsNjYuMTUsNTMuNTYsNjYuMTVaTTEzOS44NCwyOS4zaC02bDYtNS4zNloiLz48cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik03LDE1NVY3NC41QzcsNDcuOSwyOS44NSwzNC4yNiw1NC4wNywzNC4yNiw4MC41LDM0LjI2LDk5LjYsNTMsOTkuNiw3Ny45MWMwLDI4LjQ4LTIyLjUxLDQzLjMyLTQ0LjE3LDQzLjMyLTYuNDgsMC0xMC43NC0xLTEzLjMtMlY5My45NGMyLDEuMiw1LjQ2LDIuMzksMTEuNDMsMi4zOSwxMC41NywwLDE4Ljc1LTcuNjcsMTguNzUtMTguNTlTNjQuMTMsNTkuMTUsNTMuNTYsNTkuMTVjLTEzLDAtMTkuMjcsOS4yMS0xOS4yNywyMlYxNTVaTTE0OC4xOCw3LDEyNi4wNiwyNi45NEgxMDYuODJMMTIwLDdaTTEzMy45MiwxMTkuMThIMTA2LjY0VjM2LjNoMjcuMjhabTU4LjYyLTgzLjU2djI0LjlIMTczLjFWODIuNjljMCw5LjU1LDMuNDEsMTEuMjUsMTQsMTEuNTksMS44OCwwLDMuOTMtLjE3LDUuOC0uMzR2MjUuMjRIMTc3LjUzYy0yMC44LDAtMzAuNjktMTQtMzAuNjktMjkuNjdWMTUuODRoMjYuNDNWMzUuNjJabTY4LjksODMuNTZWODFjMC0xNC42Ni02LjgyLTIxLjgzLTE5LjI3LTIxLjgzLTkuODksMC0xOC43Niw3LjY4LTE4Ljc2LDE4LjA4LDAsMTIuNjIsOS4yMSwxOS4xLDE4LjA3LDE5LjFhMzYuNzUsMzYuNzUsMCwwLDAsMTMuMTQtMi4zOXYyMi41MWMtNS4xMiwzLjU4LTEwLjkyLDQuNzgtMTguNTksNC43OC0xNy40LDAtMzkuOTEtMTQuODQtMzkuOTEtNDMuMzIsMC0yNC44OSwxOS4xLTQzLjY1LDQ1LjU0LTQzLjY1LDI1Ljc1LDAsNDcuMDYsMTQsNDcuMDYsNDAuMjR2NDQuNjhabTM1LjY0LDBWNzEuNzdjMC0yMS40OCwxMi40NS0zNy41MSwzNS42NC0zNy41MXMzNS42NCwxNiwzNS42NCwzNy41MXY0Ny40MUgzNDIuMVY3MS43N2MwLTcuMTYtMy41OC0xMS41OS05LjM4LTExLjU5cy05LjM4LDQuNDMtOS4zOCwxMS41OXY0Ny40MVoiLz48L3N2Zz4=",
         "Name": "Pítan",
         "Category": "Icelandic",
         "Distance": 0.3,
@@ -114,7 +114,7 @@
     },
     {
         "ID": 1,
-        "IMG":"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/78404773_2539377722827029_5796740359513964544_n.jpg?_nc_cat=105&ccb=2&_nc_sid=09cbfe&_nc_ohc=9nm7Ju8DXs8AX8Japa0&_nc_ht=scontent-lht6-1.xx&oh=459623025695158d71a5bd618f7359ab&oe=5FF1177B",
+        "IMG":"https://americanstyle.is/wp-content/themes/americanstyle/library/images/logo-full.png",
         "Name": "American style",
         "Category": "Hamburger",
         "Distance": 0.9,
@@ -124,7 +124,7 @@
     },
     {
         "ID": 2,
-        "IMG":"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/78404773_2539377722827029_5796740359513964544_n.jpg?_nc_cat=105&ccb=2&_nc_sid=09cbfe&_nc_ohc=9nm7Ju8DXs8AX8Japa0&_nc_ht=scontent-lht6-1.xx&oh=459623025695158d71a5bd618f7359ab&oe=5FF1177B",
+        "IMG":"https://www.pizzaking.is/images/pizza-king-logo-big-ii.png",
         "Name": "Pizza king",
         "Category": "Pizza",
         "Distance": 0.3,
@@ -134,7 +134,7 @@
     },
     {
         "ID": 3,
-        "IMG":"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/78404773_2539377722827029_5796740359513964544_n.jpg?_nc_cat=105&ccb=2&_nc_sid=09cbfe&_nc_ohc=9nm7Ju8DXs8AX8Japa0&_nc_ht=scontent-lht6-1.xx&oh=459623025695158d71a5bd618f7359ab&oe=5FF1177B",
+        "IMG":"https://subway.is/wp-content/uploads/2017/10/SubwayLogotype_YellowGreen_RGB.png",
         "Name": "Subway",
         "Category": "Sandwich",
         "Distance": 0.3,
@@ -181,7 +181,7 @@
     },
     {
         "ID": 4,
-        "IMG":"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/78404773_2539377722827029_5796740359513964544_n.jpg?_nc_cat=105&ccb=2&_nc_sid=09cbfe&_nc_ohc=9nm7Ju8DXs8AX8Japa0&_nc_ht=scontent-lht6-1.xx&oh=459623025695158d71a5bd618f7359ab&oe=5FF1177B",
+        "IMG":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKdvwMaRYa2zCWPUMaqYa53lCzP-O2aXGR1g&usqp=CAU",
         "Name": "Dominos",
         "Category": "Pizza",
         "Distance": 4,
@@ -252,7 +252,7 @@
     },
     {
         "ID": 5,
-        "IMG":"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/78404773_2539377722827029_5796740359513964544_n.jpg?_nc_cat=105&ccb=2&_nc_sid=09cbfe&_nc_ohc=9nm7Ju8DXs8AX8Japa0&_nc_ht=scontent-lht6-1.xx&oh=459623025695158d71a5bd618f7359ab&oe=5FF1177B",
+        "IMG":"https://devitos.is/images/devitos-logo-1.png",
         "Name": "Devitos Pizza",
         "Category": "Pizza",
         "Distance": 13,
@@ -262,7 +262,7 @@
     },
     {
         "ID": 6,
-        "IMG":"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/78404773_2539377722827029_5796740359513964544_n.jpg?_nc_cat=105&ccb=2&_nc_sid=09cbfe&_nc_ohc=9nm7Ju8DXs8AX8Japa0&_nc_ht=scontent-lht6-1.xx&oh=459623025695158d71a5bd618f7359ab&oe=5FF1177B",
+        "IMG":"https://noodlestation.is/wp-content/uploads/2016/04/ns-logo.png",
         "Name": "Noodle Station",
         "Category": "Noodles",
         "Distance": 14,
@@ -272,7 +272,7 @@
     },
     {
         "ID": 7,
-        "IMG":"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/78404773_2539377722827029_5796740359513964544_n.jpg?_nc_cat=105&ccb=2&_nc_sid=09cbfe&_nc_ohc=9nm7Ju8DXs8AX8Japa0&_nc_ht=scontent-lht6-1.xx&oh=459623025695158d71a5bd618f7359ab&oe=5FF1177B",
+        "IMG":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS94nibNGapOnUTGsyAksNAXNngvXSQ7GT_YQ&usqp=CAU",
         "Name": "Mai Thai",
         "Category": "Thai",
         "Distance": 10,
@@ -282,7 +282,7 @@
     },
     {
         "ID": 8,
-        "IMG":"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/78404773_2539377722827029_5796740359513964544_n.jpg?_nc_cat=105&ccb=2&_nc_sid=09cbfe&_nc_ohc=9nm7Ju8DXs8AX8Japa0&_nc_ht=scontent-lht6-1.xx&oh=459623025695158d71a5bd618f7359ab&oe=5FF1177B",
+        "IMG":"data:image/png;base64,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",
         "Name": "Brauð Og Co",
         "Category": "Bakery",
         "Distance": 10,
@@ -292,7 +292,7 @@
     },
     {
         "ID": 9,
-        "IMG":"https://scontent-lht6-1.xx.fbcdn.net/v/t1.0-9/78404773_2539377722827029_5796740359513964544_n.jpg?_nc_cat=105&ccb=2&_nc_sid=09cbfe&_nc_ohc=9nm7Ju8DXs8AX8Japa0&_nc_ht=scontent-lht6-1.xx&oh=459623025695158d71a5bd618f7359ab&oe=5FF1177B",
+        "IMG":"https://www.logopik.com/wp-content/uploads/edd/2018/08/Chinese-Food-Logo.png",
         "Name": "Chinese Flavor",
         "Category": "Chinese",
         "Distance": 13,
