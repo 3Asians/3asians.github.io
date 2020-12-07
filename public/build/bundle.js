@@ -3157,7 +3157,203 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (28:8) {#each restaurant.Menu as i}
+    // (32:8) {:else}
+    function create_else_block$2(ctx) {
+    	let ul;
+    	let each_value = /*restaurant*/ ctx[1].Menu;
+    	validate_each_argument(each_value);
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block$1(get_each_context$1(ctx, each_value, i));
+    	}
+
+    	const block = {
+    		c: function create() {
+    			ul = element("ul");
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			this.h();
+    		},
+    		l: function claim(nodes) {
+    			ul = claim_element(nodes, "UL", {});
+    			var ul_nodes = children(ul);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].l(ul_nodes);
+    			}
+
+    			ul_nodes.forEach(detach_dev);
+    			this.h();
+    		},
+    		h: function hydrate() {
+    			add_location(ul, file$5, 32, 12, 1041);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, ul, anchor);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(ul, null);
+    			}
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*restaurant*/ 2) {
+    				each_value = /*restaurant*/ ctx[1].Menu;
+    				validate_each_argument(each_value);
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context$1(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block$1(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(ul, null);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value.length;
+    			}
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(ul);
+    			destroy_each(each_blocks, detaching);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_else_block$2.name,
+    		type: "else",
+    		source: "(32:8) {:else}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (29:44) 
+    function create_if_block_1$1(ctx) {
+    	let meta;
+    	let meta_content_value;
+    	let t0;
+    	let p;
+    	let t1;
+    	let a;
+    	let t2_value = /*restaurant*/ ctx[1].Menu + "";
+    	let t2;
+    	let a_href_value;
+
+    	const block = {
+    		c: function create() {
+    			meta = element("meta");
+    			t0 = space();
+    			p = element("p");
+    			t1 = text("redirecting to ");
+    			a = element("a");
+    			t2 = text(t2_value);
+    			this.h();
+    		},
+    		l: function claim(nodes) {
+    			meta = claim_element(nodes, "META", { "http-equiv": true, content: true });
+    			t0 = claim_space(nodes);
+    			p = claim_element(nodes, "P", {});
+    			var p_nodes = children(p);
+    			t1 = claim_text(p_nodes, "redirecting to ");
+    			a = claim_element(p_nodes, "A", { href: true });
+    			var a_nodes = children(a);
+    			t2 = claim_text(a_nodes, t2_value);
+    			a_nodes.forEach(detach_dev);
+    			p_nodes.forEach(detach_dev);
+    			this.h();
+    		},
+    		h: function hydrate() {
+    			attr_dev(meta, "http-equiv", "refresh");
+    			attr_dev(meta, "content", meta_content_value = "2; URL=" + /*restaurant*/ ctx[1].Menu);
+    			add_location(meta, file$5, 29, 12, 863);
+    			attr_dev(a, "href", a_href_value = /*restaurant*/ ctx[1].Menu);
+    			add_location(a, file$5, 30, 30, 959);
+    			add_location(p, file$5, 30, 12, 941);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, meta, anchor);
+    			insert_dev(target, t0, anchor);
+    			insert_dev(target, p, anchor);
+    			append_dev(p, t1);
+    			append_dev(p, a);
+    			append_dev(a, t2);
+    		},
+    		p: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(meta);
+    			if (detaching) detach_dev(t0);
+    			if (detaching) detach_dev(p);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_1$1.name,
+    		type: "if",
+    		source: "(29:44) ",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (27:8) {#if restaurant.Menu == null}
+    function create_if_block$1(ctx) {
+    	let h3;
+    	let t;
+
+    	const block = {
+    		c: function create() {
+    			h3 = element("h3");
+    			t = text("nothing here :/");
+    			this.h();
+    		},
+    		l: function claim(nodes) {
+    			h3 = claim_element(nodes, "H3", {});
+    			var h3_nodes = children(h3);
+    			t = claim_text(h3_nodes, "nothing here :/");
+    			h3_nodes.forEach(detach_dev);
+    			this.h();
+    		},
+    		h: function hydrate() {
+    			add_location(h3, file$5, 27, 12, 779);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, h3, anchor);
+    			append_dev(h3, t);
+    		},
+    		p: noop,
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(h3);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block$1.name,
+    		type: "if",
+    		source: "(27:8) {#if restaurant.Menu == null}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (34:12) {#each restaurant.Menu as i}
     function create_each_block$1(ctx) {
     	let li;
     	let h2;
@@ -3216,14 +3412,14 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
-    			add_location(h2, file$5, 29, 16, 815);
-    			add_location(p, file$5, 30, 16, 850);
-    			add_location(h3, file$5, 31, 16, 883);
+    			add_location(h2, file$5, 35, 20, 1131);
+    			add_location(p, file$5, 36, 20, 1170);
+    			add_location(h3, file$5, 37, 20, 1207);
     			if (img.src !== (img_src_value = /*i*/ ctx[4].img)) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "img");
     			attr_dev(img, "width", "500");
-    			add_location(img, file$5, 32, 16, 919);
-    			add_location(li, file$5, 28, 12, 793);
+    			add_location(img, file$5, 38, 20, 1247);
+    			add_location(li, file$5, 34, 16, 1105);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, li, anchor);
@@ -3249,7 +3445,7 @@ var app = (function () {
     		block,
     		id: create_each_block$1.name,
     		type: "each",
-    		source: "(28:8) {#each restaurant.Menu as i}",
+    		source: "(34:12) {#each restaurant.Menu as i}",
     		ctx
     	});
 
@@ -3263,14 +3459,15 @@ var app = (function () {
     	let t0;
     	let t1;
     	let div;
-    	let ul;
-    	let each_value = /*restaurant*/ ctx[1].Menu;
-    	validate_each_argument(each_value);
-    	let each_blocks = [];
 
-    	for (let i = 0; i < each_value.length; i += 1) {
-    		each_blocks[i] = create_each_block$1(get_each_context$1(ctx, each_value, i));
+    	function select_block_type(ctx, dirty) {
+    		if (/*restaurant*/ ctx[1].Menu == null) return create_if_block$1;
+    		if (/*restaurant*/ ctx[1].Menu == String) return create_if_block_1$1;
+    		return create_else_block$2;
     	}
+
+    	let current_block_type = select_block_type(ctx);
+    	let if_block = current_block_type(ctx);
 
     	const block = {
     		c: function create() {
@@ -3280,12 +3477,7 @@ var app = (function () {
     			t0 = text(/*pageName*/ ctx[0]);
     			t1 = space();
     			div = element("div");
-    			ul = element("ul");
-
-    			for (let i = 0; i < each_blocks.length; i += 1) {
-    				each_blocks[i].c();
-    			}
-
+    			if_block.c();
     			this.h();
     		},
     		l: function claim(nodes) {
@@ -3301,27 +3493,19 @@ var app = (function () {
     			t1 = claim_space(main_nodes);
     			div = claim_element(main_nodes, "DIV", { class: true });
     			var div_nodes = children(div);
-    			ul = claim_element(div_nodes, "UL", {});
-    			var ul_nodes = children(ul);
-
-    			for (let i = 0; i < each_blocks.length; i += 1) {
-    				each_blocks[i].l(ul_nodes);
-    			}
-
-    			ul_nodes.forEach(detach_dev);
+    			if_block.l(div_nodes);
     			div_nodes.forEach(detach_dev);
     			main_nodes.forEach(detach_dev);
     			this.h();
     		},
     		h: function hydrate() {
     			attr_dev(h1, "class", "font-bold text-4xl");
-    			add_location(h1, file$5, 23, 8, 640);
+    			add_location(h1, file$5, 23, 8, 639);
     			attr_dev(header, "class", "header");
-    			add_location(header, file$5, 22, 4, 607);
-    			add_location(ul, file$5, 26, 8, 737);
+    			add_location(header, file$5, 22, 4, 606);
     			attr_dev(div, "class", "foods");
-    			add_location(div, file$5, 25, 4, 708);
-    			add_location(main, file$5, 21, 0, 594);
+    			add_location(div, file$5, 25, 4, 707);
+    			add_location(main, file$5, 21, 0, 593);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, main, anchor);
@@ -3330,42 +3514,16 @@ var app = (function () {
     			append_dev(h1, t0);
     			append_dev(main, t1);
     			append_dev(main, div);
-    			append_dev(div, ul);
-
-    			for (let i = 0; i < each_blocks.length; i += 1) {
-    				each_blocks[i].m(ul, null);
-    			}
+    			if_block.m(div, null);
     		},
     		p: function update(ctx, [dirty]) {
-    			if (dirty & /*restaurant*/ 2) {
-    				each_value = /*restaurant*/ ctx[1].Menu;
-    				validate_each_argument(each_value);
-    				let i;
-
-    				for (i = 0; i < each_value.length; i += 1) {
-    					const child_ctx = get_each_context$1(ctx, each_value, i);
-
-    					if (each_blocks[i]) {
-    						each_blocks[i].p(child_ctx, dirty);
-    					} else {
-    						each_blocks[i] = create_each_block$1(child_ctx);
-    						each_blocks[i].c();
-    						each_blocks[i].m(ul, null);
-    					}
-    				}
-
-    				for (; i < each_blocks.length; i += 1) {
-    					each_blocks[i].d(1);
-    				}
-
-    				each_blocks.length = each_value.length;
-    			}
+    			if_block.p(ctx, dirty);
     		},
     		i: noop,
     		o: noop,
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(main);
-    			destroy_each(each_blocks, detaching);
+    			if_block.d();
     		}
     	};
 
@@ -3389,12 +3547,12 @@ var app = (function () {
     	let restaurant = [];
 
     	onMount(async () => {
-    		const res = await fetch("https://gist.githubusercontent.com/Gudruna02/cfa46697fd9d5eb012e4605d28dd32f2/raw/534c4ae3dcaa31ce3ce3e4d13e5b9855a66663c1/menu.json");
+    		const res = await fetch("https://gist.githubusercontent.com/Gudruna02/cfa46697fd9d5eb012e4605d28dd32f2/raw/cf120ae14382854289e30859cd5e89529dc608f9/menu.json");
     		restaurants = await res.json();
     	});
 
     	for (let i = 0; i < restaurants.length; i++) {
-    		if (params.id === restaurants[i].ID) {
+    		if (params.id == restaurants[i].ID) {
     			restaurant.push(restaurants[i]);
     		}
     	}
