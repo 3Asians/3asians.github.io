@@ -3106,7 +3106,7 @@ var app = (function () {
     	let restaurants = [];
 
     	onMount(async () => {
-    		const res = await fetch("https://gist.githubusercontent.com/Gudruna02/cfa46697fd9d5eb012e4605d28dd32f2/raw/534c4ae3dcaa31ce3ce3e4d13e5b9855a66663c1/menu.json");
+    		const res = await fetch("https://gist.githubusercontent.com/Gudruna02/cfa46697fd9d5eb012e4605d28dd32f2/raw/cf120ae14382854289e30859cd5e89529dc608f9/menu.json");
     		$$invalidate(0, restaurants = await res.json());
 
     		restaurants.sort((a, b) => a.Distance > b.Distance
