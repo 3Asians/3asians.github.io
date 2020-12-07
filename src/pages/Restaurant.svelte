@@ -24,13 +24,15 @@
         <h1 class="font-bold text-4xl">{pageName}</h1>
     </header> 
     <div class="foods">
-            <ul>
-                <li><b><a href="/restaurant/{restaurant.ID}">{restaurant.Name}</a></b></li>
-                <li>Category: {restaurant.Category}</li>
-                <li>Distance: {restaurant.Distance}km</li>
-                <li>Price: {restaurant.Price}</li>
-                <li><a href={restaurant.Site}>{restaurant.Site}</a></li>
-                <!--<li><img src={restaurant.Image} alt="img" width="500"/></li>-->
-            </ul>
+        {#each restaurant.Menu as foods}
+        <ul class="lists">
+            <li>{foods.name}</li>
+            <li>{foods.food}</li>
+            <li>{foods.price}</li>
+            <li><img src={foods.img} alt="img" width="500"/></li>
+        </ul>
+        {:else}
+        <div class="loader"></div>
+        {/each}
     </div>
 </main>

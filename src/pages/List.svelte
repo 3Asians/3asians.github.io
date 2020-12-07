@@ -2,14 +2,14 @@
     let pageName="List";
     import { onMount } from "svelte";
 
-    /*import {fade,slide} from "svelte/transition";
+    import {fade,slide} from "svelte/transition";
 	
 	let show = false;
 	let showMore = false;
 	
 	function toggle() {
 		show? showMore = false : show = true
-	}*/
+	}
 
     let restaurants = [];
 
@@ -34,23 +34,30 @@
             <li>Price: {restaurant.Price}</li>
             <li><a href={restaurant.Site}>{restaurant.Site}</a></li>
             <li>Menu: </li>
-            <!--{#if show}
+            {#if show}
             <div class="set" transition:slide on:introend={()=> showMore = true}>
                 {#if showMore}
-                    <p transition:fade on:outroend={()=> show = false} >
-                        {restaurant.Menu}
-                    </p>
+                    <div transition:fade on:outroend={()=> show = false} >
+                        {#each restaurant.Menu as foods}
+                        <ul class="lists">
+                            <li>{foods.name}</li>
+                            <li>{foods.food}</li>
+                            <li>{foods.price}</li>
+                            <li><img src={foods.img} alt="img" width="100"/></li>
+                        </ul>
+                        {:else}
+                        <div class="loader"></div>
+                        {/each}
+                    </div>
                 {/if}
             </div>
             {/if}
             <button on:click={toggle}>
-                {show? 'Hide' : 'Show'}
+                {show? '' : 'Show'}
             </button>
-            <li><img src={restaurant.Image} alt="img" width="500"/></li>-->
         </ul>
         {:else}
         <div class="loader"></div>
-        
         {/each}
     </div>
 </main>
