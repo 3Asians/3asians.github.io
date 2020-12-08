@@ -28,7 +28,7 @@
     <div class="foods">
         {#each restaurants as restaurant}
         <ul class="lists">
-            <li><b><a href="/restaurant/{restaurant.ID}">{restaurant.Name}</a></b></li>
+            <li class= "text-4xl font-bold">{restaurant.Name}</li>
             <li>Category: {restaurant.Category}</li>
             <li>Distance: {restaurant.Distance}km</li>
             <li>Price: {restaurant.Price}</li>

@@ -3016,7 +3016,7 @@ var app = (function () {
     		},
     		h: function hydrate() {
     			attr_dev(div, "class", "loader");
-    			add_location(div, file$4, 59, 8, 2152);
+    			add_location(div, file$4, 59, 8, 2131);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3061,7 +3061,7 @@ var app = (function () {
     		},
     		h: function hydrate() {
     			attr_dev(div, "class", "set");
-    			add_location(div, file$4, 37, 12, 1255);
+    			add_location(div, file$4, 37, 12, 1234);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3185,7 +3185,7 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
-    			add_location(div, file$4, 39, 20, 1378);
+    			add_location(div, file$4, 39, 20, 1357);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3293,7 +3293,7 @@ var app = (function () {
     		},
     		h: function hydrate() {
     			attr_dev(div, "class", "loader");
-    			add_location(div, file$4, 48, 24, 1861);
+    			add_location(div, file$4, 48, 24, 1840);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -3378,16 +3378,16 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
-    			add_location(li0, file$4, 42, 28, 1564);
-    			add_location(li1, file$4, 43, 28, 1615);
-    			add_location(li2, file$4, 44, 28, 1666);
+    			add_location(li0, file$4, 42, 28, 1543);
+    			add_location(li1, file$4, 43, 28, 1594);
+    			add_location(li2, file$4, 44, 28, 1645);
     			if (img.src !== (img_src_value = /*foods*/ ctx[10].img)) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "img");
     			attr_dev(img, "width", "100");
-    			add_location(img, file$4, 45, 32, 1722);
-    			add_location(li3, file$4, 45, 28, 1718);
+    			add_location(img, file$4, 45, 32, 1701);
+    			add_location(li3, file$4, 45, 28, 1697);
     			attr_dev(ul, "class", "lists");
-    			add_location(ul, file$4, 41, 24, 1516);
+    			add_location(ul, file$4, 41, 24, 1495);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, ul, anchor);
@@ -3433,11 +3433,8 @@ var app = (function () {
     function create_each_block(ctx) {
     	let ul;
     	let li0;
-    	let b;
-    	let a0;
     	let t0_value = /*restaurant*/ ctx[7].Name + "";
     	let t0;
-    	let a0_href_value;
     	let t1;
     	let li1;
     	let t2;
@@ -3456,10 +3453,10 @@ var app = (function () {
     	let t10;
     	let t11;
     	let li4;
-    	let a1;
+    	let a;
     	let t12_value = /*restaurant*/ ctx[7].Site + "";
     	let t12;
-    	let a1_href_value;
+    	let a_href_value;
     	let t13;
     	let li5;
     	let t14;
@@ -3478,8 +3475,6 @@ var app = (function () {
     		c: function create() {
     			ul = element("ul");
     			li0 = element("li");
-    			b = element("b");
-    			a0 = element("a");
     			t0 = text(t0_value);
     			t1 = space();
     			li1 = element("li");
@@ -3496,7 +3491,7 @@ var app = (function () {
     			t10 = text(t10_value);
     			t11 = space();
     			li4 = element("li");
-    			a1 = element("a");
+    			a = element("a");
     			t12 = text(t12_value);
     			t13 = space();
     			li5 = element("li");
@@ -3512,15 +3507,9 @@ var app = (function () {
     		l: function claim(nodes) {
     			ul = claim_element(nodes, "UL", { class: true });
     			var ul_nodes = children(ul);
-    			li0 = claim_element(ul_nodes, "LI", {});
+    			li0 = claim_element(ul_nodes, "LI", { class: true });
     			var li0_nodes = children(li0);
-    			b = claim_element(li0_nodes, "B", {});
-    			var b_nodes = children(b);
-    			a0 = claim_element(b_nodes, "A", { href: true });
-    			var a0_nodes = children(a0);
-    			t0 = claim_text(a0_nodes, t0_value);
-    			a0_nodes.forEach(detach_dev);
-    			b_nodes.forEach(detach_dev);
+    			t0 = claim_text(li0_nodes, t0_value);
     			li0_nodes.forEach(detach_dev);
     			t1 = claim_space(ul_nodes);
     			li1 = claim_element(ul_nodes, "LI", {});
@@ -3544,10 +3533,10 @@ var app = (function () {
     			t11 = claim_space(ul_nodes);
     			li4 = claim_element(ul_nodes, "LI", {});
     			var li4_nodes = children(li4);
-    			a1 = claim_element(li4_nodes, "A", { href: true });
-    			var a1_nodes = children(a1);
-    			t12 = claim_text(a1_nodes, t12_value);
-    			a1_nodes.forEach(detach_dev);
+    			a = claim_element(li4_nodes, "A", { href: true });
+    			var a_nodes = children(a);
+    			t12 = claim_text(a_nodes, t12_value);
+    			a_nodes.forEach(detach_dev);
     			li4_nodes.forEach(detach_dev);
     			t13 = claim_space(ul_nodes);
     			li5 = claim_element(ul_nodes, "LI", {});
@@ -3566,27 +3555,23 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
-    			attr_dev(a0, "href", a0_href_value = "/restaurant/" + /*restaurant*/ ctx[7].ID);
-    			add_location(a0, file$4, 30, 19, 892);
-    			add_location(b, file$4, 30, 16, 889);
+    			attr_dev(li0, "class", "text-4xl font-bold");
     			add_location(li0, file$4, 30, 12, 885);
-    			add_location(li1, file$4, 31, 12, 974);
-    			add_location(li2, file$4, 32, 12, 1028);
-    			add_location(li3, file$4, 33, 12, 1084);
-    			attr_dev(a1, "href", a1_href_value = /*restaurant*/ ctx[7].Site);
-    			add_location(a1, file$4, 34, 16, 1136);
-    			add_location(li4, file$4, 34, 12, 1132);
-    			add_location(li5, file$4, 35, 12, 1202);
-    			add_location(button, file$4, 54, 12, 2024);
+    			add_location(li1, file$4, 31, 12, 953);
+    			add_location(li2, file$4, 32, 12, 1007);
+    			add_location(li3, file$4, 33, 12, 1063);
+    			attr_dev(a, "href", a_href_value = /*restaurant*/ ctx[7].Site);
+    			add_location(a, file$4, 34, 16, 1115);
+    			add_location(li4, file$4, 34, 12, 1111);
+    			add_location(li5, file$4, 35, 12, 1181);
+    			add_location(button, file$4, 54, 12, 2003);
     			attr_dev(ul, "class", "lists");
     			add_location(ul, file$4, 29, 8, 853);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, ul, anchor);
     			append_dev(ul, li0);
-    			append_dev(li0, b);
-    			append_dev(b, a0);
-    			append_dev(a0, t0);
+    			append_dev(li0, t0);
     			append_dev(ul, t1);
     			append_dev(ul, li1);
     			append_dev(li1, t2);
@@ -3602,8 +3587,8 @@ var app = (function () {
     			append_dev(li3, t10);
     			append_dev(ul, t11);
     			append_dev(ul, li4);
-    			append_dev(li4, a1);
-    			append_dev(a1, t12);
+    			append_dev(li4, a);
+    			append_dev(a, t12);
     			append_dev(ul, t13);
     			append_dev(ul, li5);
     			append_dev(li5, t14);
@@ -3622,18 +3607,13 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			if ((!current || dirty & /*restaurants*/ 4) && t0_value !== (t0_value = /*restaurant*/ ctx[7].Name + "")) set_data_dev(t0, t0_value);
-
-    			if (!current || dirty & /*restaurants*/ 4 && a0_href_value !== (a0_href_value = "/restaurant/" + /*restaurant*/ ctx[7].ID)) {
-    				attr_dev(a0, "href", a0_href_value);
-    			}
-
     			if ((!current || dirty & /*restaurants*/ 4) && t3_value !== (t3_value = /*restaurant*/ ctx[7].Category + "")) set_data_dev(t3, t3_value);
     			if ((!current || dirty & /*restaurants*/ 4) && t6_value !== (t6_value = /*restaurant*/ ctx[7].Distance + "")) set_data_dev(t6, t6_value);
     			if ((!current || dirty & /*restaurants*/ 4) && t10_value !== (t10_value = /*restaurant*/ ctx[7].Price + "")) set_data_dev(t10, t10_value);
     			if ((!current || dirty & /*restaurants*/ 4) && t12_value !== (t12_value = /*restaurant*/ ctx[7].Site + "")) set_data_dev(t12, t12_value);
 
-    			if (!current || dirty & /*restaurants*/ 4 && a1_href_value !== (a1_href_value = /*restaurant*/ ctx[7].Site)) {
-    				attr_dev(a1, "href", a1_href_value);
+    			if (!current || dirty & /*restaurants*/ 4 && a_href_value !== (a_href_value = /*restaurant*/ ctx[7].Site)) {
+    				attr_dev(a, "href", a_href_value);
     			}
 
     			if (/*show*/ ctx[0]) {
