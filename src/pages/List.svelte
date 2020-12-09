@@ -14,7 +14,7 @@
     let restaurants = [];
 
     onMount(async () => {
-        const res = await fetch(`https://gist.githubusercontent.com/anhthuvu/1004ac7072533201b49592b24a446466/raw/ccbb6574bf8460128053f2cad38864481b21e452/menu.json`);
+        const res = await fetch(`https://raw.githubusercontent.com/3Asians/FoodApp/master/menu.json`);
         restaurants = await res.json();
         restaurants.sort((a, b) => (a.Distance > b.Distance) ? 1 : (a.Distance === b.Distance) ? ((a.ID > b.ID) ? 1 : -1) : -1 );
     });
@@ -23,12 +23,14 @@
 
 <main> 
     <header class="header">
+        <img class="logo" src="/restaurant.png" alt="logo">
         <h1 class="font-bold text-4xl">{pageName}</h1>
     </header> 
     <div class="foods">
         {#each restaurants as restaurant}
         <ul class="lists">
             <li class= "text-4xl font-bold">{restaurant.Name}</li>
+            <li><img class="brand" src={restaurant.IMG} alt="img" width="500"/></li>
             <li>Category: {restaurant.Category}</li>
             <li>Distance: {restaurant.Distance}km</li>
             <li>Price: {restaurant.Price}</li>
