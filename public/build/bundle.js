@@ -4,6 +4,7 @@ var app = (function () {
     'use strict';
 
     function noop() { }
+    const identity = x => x;
     function assign(tar, src) {
         // @ts-ignore
         for (const k in src)
@@ -90,6 +91,41 @@ var app = (function () {
             if (k[0] !== '$')
                 result[k] = props[k];
         return result;
+    }
+
+    const is_client = typeof window !== 'undefined';
+    let now = is_client
+        ? () => window.performance.now()
+        : () => Date.now();
+    let raf = is_client ? cb => requestAnimationFrame(cb) : noop;
+
+    const tasks = new Set();
+    function run_tasks(now) {
+        tasks.forEach(task => {
+            if (!task.c(now)) {
+                tasks.delete(task);
+                task.f();
+            }
+        });
+        if (tasks.size !== 0)
+            raf(run_tasks);
+    }
+    /**
+     * Creates a new task that runs on each raf frame
+     * until it returns a falsy value or is aborted
+     */
+    function loop(callback) {
+        let task;
+        if (tasks.size === 0)
+            raf(run_tasks);
+        return {
+            promise: new Promise(fulfill => {
+                tasks.add(task = { c: callback, f: fulfill });
+            }),
+            abort() {
+                tasks.delete(task);
+            }
+        };
     }
 
     function append(target, node) {
@@ -195,6 +231,67 @@ var app = (function () {
         return e;
     }
 
+    const active_docs = new Set();
+    let active = 0;
+    // https://github.com/darkskyapp/string-hash/blob/master/index.js
+    function hash(str) {
+        let hash = 5381;
+        let i = str.length;
+        while (i--)
+            hash = ((hash << 5) - hash) ^ str.charCodeAt(i);
+        return hash >>> 0;
+    }
+    function create_rule(node, a, b, duration, delay, ease, fn, uid = 0) {
+        const step = 16.666 / duration;
+        let keyframes = '{\n';
+        for (let p = 0; p <= 1; p += step) {
+            const t = a + (b - a) * ease(p);
+            keyframes += p * 100 + `%{${fn(t, 1 - t)}}\n`;
+        }
+        const rule = keyframes + `100% {${fn(b, 1 - b)}}\n}`;
+        const name = `__svelte_${hash(rule)}_${uid}`;
+        const doc = node.ownerDocument;
+        active_docs.add(doc);
+        const stylesheet = doc.__svelte_stylesheet || (doc.__svelte_stylesheet = doc.head.appendChild(element('style')).sheet);
+        const current_rules = doc.__svelte_rules || (doc.__svelte_rules = {});
+        if (!current_rules[name]) {
+            current_rules[name] = true;
+            stylesheet.insertRule(`@keyframes ${name} ${rule}`, stylesheet.cssRules.length);
+        }
+        const animation = node.style.animation || '';
+        node.style.animation = `${animation ? `${animation}, ` : ``}${name} ${duration}ms linear ${delay}ms 1 both`;
+        active += 1;
+        return name;
+    }
+    function delete_rule(node, name) {
+        const previous = (node.style.animation || '').split(', ');
+        const next = previous.filter(name
+            ? anim => anim.indexOf(name) < 0 // remove specific animation
+            : anim => anim.indexOf('__svelte') === -1 // remove all Svelte animations
+        );
+        const deleted = previous.length - next.length;
+        if (deleted) {
+            node.style.animation = next.join(', ');
+            active -= deleted;
+            if (!active)
+                clear_rules();
+        }
+    }
+    function clear_rules() {
+        raf(() => {
+            if (active)
+                return;
+            active_docs.forEach(doc => {
+                const stylesheet = doc.__svelte_stylesheet;
+                let i = stylesheet.cssRules.length;
+                while (i--)
+                    stylesheet.deleteRule(i);
+                doc.__svelte_rules = {};
+            });
+            active_docs.clear();
+        });
+    }
+
     let current_component;
     function set_current_component(component) {
         current_component = component;
@@ -294,6 +391,20 @@ var app = (function () {
             $$.after_update.forEach(add_render_callback);
         }
     }
+
+    let promise;
+    function wait() {
+        if (!promise) {
+            promise = Promise.resolve();
+            promise.then(() => {
+                promise = null;
+            });
+        }
+        return promise;
+    }
+    function dispatch(node, direction, kind) {
+        node.dispatchEvent(custom_event(`${direction ? 'intro' : 'outro'}${kind}`));
+    }
     const outroing = new Set();
     let outros;
     function group_outros() {
@@ -330,6 +441,112 @@ var app = (function () {
             });
             block.o(local);
         }
+    }
+    const null_transition = { duration: 0 };
+    function create_bidirectional_transition(node, fn, params, intro) {
+        let config = fn(node, params);
+        let t = intro ? 0 : 1;
+        let running_program = null;
+        let pending_program = null;
+        let animation_name = null;
+        function clear_animation() {
+            if (animation_name)
+                delete_rule(node, animation_name);
+        }
+        function init(program, duration) {
+            const d = program.b - t;
+            duration *= Math.abs(d);
+            return {
+                a: t,
+                b: program.b,
+                d,
+                duration,
+                start: program.start,
+                end: program.start + duration,
+                group: program.group
+            };
+        }
+        function go(b) {
+            const { delay = 0, duration = 300, easing = identity, tick = noop, css } = config || null_transition;
+            const program = {
+                start: now() + delay,
+                b
+            };
+            if (!b) {
+                // @ts-ignore todo: improve typings
+                program.group = outros;
+                outros.r += 1;
+            }
+            if (running_program || pending_program) {
+                pending_program = program;
+            }
+            else {
+                // if this is an intro, and there's a delay, we need to do
+                // an initial tick and/or apply CSS animation immediately
+                if (css) {
+                    clear_animation();
+                    animation_name = create_rule(node, t, b, duration, delay, easing, css);
+                }
+                if (b)
+                    tick(0, 1);
+                running_program = init(program, duration);
+                add_render_callback(() => dispatch(node, b, 'start'));
+                loop(now => {
+                    if (pending_program && now > pending_program.start) {
+                        running_program = init(pending_program, duration);
+                        pending_program = null;
+                        dispatch(node, running_program.b, 'start');
+                        if (css) {
+                            clear_animation();
+                            animation_name = create_rule(node, t, running_program.b, running_program.duration, 0, easing, config.css);
+                        }
+                    }
+                    if (running_program) {
+                        if (now >= running_program.end) {
+                            tick(t = running_program.b, 1 - t);
+                            dispatch(node, running_program.b, 'end');
+                            if (!pending_program) {
+                                // we're done
+                                if (running_program.b) {
+                                    // intro — we can tidy up immediately
+                                    clear_animation();
+                                }
+                                else {
+                                    // outro — needs to be coordinated
+                                    if (!--running_program.group.r)
+                                        run_all(running_program.group.c);
+                                }
+                            }
+                            running_program = null;
+                        }
+                        else if (now >= running_program.start) {
+                            const p = now - running_program.start;
+                            t = running_program.a + running_program.d * easing(p / running_program.duration);
+                            tick(t, 1 - t);
+                        }
+                    }
+                    return !!(running_program || pending_program);
+                });
+            }
+        }
+        return {
+            run(b) {
+                if (is_function(config)) {
+                    wait().then(() => {
+                        // @ts-ignore
+                        config = config();
+                        go(b);
+                    });
+                }
+                else {
+                    go(b);
+                }
+            },
+            end() {
+                clear_animation();
+                running_program = pending_program = null;
+            }
+        };
     }
 
     function get_spread_update(levels, updates) {
@@ -2121,7 +2338,7 @@ var app = (function () {
     /* src\pages\Home.svelte generated by Svelte v3.29.0 */
     const file$1 = "src\\pages\\Home.svelte";
 
-    // (13:4) <Link to="list">
+    // (14:4) <Link to="list">
     function create_default_slot(ctx) {
     	let button;
     	let t;
@@ -2140,9 +2357,9 @@ var app = (function () {
     			this.h();
     		},
     		h: function hydrate() {
-    			attr_dev(button, "class", "bg-white m-4 py-20 px-16 hover:bg-gray-200 text-blue-600 font-semibold border-4 border-blue-500 shadow items shadow-2xl");
+    			attr_dev(button, "class", " text-xl bg-white m-3 py-20 px-16 hover:bg-gray-200 text-blue-600 font-semibold border-4 border-blue-500 shadow items shadow-md");
     			attr_dev(button, "type", "submit");
-    			add_location(button, file$1, 12, 20, 352);
+    			add_location(button, file$1, 13, 20, 426);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -2157,7 +2374,7 @@ var app = (function () {
     		block,
     		id: create_default_slot.name,
     		type: "slot",
-    		source: "(13:4) <Link to=\\\"list\\\">",
+    		source: "(14:4) <Link to=\\\"list\\\">",
     		ctx
     	});
 
@@ -2167,20 +2384,23 @@ var app = (function () {
     function create_fragment$3(ctx) {
     	let main;
     	let header;
-    	let h1;
+    	let img;
+    	let img_src_value;
     	let t0;
+    	let h1;
     	let t1;
+    	let t2;
     	let article;
     	let p0;
-    	let t2;
     	let t3;
-    	let link;
     	let t4;
+    	let link;
+    	let t5;
     	let footer;
     	let p1;
-    	let t5;
     	let t6;
     	let t7;
+    	let t8;
     	let current;
 
     	link = new Link({
@@ -2196,20 +2416,22 @@ var app = (function () {
     		c: function create() {
     			main = element("main");
     			header = element("header");
+    			img = element("img");
+    			t0 = space();
     			h1 = element("h1");
-    			t0 = text(/*appName*/ ctx[0]);
-    			t1 = space();
+    			t1 = text(/*appName*/ ctx[0]);
+    			t2 = space();
     			article = element("article");
     			p0 = element("p");
-    			t2 = text("Click the button to find lists of food");
-    			t3 = space();
-    			create_component(link.$$.fragment);
+    			t3 = text("Click the button to find lists of food");
     			t4 = space();
+    			create_component(link.$$.fragment);
+    			t5 = space();
     			footer = element("footer");
     			p1 = element("p");
-    			t5 = text("© ");
-    			t6 = text(/*appName*/ ctx[0]);
-    			t7 = text(" 2020");
+    			t6 = text("Copyright © 2020 ");
+    			t7 = text(/*appName*/ ctx[0]);
+    			t8 = text(". All Rights Reserved.");
     			this.h();
     		},
     		l: function claim(nodes) {
@@ -2217,65 +2439,73 @@ var app = (function () {
     			var main_nodes = children(main);
     			header = claim_element(main_nodes, "HEADER", { class: true });
     			var header_nodes = children(header);
+    			img = claim_element(header_nodes, "IMG", { class: true, src: true, alt: true });
+    			t0 = claim_space(header_nodes);
     			h1 = claim_element(header_nodes, "H1", { class: true });
     			var h1_nodes = children(h1);
-    			t0 = claim_text(h1_nodes, /*appName*/ ctx[0]);
+    			t1 = claim_text(h1_nodes, /*appName*/ ctx[0]);
     			h1_nodes.forEach(detach_dev);
     			header_nodes.forEach(detach_dev);
-    			t1 = claim_space(main_nodes);
+    			t2 = claim_space(main_nodes);
     			article = claim_element(main_nodes, "ARTICLE", { class: true });
     			var article_nodes = children(article);
-    			p0 = claim_element(article_nodes, "P", {});
+    			p0 = claim_element(article_nodes, "P", { class: true });
     			var p0_nodes = children(p0);
-    			t2 = claim_text(p0_nodes, "Click the button to find lists of food");
+    			t3 = claim_text(p0_nodes, "Click the button to find lists of food");
     			p0_nodes.forEach(detach_dev);
-    			t3 = claim_space(article_nodes);
+    			t4 = claim_space(article_nodes);
     			claim_component(link.$$.fragment, article_nodes);
     			article_nodes.forEach(detach_dev);
-    			t4 = claim_space(main_nodes);
-    			footer = claim_element(main_nodes, "FOOTER", { class: true });
+    			t5 = claim_space(main_nodes);
+    			footer = claim_element(main_nodes, "FOOTER", {});
     			var footer_nodes = children(footer);
     			p1 = claim_element(footer_nodes, "P", { class: true });
     			var p1_nodes = children(p1);
-    			t5 = claim_text(p1_nodes, "© ");
-    			t6 = claim_text(p1_nodes, /*appName*/ ctx[0]);
-    			t7 = claim_text(p1_nodes, " 2020");
+    			t6 = claim_text(p1_nodes, "Copyright © 2020 ");
+    			t7 = claim_text(p1_nodes, /*appName*/ ctx[0]);
+    			t8 = claim_text(p1_nodes, ". All Rights Reserved.");
     			p1_nodes.forEach(detach_dev);
     			footer_nodes.forEach(detach_dev);
     			main_nodes.forEach(detach_dev);
     			this.h();
     		},
     		h: function hydrate() {
+    			attr_dev(img, "class", "logo");
+    			if (img.src !== (img_src_value = "/restaurant.png")) attr_dev(img, "src", img_src_value);
+    			attr_dev(img, "alt", "logo");
+    			add_location(img, file$1, 8, 8, 184);
     			attr_dev(h1, "class", "font-bold text-4xl");
-    			add_location(h1, file$1, 8, 8, 184);
+    			add_location(h1, file$1, 9, 8, 245);
     			attr_dev(header, "class", "text-center");
     			add_location(header, file$1, 7, 4, 146);
-    			add_location(p0, file$1, 11, 4, 285);
+    			attr_dev(p0, "class", "m-10");
+    			add_location(p0, file$1, 12, 4, 346);
     			attr_dev(article, "class", "text-center");
-    			add_location(article, file$1, 10, 4, 250);
-    			attr_dev(p1, "class", "copy");
-    			add_location(p1, file$1, 16, 8, 603);
-    			attr_dev(footer, "class", "text-center py-8 px-8");
-    			add_location(footer, file$1, 15, 4, 555);
+    			add_location(article, file$1, 11, 4, 311);
+    			attr_dev(p1, "class", "text-lg");
+    			add_location(p1, file$1, 17, 8, 655);
+    			add_location(footer, file$1, 16, 4, 637);
     			add_location(main, file$1, 6, 0, 134);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, main, anchor);
     			append_dev(main, header);
+    			append_dev(header, img);
+    			append_dev(header, t0);
     			append_dev(header, h1);
-    			append_dev(h1, t0);
-    			append_dev(main, t1);
+    			append_dev(h1, t1);
+    			append_dev(main, t2);
     			append_dev(main, article);
     			append_dev(article, p0);
-    			append_dev(p0, t2);
-    			append_dev(article, t3);
+    			append_dev(p0, t3);
+    			append_dev(article, t4);
     			mount_component(link, article, null);
-    			append_dev(main, t4);
+    			append_dev(main, t5);
     			append_dev(main, footer);
     			append_dev(footer, p1);
-    			append_dev(p1, t5);
     			append_dev(p1, t6);
     			append_dev(p1, t7);
+    			append_dev(p1, t8);
     			current = true;
     		},
     		p: function update(ctx, [dirty]) {
@@ -2357,73 +2587,70 @@ var app = (function () {
     function create_fragment$4(ctx) {
     	let main;
     	let header;
-    	let h1;
+    	let img;
+    	let img_src_value;
     	let t0;
+    	let h1;
     	let t1;
-    	let article;
-    	let h20;
     	let t2;
+    	let article;
+    	let h2;
     	let t3;
-    	let p0;
     	let t4;
+    	let p0;
     	let t5;
-    	let h21;
     	let t6;
+    	let br;
     	let t7;
     	let p1;
     	let t8;
     	let t9;
     	let aside;
-    	let h40;
+    	let h4;
     	let t10;
     	let t11;
-    	let h41;
+    	let a;
     	let t12;
     	let t13;
-    	let h42;
-    	let t14;
-    	let t15;
     	let footer;
     	let p2;
+    	let t14;
+    	let t15;
     	let t16;
-    	let t17;
-    	let t18;
 
     	const block = {
     		c: function create() {
     			main = element("main");
     			header = element("header");
+    			img = element("img");
+    			t0 = space();
     			h1 = element("h1");
-    			t0 = text(/*pageName*/ ctx[1]);
-    			t1 = space();
+    			t1 = text(/*pageName*/ ctx[1]);
+    			t2 = space();
     			article = element("article");
-    			h20 = element("h2");
-    			t2 = text("Our story");
-    			t3 = space();
+    			h2 = element("h2");
+    			t3 = text("About us");
+    			t4 = space();
     			p0 = element("p");
-    			t4 = text("We are students from Technical College");
-    			t5 = space();
-    			h21 = element("h2");
-    			t6 = text("About web");
+    			t5 = text("The FoodPoint is a fastfood/restaurants finder where you can find lists of food when you don't know what to eat.");
+    			t6 = space();
+    			br = element("br");
     			t7 = space();
     			p1 = element("p");
-    			t8 = text("The FoodPoint is a fastfood/restaurants finder where you can find lists of food when you don't know what to eat.");
+    			t8 = text("We are students from Technical College and this website is our project for web development class. We've been\r\n            working on this project for a semester. We manage to scrape some restaurant website and put the data in the list, \r\n            we also added a GoogleMaps and the restaurants from our lists are pinned in the map. What we didn't manage to add was log in and log out\r\n            and favorite the restaurants, make filter to find restaurants easier and make new website for the menu. \r\n            We used Svelte to make our website, since Svelte is a recent Javascript framework there wasn't much information to find.\r\n            The result is not perfect but we did try to make the website as best as possible.");
     			t9 = space();
     			aside = element("aside");
-    			h40 = element("h4");
-    			t10 = text("Phone");
+    			h4 = element("h4");
+    			t10 = text("Our Github Page");
     			t11 = space();
-    			h41 = element("h4");
-    			t12 = text("Email");
+    			a = element("a");
+    			t12 = text("https://github.com/3Asians/FoodApp");
     			t13 = space();
-    			h42 = element("h4");
-    			t14 = text("Github");
-    			t15 = space();
     			footer = element("footer");
     			p2 = element("p");
-    			t16 = text("© ");
-    			t17 = text(/*appName*/ ctx[0]);
-    			t18 = text(" 2020");
+    			t14 = text("Copyright © 2020 ");
+    			t15 = text(/*appName*/ ctx[0]);
+    			t16 = text(". All Rights Reserved.");
     			this.h();
     		},
     		l: function claim(nodes) {
@@ -2431,124 +2658,119 @@ var app = (function () {
     			var main_nodes = children(main);
     			header = claim_element(main_nodes, "HEADER", { class: true });
     			var header_nodes = children(header);
+    			img = claim_element(header_nodes, "IMG", { class: true, src: true, alt: true });
+    			t0 = claim_space(header_nodes);
     			h1 = claim_element(header_nodes, "H1", { class: true });
     			var h1_nodes = children(h1);
-    			t0 = claim_text(h1_nodes, /*pageName*/ ctx[1]);
+    			t1 = claim_text(h1_nodes, /*pageName*/ ctx[1]);
     			h1_nodes.forEach(detach_dev);
     			header_nodes.forEach(detach_dev);
-    			t1 = claim_space(main_nodes);
-    			article = claim_element(main_nodes, "ARTICLE", {});
+    			t2 = claim_space(main_nodes);
+    			article = claim_element(main_nodes, "ARTICLE", { class: true });
     			var article_nodes = children(article);
-    			h20 = claim_element(article_nodes, "H2", { class: true });
-    			var h20_nodes = children(h20);
-    			t2 = claim_text(h20_nodes, "Our story");
-    			h20_nodes.forEach(detach_dev);
-    			t3 = claim_space(article_nodes);
-    			p0 = claim_element(article_nodes, "P", {});
+    			h2 = claim_element(article_nodes, "H2", { class: true });
+    			var h2_nodes = children(h2);
+    			t3 = claim_text(h2_nodes, "About us");
+    			h2_nodes.forEach(detach_dev);
+    			t4 = claim_space(article_nodes);
+    			p0 = claim_element(article_nodes, "P", { class: true });
     			var p0_nodes = children(p0);
-    			t4 = claim_text(p0_nodes, "We are students from Technical College");
+    			t5 = claim_text(p0_nodes, "The FoodPoint is a fastfood/restaurants finder where you can find lists of food when you don't know what to eat.");
     			p0_nodes.forEach(detach_dev);
-    			t5 = claim_space(article_nodes);
-    			h21 = claim_element(article_nodes, "H2", { class: true });
-    			var h21_nodes = children(h21);
-    			t6 = claim_text(h21_nodes, "About web");
-    			h21_nodes.forEach(detach_dev);
+    			t6 = claim_space(article_nodes);
+    			br = claim_element(article_nodes, "BR", {});
     			t7 = claim_space(article_nodes);
-    			p1 = claim_element(article_nodes, "P", {});
+    			p1 = claim_element(article_nodes, "P", { class: true });
     			var p1_nodes = children(p1);
-    			t8 = claim_text(p1_nodes, "The FoodPoint is a fastfood/restaurants finder where you can find lists of food when you don't know what to eat.");
+    			t8 = claim_text(p1_nodes, "We are students from Technical College and this website is our project for web development class. We've been\r\n            working on this project for a semester. We manage to scrape some restaurant website and put the data in the list, \r\n            we also added a GoogleMaps and the restaurants from our lists are pinned in the map. What we didn't manage to add was log in and log out\r\n            and favorite the restaurants, make filter to find restaurants easier and make new website for the menu. \r\n            We used Svelte to make our website, since Svelte is a recent Javascript framework there wasn't much information to find.\r\n            The result is not perfect but we did try to make the website as best as possible.");
     			p1_nodes.forEach(detach_dev);
     			article_nodes.forEach(detach_dev);
     			t9 = claim_space(main_nodes);
     			aside = claim_element(main_nodes, "ASIDE", {});
     			var aside_nodes = children(aside);
-    			h40 = claim_element(aside_nodes, "H4", { class: true });
-    			var h40_nodes = children(h40);
-    			t10 = claim_text(h40_nodes, "Phone");
-    			h40_nodes.forEach(detach_dev);
+    			h4 = claim_element(aside_nodes, "H4", { class: true });
+    			var h4_nodes = children(h4);
+    			t10 = claim_text(h4_nodes, "Our Github Page");
+    			h4_nodes.forEach(detach_dev);
     			t11 = claim_space(aside_nodes);
-    			h41 = claim_element(aside_nodes, "H4", { class: true });
-    			var h41_nodes = children(h41);
-    			t12 = claim_text(h41_nodes, "Email");
-    			h41_nodes.forEach(detach_dev);
-    			t13 = claim_space(aside_nodes);
-    			h42 = claim_element(aside_nodes, "H4", { class: true });
-    			var h42_nodes = children(h42);
-    			t14 = claim_text(h42_nodes, "Github");
-    			h42_nodes.forEach(detach_dev);
+    			a = claim_element(aside_nodes, "A", { href: true });
+    			var a_nodes = children(a);
+    			t12 = claim_text(a_nodes, "https://github.com/3Asians/FoodApp");
+    			a_nodes.forEach(detach_dev);
     			aside_nodes.forEach(detach_dev);
-    			t15 = claim_space(main_nodes);
-    			footer = claim_element(main_nodes, "FOOTER", { class: true });
+    			t13 = claim_space(main_nodes);
+    			footer = claim_element(main_nodes, "FOOTER", {});
     			var footer_nodes = children(footer);
     			p2 = claim_element(footer_nodes, "P", { class: true });
     			var p2_nodes = children(p2);
-    			t16 = claim_text(p2_nodes, "© ");
-    			t17 = claim_text(p2_nodes, /*appName*/ ctx[0]);
-    			t18 = claim_text(p2_nodes, " 2020");
+    			t14 = claim_text(p2_nodes, "Copyright © 2020 ");
+    			t15 = claim_text(p2_nodes, /*appName*/ ctx[0]);
+    			t16 = claim_text(p2_nodes, ". All Rights Reserved.");
     			p2_nodes.forEach(detach_dev);
     			footer_nodes.forEach(detach_dev);
     			main_nodes.forEach(detach_dev);
     			this.h();
     		},
     		h: function hydrate() {
+    			attr_dev(img, "class", "logo");
+    			if (img.src !== (img_src_value = "/restaurant.png")) attr_dev(img, "src", img_src_value);
+    			attr_dev(img, "alt", "logo");
+    			add_location(img, file$2, 7, 8, 125);
     			attr_dev(h1, "class", "font-bold text-4xl");
-    			add_location(h1, file$2, 7, 8, 125);
+    			add_location(h1, file$2, 8, 8, 186);
     			attr_dev(header, "class", "header");
     			add_location(header, file$2, 6, 4, 92);
-    			attr_dev(h20, "class", "font-bold text-2xl my-2");
-    			add_location(h20, file$2, 10, 8, 213);
-    			add_location(p0, file$2, 11, 8, 273);
-    			attr_dev(h21, "class", "font-bold text-2xl my-2");
-    			add_location(h21, file$2, 12, 8, 328);
-    			add_location(p1, file$2, 13, 8, 388);
-    			add_location(article, file$2, 9, 4, 194);
-    			attr_dev(h40, "class", "font-bold text-lg my-4");
-    			add_location(h40, file$2, 16, 8, 546);
-    			attr_dev(h41, "class", "font-bold text-lg my-4");
-    			add_location(h41, file$2, 17, 8, 601);
-    			attr_dev(h42, "class", "font-bold text-lg my-4");
-    			add_location(h42, file$2, 18, 8, 656);
-    			add_location(aside, file$2, 15, 4, 529);
-    			attr_dev(p2, "class", "copy");
-    			add_location(p2, file$2, 21, 8, 755);
-    			attr_dev(footer, "class", "footer");
-    			add_location(footer, file$2, 20, 4, 722);
+    			attr_dev(h2, "class", "font-bold text-2xl my-2");
+    			add_location(h2, file$2, 11, 8, 304);
+    			attr_dev(p0, "class", "text-left text-lg");
+    			add_location(p0, file$2, 12, 8, 363);
+    			add_location(br, file$2, 13, 8, 518);
+    			attr_dev(p1, "class", "text-left text-lg");
+    			add_location(p1, file$2, 14, 8, 532);
+    			attr_dev(article, "class", "w-2/4 mr-auto ml-auto");
+    			add_location(article, file$2, 10, 4, 255);
+    			attr_dev(h4, "class", "font-bold text-lg my-4");
+    			add_location(h4, file$2, 23, 8, 1347);
+    			attr_dev(a, "href", "https://github.com/3Asians/FoodApp");
+    			add_location(a, file$2, 24, 8, 1412);
+    			add_location(aside, file$2, 22, 4, 1330);
+    			attr_dev(p2, "class", "text-lg");
+    			add_location(p2, file$2, 28, 8, 1535);
+    			add_location(footer, file$2, 27, 4, 1517);
     			add_location(main, file$2, 5, 0, 80);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, main, anchor);
     			append_dev(main, header);
+    			append_dev(header, img);
+    			append_dev(header, t0);
     			append_dev(header, h1);
-    			append_dev(h1, t0);
-    			append_dev(main, t1);
+    			append_dev(h1, t1);
+    			append_dev(main, t2);
     			append_dev(main, article);
-    			append_dev(article, h20);
-    			append_dev(h20, t2);
-    			append_dev(article, t3);
+    			append_dev(article, h2);
+    			append_dev(h2, t3);
+    			append_dev(article, t4);
     			append_dev(article, p0);
-    			append_dev(p0, t4);
-    			append_dev(article, t5);
-    			append_dev(article, h21);
-    			append_dev(h21, t6);
+    			append_dev(p0, t5);
+    			append_dev(article, t6);
+    			append_dev(article, br);
     			append_dev(article, t7);
     			append_dev(article, p1);
     			append_dev(p1, t8);
     			append_dev(main, t9);
     			append_dev(main, aside);
-    			append_dev(aside, h40);
-    			append_dev(h40, t10);
+    			append_dev(aside, h4);
+    			append_dev(h4, t10);
     			append_dev(aside, t11);
-    			append_dev(aside, h41);
-    			append_dev(h41, t12);
-    			append_dev(aside, t13);
-    			append_dev(aside, h42);
-    			append_dev(h42, t14);
-    			append_dev(main, t15);
+    			append_dev(aside, a);
+    			append_dev(a, t12);
+    			append_dev(main, t13);
     			append_dev(main, footer);
     			append_dev(footer, p2);
+    			append_dev(p2, t14);
+    			append_dev(p2, t15);
     			append_dev(p2, t16);
-    			append_dev(p2, t17);
-    			append_dev(p2, t18);
     		},
     		p: noop,
     		i: noop,
@@ -2614,22 +2836,35 @@ var app = (function () {
     function create_fragment$5(ctx) {
     	let main;
     	let header;
-    	let h1;
+    	let img;
+    	let img_src_value;
     	let t0;
+    	let h1;
     	let t1;
+    	let t2;
     	let div;
     	let iframe;
     	let iframe_src_value;
+    	let t3;
+    	let footer;
+    	let p;
+    	let t4;
 
     	const block = {
     		c: function create() {
     			main = element("main");
     			header = element("header");
+    			img = element("img");
+    			t0 = space();
     			h1 = element("h1");
-    			t0 = text(/*pageName*/ ctx[0]);
-    			t1 = space();
+    			t1 = text(/*pageName*/ ctx[0]);
+    			t2 = space();
     			div = element("div");
     			iframe = element("iframe");
+    			t3 = space();
+    			footer = element("footer");
+    			p = element("p");
+    			t4 = text("Copyright © 2020 FoodApp. All Rights Reserved.");
     			this.h();
     		},
     		l: function claim(nodes) {
@@ -2637,40 +2872,63 @@ var app = (function () {
     			var main_nodes = children(main);
     			header = claim_element(main_nodes, "HEADER", { class: true });
     			var header_nodes = children(header);
+    			img = claim_element(header_nodes, "IMG", { class: true, src: true, alt: true });
+    			t0 = claim_space(header_nodes);
     			h1 = claim_element(header_nodes, "H1", { class: true });
     			var h1_nodes = children(h1);
-    			t0 = claim_text(h1_nodes, /*pageName*/ ctx[0]);
+    			t1 = claim_text(h1_nodes, /*pageName*/ ctx[0]);
     			h1_nodes.forEach(detach_dev);
     			header_nodes.forEach(detach_dev);
-    			t1 = claim_space(main_nodes);
+    			t2 = claim_space(main_nodes);
     			div = claim_element(main_nodes, "DIV", { class: true });
     			var div_nodes = children(div);
     			iframe = claim_element(div_nodes, "IFRAME", { title: true, src: true });
     			children(iframe).forEach(detach_dev);
     			div_nodes.forEach(detach_dev);
+    			t3 = claim_space(main_nodes);
+    			footer = claim_element(main_nodes, "FOOTER", {});
+    			var footer_nodes = children(footer);
+    			p = claim_element(footer_nodes, "P", { class: true });
+    			var p_nodes = children(p);
+    			t4 = claim_text(p_nodes, "Copyright © 2020 FoodApp. All Rights Reserved.");
+    			p_nodes.forEach(detach_dev);
+    			footer_nodes.forEach(detach_dev);
     			main_nodes.forEach(detach_dev);
     			this.h();
     		},
     		h: function hydrate() {
+    			attr_dev(img, "class", "logo");
+    			if (img.src !== (img_src_value = "/restaurant.png")) attr_dev(img, "src", img_src_value);
+    			attr_dev(img, "alt", "logo");
+    			add_location(img, file$3, 8, 8, 139);
     			attr_dev(h1, "class", "font-bold text-4xl");
-    			add_location(h1, file$3, 8, 8, 139);
+    			add_location(h1, file$3, 9, 8, 200);
     			attr_dev(header, "class", "header");
     			add_location(header, file$3, 7, 4, 106);
     			attr_dev(iframe, "title", "map");
     			if (iframe.src !== (iframe_src_value = "https://www.google.com/maps/d/embed?mid=1HzY2j4x2sQGoC9SBT-J5kvjp0wZ57a0L")) attr_dev(iframe, "src", iframe_src_value);
-    			add_location(iframe, file$3, 11, 4, 231);
-    			attr_dev(div, "class", "maps");
-    			add_location(div, file$3, 10, 4, 207);
+    			add_location(iframe, file$3, 12, 4, 292);
+    			attr_dev(div, "class", "px-5");
+    			add_location(div, file$3, 11, 4, 268);
+    			attr_dev(p, "class", "text-lg");
+    			add_location(p, file$3, 14, 8, 431);
+    			add_location(footer, file$3, 13, 4, 413);
     			add_location(main, file$3, 6, 0, 92);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, main, anchor);
     			append_dev(main, header);
+    			append_dev(header, img);
+    			append_dev(header, t0);
     			append_dev(header, h1);
-    			append_dev(h1, t0);
-    			append_dev(main, t1);
+    			append_dev(h1, t1);
+    			append_dev(main, t2);
     			append_dev(main, div);
     			append_dev(div, iframe);
+    			append_dev(main, t3);
+    			append_dev(main, footer);
+    			append_dev(footer, p);
+    			append_dev(p, t4);
     		},
     		p: noop,
     		i: noop,
@@ -2728,16 +2986,343 @@ var app = (function () {
     	}
     }
 
+    function cubicOut(t) {
+        const f = t - 1.0;
+        return f * f * f + 1.0;
+    }
+
+    function fade(node, { delay = 0, duration = 400, easing = identity }) {
+        const o = +getComputedStyle(node).opacity;
+        return {
+            delay,
+            duration,
+            easing,
+            css: t => `opacity: ${t * o}`
+        };
+    }
+    function slide(node, { delay = 0, duration = 400, easing = cubicOut }) {
+        const style = getComputedStyle(node);
+        const opacity = +style.opacity;
+        const height = parseFloat(style.height);
+        const padding_top = parseFloat(style.paddingTop);
+        const padding_bottom = parseFloat(style.paddingBottom);
+        const margin_top = parseFloat(style.marginTop);
+        const margin_bottom = parseFloat(style.marginBottom);
+        const border_top_width = parseFloat(style.borderTopWidth);
+        const border_bottom_width = parseFloat(style.borderBottomWidth);
+        return {
+            delay,
+            duration,
+            easing,
+            css: t => `overflow: hidden;` +
+                `opacity: ${Math.min(t * 20, 1) * opacity};` +
+                `height: ${t * height}px;` +
+                `padding-top: ${t * padding_top}px;` +
+                `padding-bottom: ${t * padding_bottom}px;` +
+                `margin-top: ${t * margin_top}px;` +
+                `margin-bottom: ${t * margin_bottom}px;` +
+                `border-top-width: ${t * border_top_width}px;` +
+                `border-bottom-width: ${t * border_bottom_width}px;`
+        };
+    }
+
     /* src\pages\List.svelte generated by Svelte v3.29.0 */
     const file$4 = "src\\pages\\List.svelte";
 
-    function get_each_context(ctx, list, i) {
+    function get_each_context_1(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[2] = list[i];
+    	child_ctx[10] = list[i];
     	return child_ctx;
     }
 
-    // (27:8) {:else}
+    function get_each_context(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[7] = list[i];
+    	return child_ctx;
+    }
+
+    // (61:8) {:else}
+    function create_else_block_1(ctx) {
+    	let div;
+
+    	const block = {
+    		c: function create() {
+    			div = element("div");
+    			this.h();
+    		},
+    		l: function claim(nodes) {
+    			div = claim_element(nodes, "DIV", { class: true });
+    			children(div).forEach(detach_dev);
+    			this.h();
+    		},
+    		h: function hydrate() {
+    			attr_dev(div, "class", "loader");
+    			add_location(div, file$4, 61, 8, 2213);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div, anchor);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_else_block_1.name,
+    		type: "else",
+    		source: "(61:8) {:else}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (39:12) {#if show}
+    function create_if_block$1(ctx) {
+    	let div;
+    	let div_transition;
+    	let current;
+    	let mounted;
+    	let dispose;
+    	let if_block = /*showMore*/ ctx[1] && create_if_block_1$1(ctx);
+
+    	const block = {
+    		c: function create() {
+    			div = element("div");
+    			if (if_block) if_block.c();
+    			this.h();
+    		},
+    		l: function claim(nodes) {
+    			div = claim_element(nodes, "DIV", { class: true });
+    			var div_nodes = children(div);
+    			if (if_block) if_block.l(div_nodes);
+    			div_nodes.forEach(detach_dev);
+    			this.h();
+    		},
+    		h: function hydrate() {
+    			attr_dev(div, "class", "set");
+    			add_location(div, file$4, 39, 12, 1316);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div, anchor);
+    			if (if_block) if_block.m(div, null);
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = listen_dev(div, "introend", /*introend_handler*/ ctx[6], false, false, false);
+    				mounted = true;
+    			}
+    		},
+    		p: function update(ctx, dirty) {
+    			if (/*showMore*/ ctx[1]) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+
+    					if (dirty & /*showMore*/ 2) {
+    						transition_in(if_block, 1);
+    					}
+    				} else {
+    					if_block = create_if_block_1$1(ctx);
+    					if_block.c();
+    					transition_in(if_block, 1);
+    					if_block.m(div, null);
+    				}
+    			} else if (if_block) {
+    				group_outros();
+
+    				transition_out(if_block, 1, 1, () => {
+    					if_block = null;
+    				});
+
+    				check_outros();
+    			}
+
+    			if (dirty & /*restaurants*/ 1 && img.src !== (img_src_value = /*restaurant*/ ctx[2].IMG)) {
+    				attr_dev(img, "src", img_src_value);
+    			}
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(if_block);
+
+    			add_render_callback(() => {
+    				if (!div_transition) div_transition = create_bidirectional_transition(div, slide, {}, true);
+    				div_transition.run(1);
+    			});
+
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(if_block);
+    			if (!div_transition) div_transition = create_bidirectional_transition(div, slide, {}, false);
+    			div_transition.run(0);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div);
+    			if (if_block) if_block.d();
+    			if (detaching && div_transition) div_transition.end();
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block$1.name,
+    		type: "if",
+    		source: "(39:12) {#if show}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (41:16) {#if showMore}
+    function create_if_block_1$1(ctx) {
+    	let div;
+    	let div_transition;
+    	let current;
+    	let mounted;
+    	let dispose;
+    	let each_value_1 = /*restaurant*/ ctx[7].Menu;
+    	validate_each_argument(each_value_1);
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value_1.length; i += 1) {
+    		each_blocks[i] = create_each_block_1(get_each_context_1(ctx, each_value_1, i));
+    	}
+
+    	let each_1_else_1 = null;
+
+    	if (!each_value_1.length) {
+    		each_1_else_1 = create_else_block$1(ctx);
+    	}
+
+    	const block = {
+    		c: function create() {
+    			div = element("div");
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			if (each_1_else_1) {
+    				each_1_else_1.c();
+    			}
+
+    			this.h();
+    		},
+    		l: function claim(nodes) {
+    			div = claim_element(nodes, "DIV", {});
+    			var div_nodes = children(div);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].l(div_nodes);
+    			}
+
+    			if (each_1_else_1) {
+    				each_1_else_1.l(div_nodes);
+    			}
+
+    			div_nodes.forEach(detach_dev);
+    			this.h();
+    		},
+    		h: function hydrate() {
+    			add_location(div, file$4, 41, 20, 1439);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div, anchor);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(div, null);
+    			}
+
+    			if (each_1_else_1) {
+    				each_1_else_1.m(div, null);
+    			}
+
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = listen_dev(div, "outroend", /*outroend_handler*/ ctx[5], false, false, false);
+    				mounted = true;
+    			}
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*restaurants*/ 4) {
+    				each_value_1 = /*restaurant*/ ctx[7].Menu;
+    				validate_each_argument(each_value_1);
+    				let i;
+
+    				for (i = 0; i < each_value_1.length; i += 1) {
+    					const child_ctx = get_each_context_1(ctx, each_value_1, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block_1(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(div, null);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value_1.length;
+
+    				if (each_value_1.length) {
+    					if (each_1_else_1) {
+    						each_1_else_1.d(1);
+    						each_1_else_1 = null;
+    					}
+    				} else if (!each_1_else_1) {
+    					each_1_else_1 = create_else_block$1(ctx);
+    					each_1_else_1.c();
+    					each_1_else_1.m(div, null);
+    				}
+    			}
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+
+    			add_render_callback(() => {
+    				if (!div_transition) div_transition = create_bidirectional_transition(div, fade, {}, true);
+    				div_transition.run(1);
+    			});
+
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			if (!div_transition) div_transition = create_bidirectional_transition(div, fade, {}, false);
+    			div_transition.run(0);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div);
+    			destroy_each(each_blocks, detaching);
+    			if (each_1_else_1) each_1_else_1.d();
+    			if (detaching && div_transition) div_transition.end();
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_1$1.name,
+    		type: "if",
+    		source: "(41:16) {#if showMore}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (50:24) {:else}
     function create_else_block$1(ctx) {
     	let div;
 
@@ -2753,7 +3338,7 @@ var app = (function () {
     		},
     		h: function hydrate() {
     			attr_dev(div, "class", "loader");
-    			add_location(div, file$4, 27, 8, 1018);
+    			add_location(div, file$4, 50, 24, 1922);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
@@ -2767,69 +3352,48 @@ var app = (function () {
     		block,
     		id: create_else_block$1.name,
     		type: "else",
-    		source: "(27:8) {:else}",
+    		source: "(50:24) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (19:8) {#each restaurants as restaurant}
-    function create_each_block(ctx) {
+    // (43:24) {#each restaurant.Menu as foods}
+    function create_each_block_1(ctx) {
     	let ul;
     	let li0;
-    	let b;
-    	let a0;
-    	let t0_value = /*restaurant*/ ctx[2].Name + "";
+    	let t0_value = /*foods*/ ctx[10].name + "";
     	let t0;
-    	let a0_href_value;
     	let t1;
     	let li1;
+    	let t2_value = /*foods*/ ctx[10].food + "";
     	let t2;
-    	let t3_value = /*restaurant*/ ctx[2].Category + "";
     	let t3;
-    	let t4;
     	let li2;
+    	let t4_value = /*foods*/ ctx[10].price + "";
+    	let t4;
     	let t5;
-    	let t6_value = /*restaurant*/ ctx[2].Distance + "";
-    	let t6;
-    	let t7;
-    	let t8;
     	let li3;
-    	let a1;
-    	let t9_value = /*restaurant*/ ctx[2].Site + "";
-    	let t9;
-    	let a1_href_value;
-    	let t10;
-    	let li4;
     	let img;
     	let img_src_value;
-    	let t11;
+    	let t6;
 
     	const block = {
     		c: function create() {
     			ul = element("ul");
     			li0 = element("li");
-    			b = element("b");
-    			a0 = element("a");
     			t0 = text(t0_value);
     			t1 = space();
     			li1 = element("li");
-    			t2 = text("Category: ");
-    			t3 = text(t3_value);
-    			t4 = space();
+    			t2 = text(t2_value);
+    			t3 = space();
     			li2 = element("li");
-    			t5 = text("Distance: ");
-    			t6 = text(t6_value);
-    			t7 = text("km");
-    			t8 = space();
+    			t4 = text(t4_value);
+    			t5 = space();
     			li3 = element("li");
-    			a1 = element("a");
-    			t9 = text(t9_value);
-    			t10 = space();
-    			li4 = element("li");
     			img = element("img");
-    			t11 = space();
+    			t6 = space();
     			this.h();
     		},
     		l: function claim(nodes) {
@@ -2837,102 +3401,60 @@ var app = (function () {
     			var ul_nodes = children(ul);
     			li0 = claim_element(ul_nodes, "LI", {});
     			var li0_nodes = children(li0);
-    			b = claim_element(li0_nodes, "B", {});
-    			var b_nodes = children(b);
-    			a0 = claim_element(b_nodes, "A", { href: true });
-    			var a0_nodes = children(a0);
-    			t0 = claim_text(a0_nodes, t0_value);
-    			a0_nodes.forEach(detach_dev);
-    			b_nodes.forEach(detach_dev);
+    			t0 = claim_text(li0_nodes, t0_value);
     			li0_nodes.forEach(detach_dev);
     			t1 = claim_space(ul_nodes);
     			li1 = claim_element(ul_nodes, "LI", {});
     			var li1_nodes = children(li1);
-    			t2 = claim_text(li1_nodes, "Category: ");
-    			t3 = claim_text(li1_nodes, t3_value);
+    			t2 = claim_text(li1_nodes, t2_value);
     			li1_nodes.forEach(detach_dev);
-    			t4 = claim_space(ul_nodes);
+    			t3 = claim_space(ul_nodes);
     			li2 = claim_element(ul_nodes, "LI", {});
     			var li2_nodes = children(li2);
-    			t5 = claim_text(li2_nodes, "Distance: ");
-    			t6 = claim_text(li2_nodes, t6_value);
-    			t7 = claim_text(li2_nodes, "km");
+    			t4 = claim_text(li2_nodes, t4_value);
     			li2_nodes.forEach(detach_dev);
-    			t8 = claim_space(ul_nodes);
+    			t5 = claim_space(ul_nodes);
     			li3 = claim_element(ul_nodes, "LI", {});
     			var li3_nodes = children(li3);
-    			a1 = claim_element(li3_nodes, "A", { href: true });
-    			var a1_nodes = children(a1);
-    			t9 = claim_text(a1_nodes, t9_value);
-    			a1_nodes.forEach(detach_dev);
+    			img = claim_element(li3_nodes, "IMG", { src: true, alt: true, width: true });
     			li3_nodes.forEach(detach_dev);
-    			t10 = claim_space(ul_nodes);
-    			li4 = claim_element(ul_nodes, "LI", {});
-    			var li4_nodes = children(li4);
-    			img = claim_element(li4_nodes, "IMG", { src: true, alt: true, width: true });
-    			li4_nodes.forEach(detach_dev);
-    			t11 = claim_space(ul_nodes);
+    			t6 = claim_space(ul_nodes);
     			ul_nodes.forEach(detach_dev);
     			this.h();
     		},
     		h: function hydrate() {
-    			attr_dev(a0, "href", a0_href_value = "/restaurant/" + /*restaurant*/ ctx[2].ID);
-    			add_location(a0, file$4, 20, 19, 656);
-    			add_location(b, file$4, 20, 16, 653);
-    			add_location(li0, file$4, 20, 12, 649);
-    			add_location(li1, file$4, 21, 12, 738);
-    			add_location(li2, file$4, 22, 12, 792);
-    			attr_dev(a1, "href", a1_href_value = /*restaurant*/ ctx[2].Site);
-    			add_location(a1, file$4, 23, 16, 852);
-    			add_location(li3, file$4, 23, 12, 848);
-    			if (img.src !== (img_src_value = /*restaurant*/ ctx[2].IMG)) attr_dev(img, "src", img_src_value);
+    			add_location(li0, file$4, 44, 28, 1625);
+    			add_location(li1, file$4, 45, 28, 1676);
+    			add_location(li2, file$4, 46, 28, 1727);
+    			if (img.src !== (img_src_value = /*foods*/ ctx[10].img)) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "img");
-    			attr_dev(img, "width", "500");
-    			add_location(img, file$4, 24, 16, 922);
-    			add_location(li4, file$4, 24, 12, 918);
+    			attr_dev(img, "width", "100");
+    			add_location(img, file$4, 47, 32, 1783);
+    			add_location(li3, file$4, 47, 28, 1779);
     			attr_dev(ul, "class", "lists");
-    			add_location(ul, file$4, 19, 8, 617);
+    			add_location(ul, file$4, 43, 24, 1577);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, ul, anchor);
     			append_dev(ul, li0);
-    			append_dev(li0, b);
-    			append_dev(b, a0);
-    			append_dev(a0, t0);
+    			append_dev(li0, t0);
     			append_dev(ul, t1);
     			append_dev(ul, li1);
     			append_dev(li1, t2);
-    			append_dev(li1, t3);
-    			append_dev(ul, t4);
+    			append_dev(ul, t3);
     			append_dev(ul, li2);
-    			append_dev(li2, t5);
-    			append_dev(li2, t6);
-    			append_dev(li2, t7);
-    			append_dev(ul, t8);
+    			append_dev(li2, t4);
+    			append_dev(ul, t5);
     			append_dev(ul, li3);
-    			append_dev(li3, a1);
-    			append_dev(a1, t9);
-    			append_dev(ul, t10);
-    			append_dev(ul, li4);
-    			append_dev(li4, img);
-    			append_dev(ul, t11);
+    			append_dev(li3, img);
+    			append_dev(ul, t6);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*restaurants*/ 1 && t0_value !== (t0_value = /*restaurant*/ ctx[2].Name + "")) set_data_dev(t0, t0_value);
+    			if (dirty & /*restaurants*/ 4 && t0_value !== (t0_value = /*foods*/ ctx[10].name + "")) set_data_dev(t0, t0_value);
+    			if (dirty & /*restaurants*/ 4 && t2_value !== (t2_value = /*foods*/ ctx[10].food + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*restaurants*/ 4 && t4_value !== (t4_value = /*foods*/ ctx[10].price + "")) set_data_dev(t4, t4_value);
 
-    			if (dirty & /*restaurants*/ 1 && a0_href_value !== (a0_href_value = "/restaurant/" + /*restaurant*/ ctx[2].ID)) {
-    				attr_dev(a0, "href", a0_href_value);
-    			}
-
-    			if (dirty & /*restaurants*/ 1 && t3_value !== (t3_value = /*restaurant*/ ctx[2].Category + "")) set_data_dev(t3, t3_value);
-    			if (dirty & /*restaurants*/ 1 && t6_value !== (t6_value = /*restaurant*/ ctx[2].Distance + "")) set_data_dev(t6, t6_value);
-    			if (dirty & /*restaurants*/ 1 && t9_value !== (t9_value = /*restaurant*/ ctx[2].Site + "")) set_data_dev(t9, t9_value);
-
-    			if (dirty & /*restaurants*/ 1 && a1_href_value !== (a1_href_value = /*restaurant*/ ctx[2].Site)) {
-    				attr_dev(a1, "href", a1_href_value);
-    			}
-
-    			if (dirty & /*restaurants*/ 1 && img.src !== (img_src_value = /*restaurant*/ ctx[2].IMG)) {
+    			if (dirty & /*restaurants*/ 4 && img.src !== (img_src_value = /*foods*/ ctx[10].img)) {
     				attr_dev(img, "src", img_src_value);
     			}
     		},
@@ -2943,9 +3465,282 @@ var app = (function () {
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
+    		id: create_each_block_1.name,
+    		type: "each",
+    		source: "(43:24) {#each restaurant.Menu as foods}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (30:8) {#each restaurants as restaurant}
+    function create_each_block(ctx) {
+    	let ul;
+    	let li0;
+    	let t0_value = /*restaurant*/ ctx[7].Name + "";
+    	let t0;
+    	let t1;
+    	let li1;
+    	let img;
+    	let img_src_value;
+    	let t2;
+    	let li2;
+    	let t3;
+    	let t4_value = /*restaurant*/ ctx[7].Category + "";
+    	let t4;
+    	let t5;
+    	let li3;
+    	let t6;
+    	let t7_value = /*restaurant*/ ctx[7].Distance + "";
+    	let t7;
+    	let t8;
+    	let t9;
+    	let li4;
+    	let t10;
+    	let t11_value = /*restaurant*/ ctx[7].Price + "";
+    	let t11;
+    	let t12;
+    	let li5;
+    	let a;
+    	let t13_value = /*restaurant*/ ctx[7].Site + "";
+    	let t13;
+    	let a_href_value;
+    	let t14;
+    	let li6;
+    	let t15;
+    	let t16;
+    	let t17;
+    	let button;
+    	let t18_value = (/*show*/ ctx[0] ? "" : "Show") + "";
+    	let t18;
+    	let t19;
+    	let current;
+    	let mounted;
+    	let dispose;
+    	let if_block = /*show*/ ctx[0] && create_if_block$1(ctx);
+
+    	const block = {
+    		c: function create() {
+    			ul = element("ul");
+    			li0 = element("li");
+    			t0 = text(t0_value);
+    			t1 = space();
+    			li1 = element("li");
+    			img = element("img");
+    			t2 = space();
+    			li2 = element("li");
+    			t3 = text("Category: ");
+    			t4 = text(t4_value);
+    			t5 = space();
+    			li3 = element("li");
+    			t6 = text("Distance: ");
+    			t7 = text(t7_value);
+    			t8 = text("km");
+    			t9 = space();
+    			li4 = element("li");
+    			t10 = text("Price: ");
+    			t11 = text(t11_value);
+    			t12 = space();
+    			li5 = element("li");
+    			a = element("a");
+    			t13 = text(t13_value);
+    			t14 = space();
+    			li6 = element("li");
+    			t15 = text("Menu:");
+    			t16 = space();
+    			if (if_block) if_block.c();
+    			t17 = space();
+    			button = element("button");
+    			t18 = text(t18_value);
+    			t19 = space();
+    			this.h();
+    		},
+    		l: function claim(nodes) {
+    			ul = claim_element(nodes, "UL", { class: true });
+    			var ul_nodes = children(ul);
+    			li0 = claim_element(ul_nodes, "LI", { class: true });
+    			var li0_nodes = children(li0);
+    			t0 = claim_text(li0_nodes, t0_value);
+    			li0_nodes.forEach(detach_dev);
+    			t1 = claim_space(ul_nodes);
+    			li1 = claim_element(ul_nodes, "LI", {});
+    			var li1_nodes = children(li1);
+
+    			img = claim_element(li1_nodes, "IMG", {
+    				class: true,
+    				src: true,
+    				alt: true,
+    				width: true
+    			});
+
+    			li1_nodes.forEach(detach_dev);
+    			t2 = claim_space(ul_nodes);
+    			li2 = claim_element(ul_nodes, "LI", {});
+    			var li2_nodes = children(li2);
+    			t3 = claim_text(li2_nodes, "Category: ");
+    			t4 = claim_text(li2_nodes, t4_value);
+    			li2_nodes.forEach(detach_dev);
+    			t5 = claim_space(ul_nodes);
+    			li3 = claim_element(ul_nodes, "LI", {});
+    			var li3_nodes = children(li3);
+    			t6 = claim_text(li3_nodes, "Distance: ");
+    			t7 = claim_text(li3_nodes, t7_value);
+    			t8 = claim_text(li3_nodes, "km");
+    			li3_nodes.forEach(detach_dev);
+    			t9 = claim_space(ul_nodes);
+    			li4 = claim_element(ul_nodes, "LI", {});
+    			var li4_nodes = children(li4);
+    			t10 = claim_text(li4_nodes, "Price: ");
+    			t11 = claim_text(li4_nodes, t11_value);
+    			li4_nodes.forEach(detach_dev);
+    			t12 = claim_space(ul_nodes);
+    			li5 = claim_element(ul_nodes, "LI", {});
+    			var li5_nodes = children(li5);
+    			a = claim_element(li5_nodes, "A", { href: true });
+    			var a_nodes = children(a);
+    			t13 = claim_text(a_nodes, t13_value);
+    			a_nodes.forEach(detach_dev);
+    			li5_nodes.forEach(detach_dev);
+    			t14 = claim_space(ul_nodes);
+    			li6 = claim_element(ul_nodes, "LI", {});
+    			var li6_nodes = children(li6);
+    			t15 = claim_text(li6_nodes, "Menu:");
+    			li6_nodes.forEach(detach_dev);
+    			t16 = claim_space(ul_nodes);
+    			if (if_block) if_block.l(ul_nodes);
+    			t17 = claim_space(ul_nodes);
+    			button = claim_element(ul_nodes, "BUTTON", {});
+    			var button_nodes = children(button);
+    			t18 = claim_text(button_nodes, t18_value);
+    			button_nodes.forEach(detach_dev);
+    			t19 = claim_space(ul_nodes);
+    			ul_nodes.forEach(detach_dev);
+    			this.h();
+    		},
+    		h: function hydrate() {
+    			attr_dev(li0, "class", "text-4xl font-bold");
+    			add_location(li0, file$4, 31, 12, 881);
+    			attr_dev(img, "class", "brand");
+    			if (img.src !== (img_src_value = /*restaurant*/ ctx[7].IMG)) attr_dev(img, "src", img_src_value);
+    			attr_dev(img, "alt", "img");
+    			attr_dev(img, "width", "500");
+    			add_location(img, file$4, 32, 16, 953);
+    			add_location(li1, file$4, 32, 12, 949);
+    			add_location(li2, file$4, 33, 12, 1035);
+    			add_location(li3, file$4, 34, 12, 1089);
+    			add_location(li4, file$4, 35, 12, 1145);
+    			attr_dev(a, "href", a_href_value = /*restaurant*/ ctx[7].Site);
+    			add_location(a, file$4, 36, 16, 1197);
+    			add_location(li5, file$4, 36, 12, 1193);
+    			add_location(li6, file$4, 37, 12, 1263);
+    			add_location(button, file$4, 56, 12, 2085);
+    			attr_dev(ul, "class", "lists");
+    			add_location(ul, file$4, 30, 8, 849);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, ul, anchor);
+    			append_dev(ul, li0);
+    			append_dev(li0, t0);
+    			append_dev(ul, t1);
+    			append_dev(ul, li1);
+    			append_dev(li1, img);
+    			append_dev(ul, t2);
+    			append_dev(ul, li2);
+    			append_dev(li2, t3);
+    			append_dev(li2, t4);
+    			append_dev(ul, t5);
+    			append_dev(ul, li3);
+    			append_dev(li3, t6);
+    			append_dev(li3, t7);
+    			append_dev(li3, t8);
+    			append_dev(ul, t9);
+    			append_dev(ul, li4);
+    			append_dev(li4, t10);
+    			append_dev(li4, t11);
+    			append_dev(ul, t12);
+    			append_dev(ul, li5);
+    			append_dev(li5, a);
+    			append_dev(a, t13);
+    			append_dev(ul, t14);
+    			append_dev(ul, li6);
+    			append_dev(li6, t15);
+    			append_dev(ul, t16);
+    			if (if_block) if_block.m(ul, null);
+    			append_dev(ul, t17);
+    			append_dev(ul, button);
+    			append_dev(button, t18);
+    			append_dev(ul, t19);
+    			current = true;
+
+    			if (!mounted) {
+    				dispose = listen_dev(button, "click", /*toggle*/ ctx[4], false, false, false);
+    				mounted = true;
+    			}
+    		},
+    		p: function update(ctx, dirty) {
+    			if ((!current || dirty & /*restaurants*/ 4) && t0_value !== (t0_value = /*restaurant*/ ctx[7].Name + "")) set_data_dev(t0, t0_value);
+
+    			if (!current || dirty & /*restaurants*/ 4 && img.src !== (img_src_value = /*restaurant*/ ctx[7].IMG)) {
+    				attr_dev(img, "src", img_src_value);
+    			}
+
+    			if ((!current || dirty & /*restaurants*/ 4) && t4_value !== (t4_value = /*restaurant*/ ctx[7].Category + "")) set_data_dev(t4, t4_value);
+    			if ((!current || dirty & /*restaurants*/ 4) && t7_value !== (t7_value = /*restaurant*/ ctx[7].Distance + "")) set_data_dev(t7, t7_value);
+    			if ((!current || dirty & /*restaurants*/ 4) && t11_value !== (t11_value = /*restaurant*/ ctx[7].Price + "")) set_data_dev(t11, t11_value);
+    			if ((!current || dirty & /*restaurants*/ 4) && t13_value !== (t13_value = /*restaurant*/ ctx[7].Site + "")) set_data_dev(t13, t13_value);
+
+    			if (!current || dirty & /*restaurants*/ 4 && a_href_value !== (a_href_value = /*restaurant*/ ctx[7].Site)) {
+    				attr_dev(a, "href", a_href_value);
+    			}
+
+    			if (/*show*/ ctx[0]) {
+    				if (if_block) {
+    					if_block.p(ctx, dirty);
+
+    					if (dirty & /*show*/ 1) {
+    						transition_in(if_block, 1);
+    					}
+    				} else {
+    					if_block = create_if_block$1(ctx);
+    					if_block.c();
+    					transition_in(if_block, 1);
+    					if_block.m(ul, t17);
+    				}
+    			} else if (if_block) {
+    				group_outros();
+
+    				transition_out(if_block, 1, 1, () => {
+    					if_block = null;
+    				});
+
+    				check_outros();
+    			}
+
+    			if ((!current || dirty & /*show*/ 1) && t18_value !== (t18_value = (/*show*/ ctx[0] ? "" : "Show") + "")) set_data_dev(t18, t18_value);
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+    			transition_in(if_block);
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			transition_out(if_block);
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(ul);
+    			if (if_block) if_block.d();
+    			mounted = false;
+    			dispose();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(19:8) {#each restaurants as restaurant}",
+    		source: "(30:8) {#each restaurants as restaurant}",
     		ctx
     	});
 
@@ -2955,11 +3750,15 @@ var app = (function () {
     function create_fragment$6(ctx) {
     	let main;
     	let header;
-    	let h1;
+    	let img;
+    	let img_src_value;
     	let t0;
+    	let h1;
     	let t1;
+    	let t2;
     	let div;
-    	let each_value = /*restaurants*/ ctx[0];
+    	let current;
+    	let each_value = /*restaurants*/ ctx[2];
     	validate_each_argument(each_value);
     	let each_blocks = [];
 
@@ -2967,10 +3766,434 @@ var app = (function () {
     		each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
     	}
 
+    	const out = i => transition_out(each_blocks[i], 1, 1, () => {
+    		each_blocks[i] = null;
+    	});
+
     	let each_1_else = null;
 
     	if (!each_value.length) {
-    		each_1_else = create_else_block$1(ctx);
+    		each_1_else = create_else_block_1(ctx);
+    	}
+
+    	const block = {
+    		c: function create() {
+    			main = element("main");
+    			header = element("header");
+    			img = element("img");
+    			t0 = space();
+    			h1 = element("h1");
+    			t1 = text(/*pageName*/ ctx[3]);
+    			t2 = space();
+    			div = element("div");
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			if (each_1_else) {
+    				each_1_else.c();
+    			}
+
+    			this.h();
+    		},
+    		l: function claim(nodes) {
+    			main = claim_element(nodes, "MAIN", {});
+    			var main_nodes = children(main);
+    			header = claim_element(main_nodes, "HEADER", { class: true });
+    			var header_nodes = children(header);
+    			img = claim_element(header_nodes, "IMG", { class: true, src: true, alt: true });
+    			t0 = claim_space(header_nodes);
+    			h1 = claim_element(header_nodes, "H1", { class: true });
+    			var h1_nodes = children(h1);
+    			t1 = claim_text(h1_nodes, /*pageName*/ ctx[3]);
+    			h1_nodes.forEach(detach_dev);
+    			header_nodes.forEach(detach_dev);
+    			t2 = claim_space(main_nodes);
+    			div = claim_element(main_nodes, "DIV", { class: true });
+    			var div_nodes = children(div);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].l(div_nodes);
+    			}
+
+    			if (each_1_else) {
+    				each_1_else.l(div_nodes);
+    			}
+
+    			div_nodes.forEach(detach_dev);
+    			main_nodes.forEach(detach_dev);
+    			this.h();
+    		},
+    		h: function hydrate() {
+    			attr_dev(img, "class", "logo");
+    			if (img.src !== (img_src_value = "/restaurant.png")) attr_dev(img, "src", img_src_value);
+    			attr_dev(img, "alt", "logo");
+    			add_location(img, file$4, 25, 8, 648);
+    			attr_dev(h1, "class", "font-bold text-4xl");
+    			add_location(h1, file$4, 26, 8, 709);
+    			attr_dev(header, "class", "header");
+    			add_location(header, file$4, 24, 4, 615);
+    			attr_dev(div, "class", "foods");
+    			add_location(div, file$4, 28, 4, 777);
+    			add_location(main, file$4, 23, 0, 602);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, main, anchor);
+    			append_dev(main, header);
+    			append_dev(header, img);
+    			append_dev(header, t0);
+    			append_dev(header, h1);
+    			append_dev(h1, t1);
+    			append_dev(main, t2);
+    			append_dev(main, div);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(div, null);
+    			}
+
+    			if (each_1_else) {
+    				each_1_else.m(div, null);
+    			}
+
+    			current = true;
+    		},
+    		p: function update(ctx, [dirty]) {
+    			if (dirty & /*toggle, show, showMore, restaurants*/ 23) {
+    				each_value = /*restaurants*/ ctx[2];
+    				validate_each_argument(each_value);
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    						transition_in(each_blocks[i], 1);
+    					} else {
+    						each_blocks[i] = create_each_block(child_ctx);
+    						each_blocks[i].c();
+    						transition_in(each_blocks[i], 1);
+    						each_blocks[i].m(div, null);
+    					}
+    				}
+
+    				group_outros();
+
+    				for (i = each_value.length; i < each_blocks.length; i += 1) {
+    					out(i);
+    				}
+
+    				check_outros();
+
+    				if (each_value.length) {
+    					if (each_1_else) {
+    						each_1_else.d(1);
+    						each_1_else = null;
+    					}
+    				} else if (!each_1_else) {
+    					each_1_else = create_else_block_1(ctx);
+    					each_1_else.c();
+    					each_1_else.m(div, null);
+    				}
+    			}
+    		},
+    		i: function intro(local) {
+    			if (current) return;
+
+    			for (let i = 0; i < each_value.length; i += 1) {
+    				transition_in(each_blocks[i]);
+    			}
+
+    			current = true;
+    		},
+    		o: function outro(local) {
+    			each_blocks = each_blocks.filter(Boolean);
+
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				transition_out(each_blocks[i]);
+    			}
+
+    			current = false;
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(main);
+    			destroy_each(each_blocks, detaching);
+    			if (each_1_else) each_1_else.d();
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_fragment$6.name,
+    		type: "component",
+    		source: "",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function instance$6($$self, $$props, $$invalidate) {
+    	let { $$slots: slots = {}, $$scope } = $$props;
+    	validate_slots("List", slots, []);
+    	let pageName = "List";
+    	let show = false;
+    	let showMore = false;
+
+    	function toggle() {
+    		show
+    		? $$invalidate(1, showMore = false)
+    		: $$invalidate(0, show = true);
+    	}
+
+    	let restaurants = [];
+
+    	onMount(async () => {
+    		const res = await fetch(`https://raw.githubusercontent.com/3Asians/FoodApp/master/menu.json`);
+    		$$invalidate(2, restaurants = await res.json());
+
+    		restaurants.sort((a, b) => a.Distance > b.Distance
+    		? 1
+    		: a.Distance === b.Distance ? a.ID > b.ID ? 1 : -1 : -1);
+    	});
+
+    	const writable_props = [];
+
+    	Object.keys($$props).forEach(key => {
+    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<List> was created with unknown prop '${key}'`);
+    	});
+
+    	const outroend_handler = () => $$invalidate(0, show = false);
+    	const introend_handler = () => $$invalidate(1, showMore = true);
+
+    	$$self.$capture_state = () => ({
+    		pageName,
+    		onMount,
+    		fade,
+    		slide,
+    		show,
+    		showMore,
+    		toggle,
+    		restaurants
+    	});
+
+    	$$self.$inject_state = $$props => {
+    		if ("pageName" in $$props) $$invalidate(3, pageName = $$props.pageName);
+    		if ("show" in $$props) $$invalidate(0, show = $$props.show);
+    		if ("showMore" in $$props) $$invalidate(1, showMore = $$props.showMore);
+    		if ("restaurants" in $$props) $$invalidate(2, restaurants = $$props.restaurants);
+    	};
+
+    	if ($$props && "$$inject" in $$props) {
+    		$$self.$inject_state($$props.$$inject);
+    	}
+
+    	return [
+    		show,
+    		showMore,
+    		restaurants,
+    		pageName,
+    		toggle,
+    		outroend_handler,
+    		introend_handler
+    	];
+    }
+
+    class List extends SvelteComponentDev {
+    	constructor(options) {
+    		super(options);
+    		init(this, options, instance$6, create_fragment$6, safe_not_equal, {});
+
+    		dispatch_dev("SvelteRegisterComponent", {
+    			component: this,
+    			tagName: "List",
+    			options,
+    			id: create_fragment$6.name
+    		});
+    	}
+    }
+
+    /* src\pages\Restaurant.svelte generated by Svelte v3.29.0 */
+    const file$5 = "src\\pages\\Restaurant.svelte";
+
+    function get_each_context$1(ctx, list, i) {
+    	const child_ctx = ctx.slice();
+    	child_ctx[5] = list[i];
+    	return child_ctx;
+    }
+
+    // (34:8) {:else}
+    function create_else_block$2(ctx) {
+    	let div;
+
+    	const block = {
+    		c: function create() {
+    			div = element("div");
+    			this.h();
+    		},
+    		l: function claim(nodes) {
+    			div = claim_element(nodes, "DIV", { class: true });
+    			children(div).forEach(detach_dev);
+    			this.h();
+    		},
+    		h: function hydrate() {
+    			attr_dev(div, "class", "loader");
+    			add_location(div, file$5, 34, 8, 1013);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, div, anchor);
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(div);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_else_block$2.name,
+    		type: "else",
+    		source: "(34:8) {:else}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (27:8) {#each restaurant.Menu as foods}
+    function create_each_block$1(ctx) {
+    	let ul;
+    	let li0;
+    	let t0_value = /*foods*/ ctx[5].name + "";
+    	let t0;
+    	let t1;
+    	let li1;
+    	let t2_value = /*foods*/ ctx[5].food + "";
+    	let t2;
+    	let t3;
+    	let li2;
+    	let t4_value = /*foods*/ ctx[5].price + "";
+    	let t4;
+    	let t5;
+    	let li3;
+    	let img;
+    	let img_src_value;
+    	let t6;
+
+    	const block = {
+    		c: function create() {
+    			ul = element("ul");
+    			li0 = element("li");
+    			t0 = text(t0_value);
+    			t1 = space();
+    			li1 = element("li");
+    			t2 = text(t2_value);
+    			t3 = space();
+    			li2 = element("li");
+    			t4 = text(t4_value);
+    			t5 = space();
+    			li3 = element("li");
+    			img = element("img");
+    			t6 = space();
+    			this.h();
+    		},
+    		l: function claim(nodes) {
+    			ul = claim_element(nodes, "UL", { class: true });
+    			var ul_nodes = children(ul);
+    			li0 = claim_element(ul_nodes, "LI", {});
+    			var li0_nodes = children(li0);
+    			t0 = claim_text(li0_nodes, t0_value);
+    			li0_nodes.forEach(detach_dev);
+    			t1 = claim_space(ul_nodes);
+    			li1 = claim_element(ul_nodes, "LI", {});
+    			var li1_nodes = children(li1);
+    			t2 = claim_text(li1_nodes, t2_value);
+    			li1_nodes.forEach(detach_dev);
+    			t3 = claim_space(ul_nodes);
+    			li2 = claim_element(ul_nodes, "LI", {});
+    			var li2_nodes = children(li2);
+    			t4 = claim_text(li2_nodes, t4_value);
+    			li2_nodes.forEach(detach_dev);
+    			t5 = claim_space(ul_nodes);
+    			li3 = claim_element(ul_nodes, "LI", {});
+    			var li3_nodes = children(li3);
+    			img = claim_element(li3_nodes, "IMG", { src: true, alt: true, width: true });
+    			li3_nodes.forEach(detach_dev);
+    			t6 = claim_space(ul_nodes);
+    			ul_nodes.forEach(detach_dev);
+    			this.h();
+    		},
+    		h: function hydrate() {
+    			add_location(li0, file$5, 28, 12, 812);
+    			add_location(li1, file$5, 29, 12, 847);
+    			add_location(li2, file$5, 30, 12, 882);
+    			if (img.src !== (img_src_value = /*foods*/ ctx[5].img)) attr_dev(img, "src", img_src_value);
+    			attr_dev(img, "alt", "img");
+    			attr_dev(img, "width", "500");
+    			add_location(img, file$5, 31, 16, 922);
+    			add_location(li3, file$5, 31, 12, 918);
+    			attr_dev(ul, "class", "lists");
+    			add_location(ul, file$5, 27, 8, 780);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, ul, anchor);
+    			append_dev(ul, li0);
+    			append_dev(li0, t0);
+    			append_dev(ul, t1);
+    			append_dev(ul, li1);
+    			append_dev(li1, t2);
+    			append_dev(ul, t3);
+    			append_dev(ul, li2);
+    			append_dev(li2, t4);
+    			append_dev(ul, t5);
+    			append_dev(ul, li3);
+    			append_dev(li3, img);
+    			append_dev(ul, t6);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*restaurant*/ 1 && t0_value !== (t0_value = /*foods*/ ctx[5].name + "")) set_data_dev(t0, t0_value);
+    			if (dirty & /*restaurant*/ 1 && t2_value !== (t2_value = /*foods*/ ctx[5].food + "")) set_data_dev(t2, t2_value);
+    			if (dirty & /*restaurant*/ 1 && t4_value !== (t4_value = /*foods*/ ctx[5].price + "")) set_data_dev(t4, t4_value);
+
+    			if (dirty & /*restaurant*/ 1 && img.src !== (img_src_value = /*foods*/ ctx[5].img)) {
+    				attr_dev(img, "src", img_src_value);
+    			}
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(ul);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_each_block$1.name,
+    		type: "each",
+    		source: "(27:8) {#each restaurant.Menu as foods}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    function create_fragment$7(ctx) {
+    	let main;
+    	let header;
+    	let h1;
+    	let t0;
+    	let t1;
+    	let div;
+    	let each_value = /*restaurant*/ ctx[0].Menu;
+    	validate_each_argument(each_value);
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block$1(get_each_context$1(ctx, each_value, i));
+    	}
+
+    	let each_1_else = null;
+
+    	if (!each_value.length) {
+    		each_1_else = create_else_block$2(ctx);
     	}
 
     	const block = {
@@ -3020,12 +4243,12 @@ var app = (function () {
     		},
     		h: function hydrate() {
     			attr_dev(h1, "class", "font-bold text-4xl");
-    			add_location(h1, file$4, 15, 8, 477);
+    			add_location(h1, file$5, 23, 8, 641);
     			attr_dev(header, "class", "header");
-    			add_location(header, file$4, 14, 4, 444);
+    			add_location(header, file$5, 22, 4, 608);
     			attr_dev(div, "class", "foods");
-    			add_location(div, file$4, 17, 4, 545);
-    			add_location(main, file$4, 13, 0, 431);
+    			add_location(div, file$5, 25, 4, 709);
+    			add_location(main, file$5, 21, 0, 595);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, main, anchor);
@@ -3044,18 +4267,18 @@ var app = (function () {
     			}
     		},
     		p: function update(ctx, [dirty]) {
-    			if (dirty & /*restaurants*/ 1) {
-    				each_value = /*restaurants*/ ctx[0];
+    			if (dirty & /*restaurant*/ 1) {
+    				each_value = /*restaurant*/ ctx[0].Menu;
     				validate_each_argument(each_value);
     				let i;
 
     				for (i = 0; i < each_value.length; i += 1) {
-    					const child_ctx = get_each_context(ctx, each_value, i);
+    					const child_ctx = get_each_context$1(ctx, each_value, i);
 
     					if (each_blocks[i]) {
     						each_blocks[i].p(child_ctx, dirty);
     					} else {
-    						each_blocks[i] = create_each_block(child_ctx);
+    						each_blocks[i] = create_each_block$1(child_ctx);
     						each_blocks[i].c();
     						each_blocks[i].m(div, null);
     					}
@@ -3073,7 +4296,7 @@ var app = (function () {
     						each_1_else = null;
     					}
     				} else if (!each_1_else) {
-    					each_1_else = create_else_block$1(ctx);
+    					each_1_else = create_else_block$2(ctx);
     					each_1_else.c();
     					each_1_else.m(div, null);
     				}
@@ -3085,445 +4308,6 @@ var app = (function () {
     			if (detaching) detach_dev(main);
     			destroy_each(each_blocks, detaching);
     			if (each_1_else) each_1_else.d();
-    		}
-    	};
-
-    	dispatch_dev("SvelteRegisterBlock", {
-    		block,
-    		id: create_fragment$6.name,
-    		type: "component",
-    		source: "",
-    		ctx
-    	});
-
-    	return block;
-    }
-
-    function instance$6($$self, $$props, $$invalidate) {
-    	let { $$slots: slots = {}, $$scope } = $$props;
-    	validate_slots("List", slots, []);
-    	let pageName = "List";
-    	let restaurants = [];
-
-    	onMount(async () => {
-    		const res = await fetch("https://raw.githubusercontent.com/3Asians/FoodApp/master/menu.json");
-    		$$invalidate(0, restaurants = await res.json());
-
-    		restaurants.sort((a, b) => a.Distance > b.Distance
-    		? 1
-    		: a.Distance === b.Distance ? a.ID > b.ID ? 1 : -1 : -1);
-    	});
-
-    	const writable_props = [];
-
-    	Object.keys($$props).forEach(key => {
-    		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<List> was created with unknown prop '${key}'`);
-    	});
-
-    	$$self.$capture_state = () => ({ pageName, onMount, restaurants });
-
-    	$$self.$inject_state = $$props => {
-    		if ("pageName" in $$props) $$invalidate(1, pageName = $$props.pageName);
-    		if ("restaurants" in $$props) $$invalidate(0, restaurants = $$props.restaurants);
-    	};
-
-    	if ($$props && "$$inject" in $$props) {
-    		$$self.$inject_state($$props.$$inject);
-    	}
-
-    	return [restaurants, pageName];
-    }
-
-    class List extends SvelteComponentDev {
-    	constructor(options) {
-    		super(options);
-    		init(this, options, instance$6, create_fragment$6, safe_not_equal, {});
-
-    		dispatch_dev("SvelteRegisterComponent", {
-    			component: this,
-    			tagName: "List",
-    			options,
-    			id: create_fragment$6.name
-    		});
-    	}
-    }
-
-    /* src\pages\Restaurant.svelte generated by Svelte v3.29.0 */
-    const file$5 = "src\\pages\\Restaurant.svelte";
-
-    function get_each_context$1(ctx, list, i) {
-    	const child_ctx = ctx.slice();
-    	child_ctx[4] = list[i];
-    	return child_ctx;
-    }
-
-    // (32:8) {:else}
-    function create_else_block$2(ctx) {
-    	let ul;
-    	let each_value = /*restaurant*/ ctx[1].Menu;
-    	validate_each_argument(each_value);
-    	let each_blocks = [];
-
-    	for (let i = 0; i < each_value.length; i += 1) {
-    		each_blocks[i] = create_each_block$1(get_each_context$1(ctx, each_value, i));
-    	}
-
-    	const block = {
-    		c: function create() {
-    			ul = element("ul");
-
-    			for (let i = 0; i < each_blocks.length; i += 1) {
-    				each_blocks[i].c();
-    			}
-
-    			this.h();
-    		},
-    		l: function claim(nodes) {
-    			ul = claim_element(nodes, "UL", {});
-    			var ul_nodes = children(ul);
-
-    			for (let i = 0; i < each_blocks.length; i += 1) {
-    				each_blocks[i].l(ul_nodes);
-    			}
-
-    			ul_nodes.forEach(detach_dev);
-    			this.h();
-    		},
-    		h: function hydrate() {
-    			add_location(ul, file$5, 32, 12, 976);
-    		},
-    		m: function mount(target, anchor) {
-    			insert_dev(target, ul, anchor);
-
-    			for (let i = 0; i < each_blocks.length; i += 1) {
-    				each_blocks[i].m(ul, null);
-    			}
-    		},
-    		p: function update(ctx, dirty) {
-    			if (dirty & /*restaurant*/ 2) {
-    				each_value = /*restaurant*/ ctx[1].Menu;
-    				validate_each_argument(each_value);
-    				let i;
-
-    				for (i = 0; i < each_value.length; i += 1) {
-    					const child_ctx = get_each_context$1(ctx, each_value, i);
-
-    					if (each_blocks[i]) {
-    						each_blocks[i].p(child_ctx, dirty);
-    					} else {
-    						each_blocks[i] = create_each_block$1(child_ctx);
-    						each_blocks[i].c();
-    						each_blocks[i].m(ul, null);
-    					}
-    				}
-
-    				for (; i < each_blocks.length; i += 1) {
-    					each_blocks[i].d(1);
-    				}
-
-    				each_blocks.length = each_value.length;
-    			}
-    		},
-    		d: function destroy(detaching) {
-    			if (detaching) detach_dev(ul);
-    			destroy_each(each_blocks, detaching);
-    		}
-    	};
-
-    	dispatch_dev("SvelteRegisterBlock", {
-    		block,
-    		id: create_else_block$2.name,
-    		type: "else",
-    		source: "(32:8) {:else}",
-    		ctx
-    	});
-
-    	return block;
-    }
-
-    // (29:44) 
-    function create_if_block_1$1(ctx) {
-    	let meta;
-    	let meta_content_value;
-    	let t0;
-    	let p;
-    	let t1;
-    	let a;
-    	let t2_value = /*restaurant*/ ctx[1].Menu + "";
-    	let t2;
-    	let a_href_value;
-
-    	const block = {
-    		c: function create() {
-    			meta = element("meta");
-    			t0 = space();
-    			p = element("p");
-    			t1 = text("redirecting to ");
-    			a = element("a");
-    			t2 = text(t2_value);
-    			this.h();
-    		},
-    		l: function claim(nodes) {
-    			meta = claim_element(nodes, "META", { "http-equiv": true, content: true });
-    			t0 = claim_space(nodes);
-    			p = claim_element(nodes, "P", {});
-    			var p_nodes = children(p);
-    			t1 = claim_text(p_nodes, "redirecting to ");
-    			a = claim_element(p_nodes, "A", { href: true });
-    			var a_nodes = children(a);
-    			t2 = claim_text(a_nodes, t2_value);
-    			a_nodes.forEach(detach_dev);
-    			p_nodes.forEach(detach_dev);
-    			this.h();
-    		},
-    		h: function hydrate() {
-    			attr_dev(meta, "http-equiv", "refresh");
-    			attr_dev(meta, "content", meta_content_value = "2; URL=" + /*restaurant*/ ctx[1].Menu);
-    			add_location(meta, file$5, 29, 12, 798);
-    			attr_dev(a, "href", a_href_value = /*restaurant*/ ctx[1].Menu);
-    			add_location(a, file$5, 30, 30, 894);
-    			add_location(p, file$5, 30, 12, 876);
-    		},
-    		m: function mount(target, anchor) {
-    			insert_dev(target, meta, anchor);
-    			insert_dev(target, t0, anchor);
-    			insert_dev(target, p, anchor);
-    			append_dev(p, t1);
-    			append_dev(p, a);
-    			append_dev(a, t2);
-    		},
-    		p: noop,
-    		d: function destroy(detaching) {
-    			if (detaching) detach_dev(meta);
-    			if (detaching) detach_dev(t0);
-    			if (detaching) detach_dev(p);
-    		}
-    	};
-
-    	dispatch_dev("SvelteRegisterBlock", {
-    		block,
-    		id: create_if_block_1$1.name,
-    		type: "if",
-    		source: "(29:44) ",
-    		ctx
-    	});
-
-    	return block;
-    }
-
-    // (27:8) {#if restaurant.Menu == null}
-    function create_if_block$1(ctx) {
-    	let h3;
-    	let t;
-
-    	const block = {
-    		c: function create() {
-    			h3 = element("h3");
-    			t = text("nothing here :/");
-    			this.h();
-    		},
-    		l: function claim(nodes) {
-    			h3 = claim_element(nodes, "H3", {});
-    			var h3_nodes = children(h3);
-    			t = claim_text(h3_nodes, "nothing here :/");
-    			h3_nodes.forEach(detach_dev);
-    			this.h();
-    		},
-    		h: function hydrate() {
-    			add_location(h3, file$5, 27, 12, 714);
-    		},
-    		m: function mount(target, anchor) {
-    			insert_dev(target, h3, anchor);
-    			append_dev(h3, t);
-    		},
-    		p: noop,
-    		d: function destroy(detaching) {
-    			if (detaching) detach_dev(h3);
-    		}
-    	};
-
-    	dispatch_dev("SvelteRegisterBlock", {
-    		block,
-    		id: create_if_block$1.name,
-    		type: "if",
-    		source: "(27:8) {#if restaurant.Menu == null}",
-    		ctx
-    	});
-
-    	return block;
-    }
-
-    // (34:12) {#each restaurant.Menu as i}
-    function create_each_block$1(ctx) {
-    	let li;
-    	let h2;
-    	let t0_value = /*i*/ ctx[4].name + "";
-    	let t0;
-    	let t1;
-    	let p;
-    	let t2_value = /*i*/ ctx[4].food + "";
-    	let t2;
-    	let t3;
-    	let h3;
-    	let t4_value = /*i*/ ctx[4].price + "";
-    	let t4;
-    	let t5;
-    	let img;
-    	let img_src_value;
-    	let t6;
-
-    	const block = {
-    		c: function create() {
-    			li = element("li");
-    			h2 = element("h2");
-    			t0 = text(t0_value);
-    			t1 = space();
-    			p = element("p");
-    			t2 = text(t2_value);
-    			t3 = space();
-    			h3 = element("h3");
-    			t4 = text(t4_value);
-    			t5 = space();
-    			img = element("img");
-    			t6 = space();
-    			this.h();
-    		},
-    		l: function claim(nodes) {
-    			li = claim_element(nodes, "LI", {});
-    			var li_nodes = children(li);
-    			h2 = claim_element(li_nodes, "H2", {});
-    			var h2_nodes = children(h2);
-    			t0 = claim_text(h2_nodes, t0_value);
-    			h2_nodes.forEach(detach_dev);
-    			t1 = claim_space(li_nodes);
-    			p = claim_element(li_nodes, "P", {});
-    			var p_nodes = children(p);
-    			t2 = claim_text(p_nodes, t2_value);
-    			p_nodes.forEach(detach_dev);
-    			t3 = claim_space(li_nodes);
-    			h3 = claim_element(li_nodes, "H3", {});
-    			var h3_nodes = children(h3);
-    			t4 = claim_text(h3_nodes, t4_value);
-    			h3_nodes.forEach(detach_dev);
-    			t5 = claim_space(li_nodes);
-    			img = claim_element(li_nodes, "IMG", { src: true, alt: true, width: true });
-    			t6 = claim_space(li_nodes);
-    			li_nodes.forEach(detach_dev);
-    			this.h();
-    		},
-    		h: function hydrate() {
-    			add_location(h2, file$5, 35, 20, 1066);
-    			add_location(p, file$5, 36, 20, 1105);
-    			add_location(h3, file$5, 37, 20, 1142);
-    			if (img.src !== (img_src_value = /*i*/ ctx[4].img)) attr_dev(img, "src", img_src_value);
-    			attr_dev(img, "alt", "img");
-    			attr_dev(img, "width", "500");
-    			add_location(img, file$5, 38, 20, 1182);
-    			add_location(li, file$5, 34, 16, 1040);
-    		},
-    		m: function mount(target, anchor) {
-    			insert_dev(target, li, anchor);
-    			append_dev(li, h2);
-    			append_dev(h2, t0);
-    			append_dev(li, t1);
-    			append_dev(li, p);
-    			append_dev(p, t2);
-    			append_dev(li, t3);
-    			append_dev(li, h3);
-    			append_dev(h3, t4);
-    			append_dev(li, t5);
-    			append_dev(li, img);
-    			append_dev(li, t6);
-    		},
-    		p: noop,
-    		d: function destroy(detaching) {
-    			if (detaching) detach_dev(li);
-    		}
-    	};
-
-    	dispatch_dev("SvelteRegisterBlock", {
-    		block,
-    		id: create_each_block$1.name,
-    		type: "each",
-    		source: "(34:12) {#each restaurant.Menu as i}",
-    		ctx
-    	});
-
-    	return block;
-    }
-
-    function create_fragment$7(ctx) {
-    	let main;
-    	let header;
-    	let h1;
-    	let t0;
-    	let t1;
-    	let div;
-
-    	function select_block_type(ctx, dirty) {
-    		if (/*restaurant*/ ctx[1].Menu == null) return create_if_block$1;
-    		if (/*restaurant*/ ctx[1].Menu == String) return create_if_block_1$1;
-    		return create_else_block$2;
-    	}
-
-    	let current_block_type = select_block_type(ctx);
-    	let if_block = current_block_type(ctx);
-
-    	const block = {
-    		c: function create() {
-    			main = element("main");
-    			header = element("header");
-    			h1 = element("h1");
-    			t0 = text(/*pageName*/ ctx[0]);
-    			t1 = space();
-    			div = element("div");
-    			if_block.c();
-    			this.h();
-    		},
-    		l: function claim(nodes) {
-    			main = claim_element(nodes, "MAIN", {});
-    			var main_nodes = children(main);
-    			header = claim_element(main_nodes, "HEADER", { class: true });
-    			var header_nodes = children(header);
-    			h1 = claim_element(header_nodes, "H1", { class: true });
-    			var h1_nodes = children(h1);
-    			t0 = claim_text(h1_nodes, /*pageName*/ ctx[0]);
-    			h1_nodes.forEach(detach_dev);
-    			header_nodes.forEach(detach_dev);
-    			t1 = claim_space(main_nodes);
-    			div = claim_element(main_nodes, "DIV", { class: true });
-    			var div_nodes = children(div);
-    			if_block.l(div_nodes);
-    			div_nodes.forEach(detach_dev);
-    			main_nodes.forEach(detach_dev);
-    			this.h();
-    		},
-    		h: function hydrate() {
-    			attr_dev(h1, "class", "font-bold text-4xl");
-    			add_location(h1, file$5, 23, 8, 574);
-    			attr_dev(header, "class", "header");
-    			add_location(header, file$5, 22, 4, 541);
-    			attr_dev(div, "class", "foods");
-    			add_location(div, file$5, 25, 4, 642);
-    			add_location(main, file$5, 21, 0, 528);
-    		},
-    		m: function mount(target, anchor) {
-    			insert_dev(target, main, anchor);
-    			append_dev(main, header);
-    			append_dev(header, h1);
-    			append_dev(h1, t0);
-    			append_dev(main, t1);
-    			append_dev(main, div);
-    			if_block.m(div, null);
-    		},
-    		p: function update(ctx, [dirty]) {
-    			if_block.p(ctx, dirty);
-    		},
-    		i: noop,
-    		o: noop,
-    		d: function destroy(detaching) {
-    			if (detaching) detach_dev(main);
-    			if_block.d();
     		}
     	};
 
@@ -3551,9 +4335,9 @@ var app = (function () {
     		restaurants = await res.json();
     	});
 
-    	for (let i = 0; i < restaurants.length; i++) {
-    		if (params.id == restaurants[i].ID) {
-    			restaurant.push(restaurants[i]);
+    	for (r = 0; r < restaurants.length; r++) {
+    		if (restaurants[r].ID == params.id) {
+    			restaurant = restaurants[r];
     		}
     	}
 
@@ -3576,17 +4360,18 @@ var app = (function () {
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ("pageName" in $$props) $$invalidate(0, pageName = $$props.pageName);
+    		if ("pageName" in $$props) $$invalidate(1, pageName = $$props.pageName);
     		if ("params" in $$props) $$invalidate(2, params = $$props.params);
     		if ("restaurants" in $$props) restaurants = $$props.restaurants;
-    		if ("restaurant" in $$props) $$invalidate(1, restaurant = $$props.restaurant);
+    		if ("r" in $$props) r = $$props.r;
+    		if ("restaurant" in $$props) $$invalidate(0, restaurant = $$props.restaurant);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [pageName, restaurant, params];
+    	return [restaurant, pageName, params];
     }
 
     class Restaurant extends SvelteComponentDev {

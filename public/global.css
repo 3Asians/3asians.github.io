@@ -13,6 +13,10 @@ body {
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
+.logo{
+
+}
+
 a {
 	color: rgb(0,100,200);
 	text-decoration: none;
@@ -57,14 +61,25 @@ button:disabled {
 
 button:not(:disabled):active {
 	background-color: #ddd;
-	border-color: blue;
+	color:#3f91fc;
+	border-color: #3f91fc;
 }
 
 button:focus {
-	border-color: #e53e3e;
+	border-color: #3f91fc;
+	color:#3f91fc;
 }
 
+
+
 h1{
+	position: absolute;
+	top: 3px;
+	left: 2.5em;
+}
+
+.logo{
+	width: 50px;
 	position: absolute;
 	top: 6px;
 	left: 1em;
@@ -78,7 +93,7 @@ h1{
 iframe{
 	padding-top: 2em;
 	width: 100%;
-	height: 600px;
+	height: 550px;
 }
 
 .loader {
@@ -109,14 +124,52 @@ article{
 	display: block;
   	margin-left: auto;
   	margin-right: auto;
-  	width: 85%;
+	width: 85%;
+	text-align: center;  
 }
 
+img {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 25%;
+}
+
+.brand{
+	display: block;
+	margin-top: 1em;
+	margin-bottom: 1em;
+	margin-left: auto;
+	margin-right: auto;
+	width: 25%;
+    border: solid 1px #CCC;
+    -moz-box-shadow: 1px 1px 5px #999;
+    -webkit-box-shadow: 1px 1px 5px #999;
+	box-shadow: 1px 1px 5px #999;
+	padding: 5px;
+}
+
+
+
 .links{
-	background-color: #a1dbf1;
+	background: linear-gradient(180deg, #6ab2cf, #a1dbf1);
+	border-bottom: 1px solid #0d84b3;
 	padding: 6px;
 	text-align: right;
-	margin: -18px;
+}
+
+footer {
+	position: absolute;
+	background: linear-gradient(180deg, #6ab2cf, #a1dbf1);
+	bottom: 0;
+	border-top: 1px solid #0d84b3;
+	width: 100%; 
+	height: 65px;           /* Footer height */
+}
+
+footer p{
+	margin: auto;
+	margin-top: 20px;
 }
 
 .header a{
