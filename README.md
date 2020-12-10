@@ -4,17 +4,6 @@
 
 FoodApp er app til að finna staði kringum háteigsskóla 
 
-<h3> Það sem tókst: </h3>
 
-* Scrape
-* Loading icon
-* Log In/Log Out
-* Maps
-* 
-
-<h3> Það sem tókst ekki: </h3>
-
-* Setja Veitingaskaði í favorites
-* Möguleiki til að leita af veitingastað
-* Ný síða fyrir menu
-*
+<h2>Skýrsla</h2>
+https://github.com/3Asians/FoodApp/wiki/Sk%C3%BDrsla
